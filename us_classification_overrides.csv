@@ -1,0 +1,6 @@
+symbol,subIndustry,note
+TVC,EXCLUDE,Tennessee Valley Authority power bonds listed as "Common Stock" - debt not equity
+TVE,EXCLUDE,Tennessee Valley Authority power bonds - debt not equity
+EIC,EXCLUDE,closed-end fund (Yahoo summary empty)
+RGT,EXCLUDE,closed-end fund (Yahoo summary does not say so)
+TBLD,EXCLUDE,closed-end fund (Yahoo summary does not say so)

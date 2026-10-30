@@ -1,0 +1,26 @@
+# virtual environment
+.venv/
+
+# python cache
+__pycache__/
+*.pyc
+
+# generated output + price caches (rebuilt by build_rs.py)
+site/
+daily_report.html
+.yh_price_cache.json
+.yh_high_cache.json
+.yh_low_cache.json
+.yh_provenance.json
+run.log
+
+# local / secrets
+.env
+.claude/
+.DS_Store
+.build.lock
+
+# tool caches
+.pytest_cache/
+.ruff_cache/
+*.tmp

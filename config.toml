@@ -1,0 +1,16 @@
+# US Relative-Strength — tunable configuration.
+# All keys optional; remove this file to use the built-in defaults.
+# Loaded by rs_engine/config.py (section [rs]).
+
+[rs]
+window = 26                 # RS window in trading days
+full_range = "2y"           # history depth of a full price fetch
+append_range = "1mo"        # incremental daily top-up range
+min_bars = 200              # below this a symbol is refetched with full_range
+ema_periods = [20, 50, 100, 150, 200]   # price-EMA flags + "price above EMA" filter
+adr_period = 20             # ADR% lookback (Qullamaggie 20-day)
+corp_action_jump = 0.90     # one-day ×10 move either way (-90% / +900%) = data break (late reverse-split adjustment), not trading
+benchmark = "S&P 500"       # display name of the benchmark
+bench_symbol = "^GSPC"      # Yahoo ticker of the benchmark
+yahoo_workers = 8           # concurrent Yahoo fetches
+min_price = 1.0             # stocks below this last price are kept out of the rankings

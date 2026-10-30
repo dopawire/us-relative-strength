@@ -1,0 +1,96 @@
+name: Daily data refresh
+
+# Cloud FALLBACK for the local cron job: the site must update daily even when
+# the home machine is off.  The local build is better (ranking archive → daily
+# deltas), so this job only acts when the committed snapshot does NOT yet
+# cover the latest session — GitHub often starts scheduled jobs hours late,
+# after the local publish.  Builds from Yahoo (public data, no keys) and
+# deploys Pages itself (pushes made with GITHUB_TOKEN don't retrigger the
+# push-based deploy).
+
+on:
+  schedule:
+    - cron: "30 22 * * 1-5"   # 17:30 EST / 18:30 EDT — market closed, Yahoo settled
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Is the committed snapshot already current?
+        id: need
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from rs_engine.config import latest_session
+          end = json.load(open("rs_data.json"))["meta"]["window_dates"][-1]
+          print(f"end={end}")
+          print(f"build={'false' if end >= latest_session() else 'true'}")
+          PY
+
+      - name: Install dependencies
+        if: steps.need.outputs.build == 'true'
+        run: pip install requests
+
+      - name: Build rankings
+        if: steps.need.outputs.build == 'true'
+        run: python build_rs.py
+
+      - name: Audit
+        if: steps.need.outputs.build == 'true'
+        run: python audit_data.py
+
+      - name: Commit only a newer session
+        id: diff
+        if: steps.need.outputs.build == 'true'
+        run: |
+          new=$(python -c "import json; print(json.load(open('rs_data.json'))['meta']['window_dates'][-1])")
+          git fetch -q origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "main moved during the build (local publish?) — leaving it"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          elif [[ "$new" > "${{ steps.need.outputs.end }}" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "no newer session than ${{ steps.need.outputs.end }} (Yahoo late?)"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit data snapshot
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "dopawire"
+          git config user.email "110220100+dopawire@users.noreply.github.com"
+          gen=$(python -c "import json; print(json.load(open('rs_data.json'))['meta']['gen'])")
+          git add rs_data.json
+          git commit -q -m "data snapshot $gen"
+          git push
+
+      - name: Export static site
+        if: steps.diff.outputs.changed == 'true'
+        run: python export_static.py
+
+      - uses: actions/upload-pages-artifact@v5
+        if: steps.diff.outputs.changed == 'true'
+        with:
+          path: site
+
+      - name: Deploy to Pages
+        if: steps.diff.outputs.changed == 'true'
+        uses: actions/deploy-pages@v5

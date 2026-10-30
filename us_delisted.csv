@@ -1,0 +1,21 @@
+symbol,company,exchange,cik,sector,industryGroup,industry,subIndustry,source,delisted_on
+AMX,"America Movil, S.A.B. de C.V.",NYSE,1129137,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo,2026-10-30
+BHK,Blackrock Core Bond Trust,NYSE,1160864,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
+CCZ,Comcast Holdings ZONES,NYSE,1166691,,,,,,2026-10-30
+DDT,Dillard's Capital Trust I,TXSE,28917,,,,,,2026-10-30
+ELC,"Entergy Louisiana, Inc. Collateral Trust Mortgage Bonds, 4.875 % Series due September 1, 2066",NYSE,1348952,,,,,,2026-10-30
+GJO,"Synthetic Fixed-Income Securities, Inc. on behalf of STRATS(SM) Trust for Wal-Mart Stores, Inc. Securities, Series 2004-5",NYSE,1340909,,,,,,2026-10-30
+GJP,"Synthetic Fixed-Income Securities, Inc. on behalf of STRATS (SM) Trust for Dominion Resources, Inc. Securities, Series 2005-6, Floating Rate Structured Repackaged Asset-Backed Trust Securities (STRATS) Certificates",NYSE,1343491,,,,,,2026-10-30
+GJR,"Synthetic Fixed-Income Securities, Inc. STRATS Trust for Procter&Gamble Securities, Series 2006-1",NYSE,1353226,,,,,,2026-10-30
+GJS,"Goldman Sachs Group Securities STRATS Trust for Goldman Sachs Group Securities, Series 2006-2",NYSE,1356284,,,,,,2026-10-30
+GJT,"Synthetic Fixed-Income Securities, Inc. Floating Rate Structured Repackaged Asset-Backed Trust Securities Certificates, Series 2006-3",NYSE,1357660,,,,,,2026-10-30
+IQMXW,IQM Quantum Computers Oyj,NASDAQ,2113060,,,,,,2026-10-30
+OBAI,"Our Bond, Inc.",NASDAQ,1756064,Information Technology,Software & Services,Software,Systems Software,yahoo,2026-10-30
+PYT,PPlus Tr GSC-2 Tr Ctf Fltg Rate,NYSE,1294808,,,,,,2026-10-30
+RLX,RLX Technology Inc.,NYSE,1828365,Consumer Staples,"Food, Beverage & Tobacco",Tobacco,Tobacco,yahoo,2026-10-30
+WDH,Waterdrop Inc.,NYSE,1823986,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo,2026-10-30
+BCAT,BlackRock Capital Allocation Term Trust,NYSE,1809541,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
+BMEZ,BlackRock Health Sciences Term Trust,NYSE,1785971,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
+BTX,BlackRock Technology and Private Equity Term Trust,NYSE,1836057,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
+ECAT,BlackRock ESG Capital Allocation Term Trust,NYSE,1864843,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
+FINS,Angel Oak Financial Strategies Income Term Trust,NYSE,1745059,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo,2026-10-30
