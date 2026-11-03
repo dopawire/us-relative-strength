@@ -17,6 +17,11 @@ A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8000`)
 - **Four tabs** (Sector / Industry Group / Industry / Sub-Industry). Each is
   an equal-weight RS ranking of its groups, and you can expand any group to
   see its stocks.
+  - **Sector / Industry Group** rank every classified stock (~4,700).
+    Stocks outside the S&P 1500 carry an **≈ approx** badge: their
+    classification is mapped, not official GICS.
+  - **Industry / Sub-Industry** are **100% official GICS**: only S&P 1500
+    constituents (plus hand-checked overrides).
 - **Per-stock columns:**
   - RS sparkline and `RS_STS%`
   - last price
@@ -72,9 +77,16 @@ A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8000`)
        most common GICS sub-industry among the S&P 1500 stocks that share it.
      - `manual` rows always win. Edit one and set `source` to `manual` to
        pin it.
-   - So the sub-industry of a non-S&P stock is **approximate**, though usually
-     right at the industry level. About 1,500 stocks carry real GICS; the
-     other ~3,750 are mapped.
+   - Measured accuracy of the mapping, holding each S&P stock out and
+     predicting it from the others: **sector 94%, industry group 88%,
+     industry 81%, sub-industry 72%**.
+   - So mapped stocks (`source = yahoo`, about 3,750) are ranked **only on the
+     Sector and Industry Group tabs**, badged approximate. The Industry and
+     Sub-Industry tabs contain only official GICS (`sp1500` / `override`, about
+     1,500 stocks).
+   - Official GICS is licensed by MSCI / S&P, and no free source covers the
+     whole market. The SEC's SIC codes are official and free, but too coarse
+     to group by (Visa, PayPal and Uber are all "Business Services, NEC").
 3. **Renames and delistings.**
    - Renames are detected by SEC CIK and written to `us_symbol_changes.csv`;
      the build stitches the old ticker's history onto the new one.

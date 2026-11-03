@@ -92,7 +92,8 @@ def get_meta():
 def get_levels():
     _check_ready()
     return [
-        {"key": lv["key"], "label": lv["label"], "n_groups": len(lv.get("groups", []))}
+        {"key": lv["key"], "label": lv["label"], "n_groups": len(lv.get("groups", [])),
+         "note": lv.get("note")}
         for lv in _data.get("levels", [])
     ]
 
@@ -109,10 +110,12 @@ def get_level(key: str):
                     name=g["name"],
                     n=g["n"],
                     pct=g["pct"],
+                    dp=g.get("dp"),
                     r=g["r"],
                     members=g.get("members", []),
                 ))
-            return LevelResponse(key=lv["key"], label=lv["label"], groups=groups)
+            return LevelResponse(key=lv["key"], label=lv["label"], groups=groups,
+                                 note=lv.get("note"))
     raise HTTPException(status_code=404, detail=f"Level '{key}' not found")
 
 

@@ -18,6 +18,7 @@ class LevelSummary(BaseModel):
     key: str
     label: str
     n_groups: int
+    note: str | None = None
 
 
 class MemberOut(BaseModel):
@@ -33,6 +34,7 @@ class MemberOut(BaseModel):
     h: float | None      # % off 52-week high
     a: float | None      # ADR%
     nw: int | None = None   # new listing: days since listing (RS% over those days)
+    ap: int | None = None   # 1 = classification mapped from Yahoo, not official GICS
 
 
 class GroupOut(BaseModel):
@@ -49,6 +51,7 @@ class LevelResponse(BaseModel):
     key: str
     label: str
     groups: list[GroupOut]
+    note: str | None = None    # e.g. "Official GICS only — S&P 1500 …"
 
 
 class MacroBreadth(BaseModel):

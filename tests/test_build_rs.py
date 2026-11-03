@@ -509,20 +509,51 @@ def test_group_index_uses_only_listed_members(rs_data):
 
 def test_new_listings_appear_in_every_level(rs_data):
     """A stock listed inside the window (>= 2 sessions, no gaps) is shown in
-    its sector / industry group / industry / sub-industry, flagged with its day count,
-    and stays on the New Listings watch until it has a full window."""
+    its sector / industry group (and, with official GICS, industry /
+    sub-industry), flagged with its day count, and stays on the New Listings
+    watch until it has a full window."""
     ipo = {i["s"]: i for i in rs_data["meta"]["ipo"]}
     by_level = {lv["key"]: {m["s"]: m for g in lv["groups"] for m in g["members"]
                             if m.get("nw")} for lv in rs_data["levels"]}
     shown = set(by_level["macro"])
     if not shown:
         pytest.skip("no multi-day new listings in the current window")
-    for key, members in by_level.items():
-        assert set(members) == shown, key
+    official = {s for s in shown if not by_level["macro"][s].get("ap")}
+    assert set(by_level["sector"]) == shown
+    for key in ("industry", "basic"):
+        assert set(by_level[key]) == official, key
     for s in shown:
         m = by_level["macro"][s]
         assert s in ipo and m["nw"] >= 2 and len(m["r"]) == m["nw"]
         assert 0.0 <= m["p"] <= 1.0
+
+
+def test_official_only_levels_hold_no_approximate_stocks(rs_data):
+    """Industry / Sub-Industry are 100% official GICS: no mapped (≈ approx)
+    stock there, while the upper levels carry every classified stock."""
+    lv = {x["key"]: x for x in rs_data["levels"]}
+    for key in ("industry", "basic"):
+        assert lv[key]["note"]
+        assert not any(m.get("ap") for g in lv[key]["groups"] for m in g["members"]), key
+    upper = {m["s"] for g in lv["macro"]["groups"] for m in g["members"]}
+    lower = {m["s"] for g in lv["basic"]["groups"] for m in g["members"]}
+    assert lower < upper and any(m.get("ap") for g in lv["macro"]["groups"] for m in g["members"])
+
+
+def test_read_universe_blanks_lower_levels_for_mapped(tmp_path, monkeypatch):
+    p = tmp_path / "m.csv"
+    p.write_text("symbol,company,exchange,cik,sector,industryGroup,industry,subIndustry,source\n"
+                 "AAA,A,NYSE,1,Financials,Banks,Banks,Regional Banks,sp1500\n"
+                 "BBB,B,NYSE,2,Financials,Banks,Banks,Regional Banks,yahoo\n"
+                 "CCC,C,NYSE,3,Financials,Banks,Banks,Regional Banks,override\n"
+                 "DDD,D,NYSE,4,,,,,\n")
+    monkeypatch.setattr(build_rs, "MASTER_CSV", str(p))
+    u = {r["sym"]: r for r in build_rs.read_universe()}
+    assert (u["AAA"]["basic"], u["AAA"]["approx"]) == ("Regional Banks", False)
+    assert (u["BBB"]["macro"], u["BBB"]["sector"], u["BBB"]["industry"], u["BBB"]["basic"],
+            u["BBB"]["approx"]) == ("Financials", "Banks", "", "", True)
+    assert u["CCC"]["approx"] is False and u["CCC"]["basic"] == "Regional Banks"
+    assert u["DDD"]["approx"] is False and not u["DDD"]["macro"]      # unclassified stub
 
 
 def test_rs_data_structure(rs_data):

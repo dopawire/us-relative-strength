@@ -82,6 +82,16 @@ YH_HEADERS = {"User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
 # Sub-Industry.
 LEVELS = [("macro", "Sector"), ("sector", "Industry Group"),
           ("industry", "Industry"), ("basic", "Sub-Industry")]
+# Official GICS only exists for S&P 1500 members (and hand-checked overrides);
+# every other stock's classification is mapped from its Yahoo industry —
+# right ~94% at sector / ~88% at industry group but only ~72% at sub-industry
+# (leave-one-out on the S&P 1500).  So mapped stocks are ranked on the two
+# upper levels only, badged approximate; Industry / Sub-Industry are 100% GICS.
+OFFICIAL_SOURCES = {"sp1500", "override"}
+OFFICIAL_ONLY_LEVELS = {"industry", "basic"}
+LEVEL_NOTES = {k: "Official GICS only — S&P 1500 constituents (+ hand-checked); "
+                  "other stocks are ranked on the Sector / Industry Group tabs"
+               for k in OFFICIAL_ONLY_LEVELS}
 
 
 # --------------------------------------------------------------------------- #
@@ -92,7 +102,9 @@ def read_universe():
 
     Source: us_stock_master.csv (symbol,company,exchange,cik,sector,
     industryGroup,industry,subIndustry,source) — refresh_universe.py.
-    `sym` is the Yahoo symbol (BRK-B), also the cache key.
+    `sym` is the Yahoo symbol (BRK-B), also the cache key.  `approx` marks a
+    classification mapped from Yahoo (not official GICS): such a stock keeps
+    only its sector + industry group (OFFICIAL_ONLY_LEVELS are left blank).
     """
     rows = []
     with open(MASTER_CSV, newline="", encoding="utf-8") as fh:
@@ -109,7 +121,13 @@ def read_universe():
                 "sector":   (r.get("industryGroup") or "").strip(),
                 "industry": (r.get("industry") or "").strip(),
                 "basic":    (r.get("subIndustry") or "").strip(),
+                "approx":   bool(r.get("subIndustry"))
+                            and r.get("source") not in OFFICIAL_SOURCES,
             })
+    for r in rows:
+        if r["approx"]:
+            for key in OFFICIAL_ONLY_LEVELS:
+                r[key] = ""
     return rows
 
 
@@ -522,7 +540,8 @@ def save_rs_json(levels, breadth, meta, path, rotation=None):
     }
     gid = 0
     for key, label, items in levels:
-        level_data = {"key": key, "label": label, "groups": []}
+        level_data = {"key": key, "label": label, "groups": [],
+                      "note": LEVEL_NOTES.get(key)}
         for it in items:
             members_out = []
             for m in it["members"]:
@@ -537,6 +556,7 @@ def save_rs_json(levels, breadth, meta, path, rotation=None):
                     "h": round(m["hi52"], 1) if m.get("hi52") is not None else None,
                     "a": round(m["adr"], 2) if m.get("adr") is not None else None,
                     "nw": m.get("new"),       # new listing: days since listing
+                    "ap": 1 if m.get("approx") else None,   # classification mapped, not GICS
                 })
             level_data["groups"].append({
                 "id": gid, "name": it["name"],
@@ -700,6 +720,7 @@ def main():
                 post = {d: v for d, v in ser.items() if d >= brk} if brk else ser
                 ef, price = ema_flags(post)
                 st = {"name": u["name"], "sym": sym, "exch": u.get("exch"),
+                      "approx": u.get("approx", False),
                       "rs": srs, "pct": percentrank_inc(srs, srs[-1]),
                       "ema": ef, "ltp": price,
                       "rse": rs_ema_flag(post, bench),

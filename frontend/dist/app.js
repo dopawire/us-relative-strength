@@ -92,7 +92,7 @@
     },
     async levels() {
       return staticData
-        ? staticData.levels.map(l => ({ key: l.key, label: l.label, n_groups: l.groups.length }))
+        ? staticData.levels.map(l => ({ key: l.key, label: l.label, n_groups: l.groups.length, note: l.note }))
         : api.get('/api/levels');
     },
     async level(key) {
@@ -356,7 +356,8 @@
         </table>
       </div>`;
 
-    $.content.innerHTML = tableHTML;
+    const note = data.note ? `<div class="level-note">✓ ${utils.esc(data.note)}</div>` : '';
+    $.content.innerHTML = note + tableHTML;
 
     // Update search info
     $.searchInfo.textContent = filtering ? `${shownGroups} group(s), ${shownStocks} stock(s)` : '';
@@ -476,9 +477,13 @@
       const newBadge = m.nw
         ? `<span class="new-badge" title="New listing — RS% over its ${m.nw} trading days since listing; joins the group index after a full window">NEW · ${m.nw}d</span>`
         : '';
+      // classification mapped from Yahoo's industry, not official GICS (non-S&P 1500)
+      const apBadge = m.ap
+        ? '<span class="ap-badge" title="Approximate classification: Yahoo industry mapped to GICS — not official GICS (stock is outside the S&P 1500). Correct sector ~94%, industry group ~88% of the time.">≈ approx</span>'
+        : '';
       mrows += `<tr data-sym="${utils.esc(m.s)}">
         <td class="mck"><input type="checkbox" class="pick" data-sym="${utils.esc(m.s)}"${ck}></td>
-        <td class="mnm"><button class="wstar${state.watchlist.has(m.s) ? ' on' : ''}" data-sym="${utils.esc(m.s)}" title="watchlist">${star}</button>${utils.esc(m.n)}<span class="msym">${utils.esc(m.s)}</span>${newBadge}${dBadge}</td>
+        <td class="mnm"><button class="wstar${state.watchlist.has(m.s) ? ' on' : ''}" data-sym="${utils.esc(m.s)}" title="watchlist">${star}</button>${utils.esc(m.n)}<span class="msym">${utils.esc(m.s)}</span>${newBadge}${apBadge}${dBadge}</td>
         <td class="msp">${spark}</td>
         <td class="mpc"><span class="rs-pct${m.nw ? ' since-listing' : ''}" style="${bg}"${m.nw ? ` title="since listing (${m.nw} days)"` : ''}>${utils.fmtPct(m.p)}</span></td>
         <td class="mlt tnum">${utils.fmtPrice(m.l)}</td>
