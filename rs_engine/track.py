@@ -130,7 +130,7 @@ def evaluate(picks, cache, universe, horizons=HORIZONS):
             if not rets:
                 continue
             avg = mean(rets.values())
-            nifty = bench[d1] / bench[d0] - 1
+            bench_ret = bench[d1] / bench[d0] - 1
 
             def grp(members):
                 v = [rets[s] for s in members if s in rets]
@@ -140,13 +140,13 @@ def evaluate(picks, cache, universe, horizons=HORIZONS):
                 v = [rets[s] for s in lst if s in rets]
                 if not v:
                     return None
-                return {"n": len(v), "ret": mean(v), "ex": mean(v) - nifty,
-                        "hit": len([x for x in v if x > nifty]) / len(v)}
+                return {"n": len(v), "ret": mean(v), "ex": mean(v) - bench_ret,
+                        "hit": len([x for x in v if x > bench_ret]) / len(v)}
             focus = grp([s for sec in p["focus"] for s in by_sector.get(sec, [])])
             avoid = grp([s for sec in p["avoid"] for s in by_sector.get(sec, [])])
             cap = grp(by_cap.get(p["cap"], [])) if p.get("cap") else None
             row["h"][h] = {
-                "nifty": nifty, "avg": avg,
+                "bench_ret": bench_ret, "avg": avg,
                 "focus": None if focus is None else focus - avg,
                 "avoid": None if avoid is None else avg - avoid,      # > 0 = right call
                 "cap": None if cap is None else cap - avg,
@@ -182,9 +182,9 @@ def summarise(rows, horizons=HORIZONS):
                                        "hit": mean(x["hit"] for x in v)}
         reg, brk_reg = {}, {}
         for lvl in ("on", "mixed", "off"):
-            v = [r["h"][h]["nifty"] for r in rows if h in r["h"] and r["regime"] == lvl]
+            v = [r["h"][h]["bench_ret"] for r in rows if h in r["h"] and r["regime"] == lvl]
             if v:
-                reg[lvl] = {"n": len(v), "nifty": mean(v),
+                reg[lvl] = {"n": len(v), "bench_ret": mean(v),
                             "up": len([x for x in v if x > 0]) / len(v)}
             # the regime's real job: when do breakouts pay?
             b = [r["h"][h]["brk"] for r in rows

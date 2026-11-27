@@ -1090,7 +1090,7 @@
   const edgeCell = (e, hitWord) => !e ? '<td class="tnum">—</td>'
     : `<td class="tnum">${tone(e.avg * 100, 1)}<span class="dc-hit">${(e.hit * 100).toFixed(0)}% ${hitWord}</span></td>`;
   const listCell = l => !l ? '<td class="tnum">—</td>'
-    : `<td class="tnum">${tone(l.ex * 100, 1)}<span class="dc-hit">${(l.hit * 100).toFixed(0)}% beat N500</span></td>`;
+    : `<td class="tnum">${tone(l.ex * 100, 1)}<span class="dc-hit">${(l.hit * 100).toFixed(0)}% beat the index</span></td>`;
   function trackIntro(t) {
     if (!t || !t.n) return '';
     const fmt = d => { const [y, m, dd] = d.split('-'); return `${+dd} ${MON[+m - 1]} ${y}`; };
@@ -1129,7 +1129,7 @@
       const r = s[h] && s[h].regime;
       if (!r) return '<td>—</td>';
       return `<td class="dc-reg">${['on', 'mixed', 'off'].filter(k => r[k]).map(k =>
-        `<div>${REGIME[k].word} ${tone(r[k].nifty * 100)} <i>${(r[k].up * 100).toFixed(0)}% up · ${r[k].n}d</i></div>`).join('')}</td>`;
+        `<div>${REGIME[k].word} ${tone(r[k].bench_ret * 100)} <i>${(r[k].up * 100).toFixed(0)}% up · ${r[k].n}d</i></div>`).join('')}</td>`;
     };
     const brkReg = h => {
       const r = s[h] && s[h].brk_regime;
