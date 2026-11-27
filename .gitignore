@@ -24,3 +24,5 @@ run.log
 .pytest_cache/
 .ruff_cache/
 *.tmp
+server.log
+.server.pid

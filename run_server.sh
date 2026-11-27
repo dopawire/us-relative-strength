@@ -14,6 +14,8 @@ fi
 
 # localhost only by default: the Update/Refresh endpoints start long jobs and
 # have no auth.  US_RS_HOST=0.0.0.0 bash run_server.sh to serve the LAN.
+# Port 8001 by default: the NSE dashboard uses 8000.
 HOST="${US_RS_HOST:-127.0.0.1}"
-echo "Starting US RS server on http://$HOST:8000"
-exec "$PY" -m uvicorn backend.main:app --host "$HOST" --port 8000
+PORT="${US_RS_PORT:-8001}"
+echo "Starting US RS server on http://$HOST:$PORT"
+exec "$PY" -m uvicorn backend.main:app --host "$HOST" --port "$PORT"

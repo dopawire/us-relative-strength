@@ -13,7 +13,7 @@ under the [MIT License](LICENSE).
 
 ## What it produces
 
-A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8000`) with:
+A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8001`) with:
 - **Four tabs** (Sector / Industry Group / Industry / Sub-Industry). Each is
   an equal-weight RS ranking of its groups, and you can expand any group to
   see its stocks.
@@ -104,18 +104,29 @@ every 90 days, at most 300 per run.
 | `build_rs.py` | Fetch Yahoo prices and rebuild `rs_data.json` (plus the `daily_report.html` digest). |
 | `audit_data.py` | Data-integrity audit (caches, holiday calendar, fake bars, freshness, GICS paths). Exits non-zero on issues. |
 | `run_daily.sh` | Runs `build_rs.py` and logs to `run.log`. |
-| `run_server.sh` | Serves the website on `localhost:8000` (`US_RS_HOST=0.0.0.0` to expose it on the LAN). |
+| `run_server.sh` | Serves the website on `localhost:8001` (`US_RS_HOST=0.0.0.0` to expose it on the LAN). |
 | `cron_us.sh` | Cron entry point: universe refresh, build and audit (plus optional Telegram alerts). |
 | `install_cron.sh` | Installs the cron entries at 17:30 New York time, converted to the system time zone for both EST and EDT. |
 | `export_static.py` | Builds a read-only static site into `site/`. |
 | `publish_site.sh` | Commits and pushes the `rs_data.json` snapshot, which triggers the GitHub Pages deploy. |
+
+## One-click launcher
+
+```
+bash us-rs.sh --install   # once: adds "US Relative Strength" to the app menu
+```
+
+Then open **US Relative Strength** from the app menu, or run `bash us-rs.sh`.
+It starts the server in the background, updates prices if a session is
+missing, and opens the dashboard at http://localhost:8001. Use
+`bash us-rs.sh --stop` (or right-click the icon → Stop server) to stop it.
 
 ## Daily use
 
 ```
 python3 refresh_universe.py   # 1. new listings / renames (fast after the first run)
 bash run_daily.sh             # 2. fetch today's prices, rebuild data (~10 min)
-bash run_server.sh            # 3. start the website → http://localhost:8000
+bash run_server.sh            # 3. start the website → http://localhost:8001
 ```
 
 ### Automation (optional)
