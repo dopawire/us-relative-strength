@@ -26,3 +26,4 @@ run.log
 *.tmp
 server.log
 .server.pid
+.coverage

@@ -18,7 +18,7 @@ from fastapi.responses import FileResponse
 from rs_engine.config import WINDOW, BENCHMARK_NAME
 from backend.models import (
     MetaResponse, LevelSummary, LevelResponse,
-    GroupOut, BreadthResponse, RotationResponse, StockDetail,
+    GroupOut, BreadthResponse, RotationResponse, StockDetail, WatchlistIn,
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -83,6 +83,7 @@ def get_meta():
         "n_groups_per_level": [len(lv.get("groups", [])) for lv in levels],
         "n_window": m.get("n_window", 0),
         "excluded": m.get("excluded", []),
+        "illiquid": m.get("illiquid", []),
         "src": m.get("src", {}),
         "ipo": m.get("ipo", []),
     }
@@ -149,6 +150,7 @@ def get_breadth():
         "span": f"{dates[0]} → {dates[-1]}" if dates else "",
         "macros": brd.get("macros", []),
         "divergence": brd.get("divergence", {}),
+        "market": brd.get("market", {}),
     }
 
 
@@ -178,6 +180,41 @@ def get_rotation():
     _check_ready()
     r = _data.get("rotation") or {}
     return {"dates": r.get("dates", []), "groups": r.get("groups", [])}
+
+
+@app.get("/api/decide")
+def get_decide():
+    """Focus / Swing decisions computed by the build (rs_engine.decide)."""
+    _check_ready()
+    return _data.get("decide") or {}
+
+
+@app.get("/api/track")
+def get_track():
+    """Track record of the Focus / Swing calls (rs_engine.track)."""
+    _check_ready()
+    return _data.get("track") or {}
+
+
+def _watchlist():
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
+    import watchlist
+    return watchlist
+
+
+@app.get("/api/watchlist")
+def get_watchlist():
+    """Starred symbols the evening brief alerts on (~/.config/us-rs/watchlist.txt)."""
+    return {"symbols": _watchlist().read()}
+
+
+@app.put("/api/watchlist")
+def put_watchlist(body: WatchlistIn):
+    """Replace the alert watchlist with the site's ☆ list."""
+    if len(body.symbols) > 500:
+        raise HTTPException(400, detail="too many symbols")
+    return {"symbols": _watchlist().write(body.symbols)}
 
 
 @app.get("/api/stock/{sym}", response_model=StockDetail)
@@ -298,7 +335,7 @@ def refresh_stocks(dry_run: bool = Query(False, description="Only list new symbo
 
     # a real refresh is followed by a quick build, so new listings show up
     args = (["refresh_universe.py", "--dry-run"] if dry_run else
-            [["refresh_universe.py"], ["build_rs.py", "--fast"]])
+            [["refresh_universe.py"], ["refresh_events.py"], ["build_rs.py", "--fast"]])
 
     threading.Thread(target=_run_script, args=(args, "stocks"), daemon=True).start()
     return {"status": "started", "dry_run": dry_run, "started_at": _pipeline["started_at"]}

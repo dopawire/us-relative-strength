@@ -33,6 +33,7 @@ Usage:
 import os
 import re
 import csv
+import sys
 import html
 import json
 import time
@@ -54,6 +55,11 @@ DELISTED = os.path.join(HERE, "us_delisted.csv")         # archived master rows
 OVERRIDES = os.path.join(HERE, "us_classification_overrides.csv")  # hand-checked fixes
 HIERARCHY = os.path.join(HERE, "gics_hierarchy.csv")     # the GICS 2023 tree
 YAHOO_MAP = os.path.join(HERE, "yahoo_to_gics.csv")      # yahoo industry → sub-industry
+CAP_CLASSES = os.path.join(HERE, "us_cap_classes.csv")   # symbol,cap,mcap (size class)
+NASDAQ_SCREENER = "https://api.nasdaq.com/api/screener/stocks?tableonly=true&download=true"
+# Conventional US size bands (market cap, US$): Large ≥ 10B, Mid 2–10B,
+# Small 300M–2B, Micro below.
+CAP_BANDS = ((10e9, "Large"), (2e9, "Mid"), (300e6, "Small"), (0, "Micro"))
 PROFILE_CACHE = os.path.join(CACHE_DIR, ".yh_profile_cache.json")
 
 LEVEL_FIELDS = ["sector", "industryGroup", "industry", "subIndustry"]
@@ -61,6 +67,16 @@ FIELDS = ["symbol", "company", "exchange", "cik"] + LEVEL_FIELDS + ["source"]
 
 NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt"
 OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
+# the same files on Nasdaq's anonymous FTP — used when the website serves a
+# bot-check page instead (HTTP 200 + HTML, seen Nov 2026)
+FTP_DIR = "ftp://ftp.nasdaqtrader.com/symboldirectory/"
+LISTING_HEADERS = {"nasdaqlisted.txt": "Symbol|", "otherlisted.txt": "ACT Symbol|"}
+# Sanity floors: a refresh that would shrink the universe this much, or
+# classify from this few S&P constituents, is a broken source, not news —
+# the last good master is kept.
+MIN_UNIVERSE = 1000
+MIN_KEEP_SHARE = 0.9
+MIN_SP_CONSTITUENTS = 1000
 SEC_TICKERS = "https://www.sec.gov/files/company_tickers_exchange.json"
 WIKI = "https://en.wikipedia.org/wiki/List_of_S%26P_{n}_companies"
 YH_PROFILE = "https://query2.finance.yahoo.com/v10/finance/quoteSummary/{sym}"
@@ -71,8 +87,9 @@ SEC_UA = os.environ.get("US_RS_SEC_UA", "us-relative-strength admin@example.com"
 
 # otherlisted.txt exchange codes → TradingView prefix (NYSE American = AMEX).
 # Cboe BZX / TXSE / IEX list a handful of real companies (CBOE, TCBI, IBOC …).
+# The Texas Stock Exchange appeared as "TXSE" and is now coded "F" (Nov 2026).
 OTHER_EXCHANGES = {"N": "NYSE", "A": "AMEX", "P": "AMEX", "Z": "CBOE",
-                   "TXSE": "TXSE", "V": "IEX"}
+                   "TXSE": "TXSE", "F": "TXSE", "V": "IEX"}
 PROFILE_RETRY_DAYS = 3       # re-ask Yahoo for a symbol it had no profile for (IPOs)
 PROFILE_REFRESH_DAYS = 90    # re-validate known profiles (reclassifications)
 PROFILE_REFRESH_CAP = 300    # ... at most this many per run
@@ -173,13 +190,37 @@ def parse_listings(nasdaq_text, other_text):
     return out
 
 
-def fetch_listings():
-    texts = []
-    for url in (NASDAQ_LISTED, OTHER_LISTED):
+def _listing_text(url):
+    """One symbol-directory file: the website first, the FTP mirror when the
+    site answers with anything but the file (bot check, error page).  The
+    reply must start with the file's header row.  None when both fail."""
+    name = url.rsplit("/", 1)[1]
+    head = LISTING_HEADERS[name]
+    try:
         r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
-        r.raise_for_status()
-        texts.append(r.text)
-    return parse_listings(*texts)
+        if r.status_code == 200 and r.text.startswith(head):
+            return r.text
+        print(f"{name}: website served no symbol file (HTTP {r.status_code}, "
+              f"{r.headers.get('content-type', '?')}) — trying FTP")
+    except requests.RequestException as e:
+        print(f"{name}: website unreachable ({type(e).__name__}) — trying FTP")
+    try:
+        import urllib.request
+        with urllib.request.urlopen(FTP_DIR + name, timeout=120) as f:
+            text = f.read().decode("utf-8", "replace")
+        if text.startswith(head):
+            return text
+        print(f"{name}: FTP reply is not the symbol file")
+    except OSError as e:
+        print(f"{name}: FTP failed ({type(e).__name__}: {e})")
+    return None
+
+
+def fetch_listings():
+    """{yahoo_symbol: row} from both symbol directories, or None when either
+    can't be fetched (the caller then keeps the last good master)."""
+    texts = [_listing_text(url) for url in (NASDAQ_LISTED, OTHER_LISTED)]
+    return parse_listings(*texts) if all(texts) else None
 
 
 def fetch_ciks():
@@ -464,6 +505,8 @@ def reconcile(master, live, ciks, dry_run=False):
         master (dual-class companies share a CIK, so a class going away is not
         a rename): logged to us_symbol_changes.csv for history stitching.
       * gone — archived to us_delisted.csv.
+    Archived symbols that trade again (a relisting, or an archive written
+    while a source was broken) are taken back out of us_delisted.csv.
     Skipped when the live list looks truncated.  Returns the renames list."""
     if not master:
         return []
@@ -494,7 +537,26 @@ def reconcile(master, live, ciks, dry_run=False):
     if not dry_run:
         _append_csv(CHANGES, ["old", "new", "cik", "date"], renames)
         _append_csv(DELISTED, FIELDS + ["delisted_on"], gone)
+        unarchive(live)
     return renames
+
+
+def unarchive(live):
+    """Drop us_delisted.csv rows whose symbol is in the live listings again."""
+    if not os.path.exists(DELISTED):
+        return []
+    with open(DELISTED, newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    back = [r["symbol"] for r in rows if r["symbol"] in live]
+    if back:
+        tmp = DELISTED + ".tmp"
+        with open(tmp, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=FIELDS + ["delisted_on"], extrasaction="ignore")
+            w.writeheader()
+            w.writerows(r for r in rows if r["symbol"] not in live)
+        os.replace(tmp, DELISTED)
+        print(f"Trading again (removed from {os.path.basename(DELISTED)}): {back}")
+    return back
 
 
 def _append_csv(path, fields, rows):
@@ -506,6 +568,55 @@ def _append_csv(path, fields, rows):
         if new_file:
             w.writeheader()
         w.writerows(rows)
+
+
+def cap_class(mcap):
+    """Market cap (US$) → Large / Mid / Small / Micro; None when unknown."""
+    if not mcap or mcap <= 0:
+        return None
+    return next(name for floor, name in CAP_BANDS if mcap >= floor)
+
+
+def parse_screener(rows):
+    """Nasdaq screener rows → {yahoo_symbol: market cap in US$} (blank or
+    zero caps — funds, fresh listings — are left out)."""
+    out = {}
+    for r in rows or []:
+        sym = (r.get("symbol") or "").strip().upper().replace("/", "-").replace(".", "-")
+        try:
+            mc = float(str(r.get("marketCap") or "").replace(",", "").replace("$", ""))
+        except ValueError:
+            continue
+        if sym and mc > 0:
+            out[sym] = mc
+    return out
+
+
+def sync_cap_classes(symbols):
+    """Rewrite us_cap_classes.csv (symbol,cap,mcap) for the universe from
+    Nasdaq's stock screener — best effort: the old file stays on failure, and
+    a reply covering under half the universe is treated as a failure."""
+    try:
+        r = requests.get(NASDAQ_SCREENER, headers={"User-Agent": UA, "Accept": "application/json"},
+                         timeout=90)
+        caps = parse_screener(((r.json() or {}).get("data") or {}).get("rows"))
+    except (requests.RequestException, ValueError, AttributeError) as e:
+        print(f"Nasdaq screener unavailable ({type(e).__name__}) — {os.path.basename(CAP_CLASSES)} kept.")
+        return
+    have = [s for s in symbols if s in caps]
+    if not symbols or len(have) < 0.5 * len(symbols):
+        print(f"Nasdaq screener: only {len(have)}/{len(symbols)} market caps — "
+              f"{os.path.basename(CAP_CLASSES)} kept.")
+        return
+    tmp = CAP_CLASSES + ".tmp"
+    with open(tmp, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["symbol", "cap", "mcap"])
+        for s in sorted(have):
+            w.writerow([s, cap_class(caps[s]), f"{caps[s]:.0f}"])
+    os.replace(tmp, CAP_CLASSES)
+    n = Counter(cap_class(caps[s]) for s in have)
+    print(f"Size classes: {dict(n)} ({len(have)}/{len(symbols)} with a market cap)")
 
 
 def save_master(rows):
@@ -525,16 +636,24 @@ def main():
     args = ap.parse_args()
 
     live = fetch_listings()
+    master = load_master_rows()
+    if not live:
+        sys.exit("Listings unavailable (website + FTP) — master unchanged.")
     print(f"Listings: {len(live)} common stocks "
           f"({Counter(v['exchange'] for v in live.values())})")
+    if len(live) < MIN_UNIVERSE or len(live) < MIN_KEEP_SHARE * len(master):
+        sys.exit(f"Listings look truncated ({len(live)} vs {len(master)} in the master) — "
+                 f"master unchanged.")
     ciks = fetch_ciks()
-    master = load_master_rows()
     old_cik = {r["symbol"]: r.get("cik", "") for r in master}
     reconcile(master, live, ciks, dry_run=args.dry_run)
 
     tree = load_hierarchy()
     assert {v["sector"] for v in tree.values()} == CURRENT_MACROS, "GICS tree ≠ 11 sectors"
     sp = fetch_sp1500(tree)
+    if len(sp) < MIN_SP_CONSTITUENTS:
+        sys.exit(f"Only {len(sp)} S&P 1500 constituents fetched — official GICS (and the "
+                 f"learnt Yahoo mapping) would be missing; master unchanged.")
     overrides = load_overrides()
     profiles = _load_json(PROFILE_CACHE)
     if args.dry_run or args.no_profiles:
@@ -568,6 +687,7 @@ def main():
         return
     save_yahoo_map(ymap)
     save_master(rows)
+    sync_cap_classes([r["symbol"] for r in rows])
     print(f"Wrote {MASTER}")
 
 

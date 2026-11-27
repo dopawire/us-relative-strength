@@ -39,7 +39,49 @@ A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8001`)
 - **Rotation tab:** daily RS lines per industry group vs the S&P 500.
 - **New Listings tab:** IPOs waiting for their first 26-day ranking, ranked
   vs the S&P 500 since the listing-day close.
+- **Scans tab:** the 1-month gainers (up ≥ 14% over 20 sessions, ≥ US$10M a
+  day, price ≥ $10), broken down by Sector, Industry Group or **market cap**:
+  a donut of the split, the share of each group, median RS rating and 3M
+  return, and each group's 1-day and 1-week change.
+- **Focus tab:** the one-shot answer, which industry groups and which size
+  class to focus on. Groups are ranked on 1M / 3M median return vs the
+  average stock, share above the 50-day EMA, share of RS ≥ 80 leaders and
+  RS_STS%, and tagged Leading / Improving / Weakening / Lagging. It also has
+  "turning up" and "avoid" lists and the market regime.
+- **Swing tab:** an evening swing-trading desk.
+  - A market-regime checklist: S&P 500 vs its 20/50/200-day EMAs, breadth
+    level and direction, share of stocks above their 50-day EMA.
+  - Leading industries.
+  - Five screens: **breakout watch** (RS ≥ 80 leaders in a full uptrend near
+    their highs), **pullbacks in leaders**, **IPO bases**, **weekly trend**
+    (above a rising 10-week SMA) and **high tight flags** (a +100% pole, then
+    a ≤ 25% flag, with an early trigger).
+  - Extended stocks not to chase, and risk rules.
+  - Each candidate shows its 10-day range, volume vs its 50-day average and
+    setup tags (*Tight*, *Vol dry-up*, *Vol surge*).
+  - Stocks reporting **earnings within 14 days** carry a ⚠ Results badge.
+  - Every list can be copied or downloaded for TradingView
+    (`NASDAQ:AAPL,NYSE:BRK.B,…`).
+- **Track record** on both pages: every build logs the day's calls to
+  `us_picks.jsonl` and scores them 5 / 10 / 20 sessions later: the lists vs
+  the S&P 500, focus / avoid groups and the size pick vs the average stock,
+  and the S&P 500 after each regime. `backfill_picks.py` rebuilds past
+  sessions from price history with the same rules, marked as backfilled.
+- **Evening Telegram brief** (`send_brief.py`, after each build): the regime,
+  focus, top candidates with earnings warnings, the track record, and alerts
+  for your ☆ watchlist. Stars on the local site sync to
+  `~/.config/us-rs/watchlist.txt`. Put `TELEGRAM_BOT_TOKEN` and
+  `TELEGRAM_CHAT_ID` in `~/.config/us-rs/notify.env`; `python send_brief.py
+  --chat-id` finds the chat id and `--dry-run` prints the message.
 - A printable **daily digest** (`daily_report.html`) after every build.
+
+**About the screening rules:** they were ported from the NSE project, where
+they were tuned and backtested on Indian stocks. The NSE figures quoted on
+the Swing page and in `rs_engine/decide.py` are labelled as such. Money and
+price thresholds are set for US stocks (US$10M/day and $10 instead of ₹5
+crore and ₹50). Whether the rules work as well here is exactly what the US
+track record measures. Check it before relying on a screen. Not investment
+advice.
 
 ## Method
 
@@ -54,6 +96,21 @@ A website (FastAPI backend plus vanilla JS frontend, served on `localhost:8001`)
 - **Data breaks:** a one-day move of ×10 or more, either way, is treated as a
   data break (typically a reverse split Yahoo adjusted late), not a trading
   move. Real +150% days stay in.
+- **Thinly traded stocks are left out of every ranking**: a stock that
+  skipped a session of the 26-day window *and* trades under US$1M a day
+  (`illiquid_turnover_m` in config.toml). Its untraded days carry the last
+  price, so its RS isn't real. They're listed in `meta.illiquid`.
+- **Completed sessions only:** Yahoo's live bar for a session still trading
+  is never stored, and bars on non-session days are dropped.
+- **RS rating** (1–99): percentile of the weighted 12-month performance
+  (2×3M + 6M + 9M + 12M) against every ranked stock, IBD-style.
+- **Size classes** from Nasdaq's stock-screener market caps
+  (`us_cap_classes.csv`, refreshed with the universe): Large ≥ $10B, Mid
+  $2–10B, Small $300M–2B, Micro below.
+- **Earnings dates** come from Nasdaq's earnings calendar (next 14 days) and
+  **IPO issue prices** from Nasdaq's IPO calendar: `refresh_events.py` →
+  `us_events.csv`, `us_ipos.csv`. A stock's first session isn't treated as an
+  IPO, because direct listings, spin-offs and uplistings also start cold.
 
 ## Universe & classification (`refresh_universe.py`)
 
@@ -101,11 +158,14 @@ every 90 days, at most 300 per run.
 | Script | Purpose |
 |---|---|
 | `refresh_universe.py` | Rebuild `us_stock_master.csv`: listings, GICS classification, renames, delistings. |
-| `build_rs.py` | Fetch Yahoo prices and rebuild `rs_data.json` (plus the `daily_report.html` digest). |
+| `build_rs.py` | Fetch Yahoo prices and rebuild `rs_data.json` (plus the `daily_report.html` digest), including the Focus / Swing decisions and their track record. |
+| `refresh_events.py` | Earnings dates (next 14 days) and priced IPOs from Nasdaq → `us_events.csv`, `us_ipos.csv`. |
+| `backfill_picks.py` | Rebuild past sessions' Focus / Swing picks from price history for the track record. |
+| `send_brief.py` | Evening Telegram brief + watchlist alerts (no-op without a bot token). |
 | `audit_data.py` | Data-integrity audit (caches, holiday calendar, fake bars, freshness, GICS paths). Exits non-zero on issues. |
 | `run_daily.sh` | Runs `build_rs.py` and logs to `run.log`. |
 | `run_server.sh` | Serves the website on `localhost:8001` (`US_RS_HOST=0.0.0.0` to expose it on the LAN). |
-| `cron_us.sh` | Cron entry point: universe refresh, build and audit (plus optional Telegram alerts). |
+| `cron_us.sh` | Cron entry point: universe refresh, earnings / IPO refresh, build, audit and the Telegram brief. |
 | `install_cron.sh` | Installs the cron entries at 17:30 New York time, converted to the system time zone for both EST and EDT. |
 | `export_static.py` | Builds a read-only static site into `site/`. |
 | `publish_site.sh` | Commits and pushes the `rs_data.json` snapshot, which triggers the GitHub Pages deploy. |

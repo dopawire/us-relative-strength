@@ -45,10 +45,8 @@ ACEL,"Accel Entertainment, Inc.",NYSE,1698991,Consumer Discretionary,Consumer Se
 ACET,"Adicet Bio, Inc.",NASDAQ,1720580,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 ACFN,"Acorn Energy, Inc.",NASDAQ,880984,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Equipment & Instruments,yahoo
 ACGL,Arch Capital Group Ltd.,NASDAQ,947484,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
-ACH,"Accendra Health, Inc.",NYSE,75252,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Distributors,yahoo
 ACHC,"Acadia Healthcare Company, Inc.",NASDAQ,1520697,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,sp1500
 ACHR,Archer Aviation Inc.,NYSE,1824502,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
-ACHV,"Achieve Life Sciences, Inc.",NASDAQ,949858,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 ACI,"Albertsons Companies, Inc.",NYSE,1646972,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Distribution & Retail,Food Retail,sp1500
 ACIC,American Coastal Insurance Corporation,NASDAQ,1401521,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo
 ACIU,AC Immune SA,NASDAQ,1651625,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -133,6 +131,7 @@ AGI,Alamos Gold Inc.,NYSE,1178819,Materials,Materials,Metals & Mining,Gold,yahoo
 AGIG,Abundia Global Impact Group Inc.,AMEX,1156041,Utilities,Utilities,Independent Power and Renewable Electricity Producers,Renewable Electricity,yahoo
 AGIO,"Agios Pharmaceuticals, Inc.",NASDAQ,1439222,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 AGL,"agilon health, inc.",NYSE,1831097,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
+AGLT,"Agility Robotics, Inc.",NASDAQ,2074973,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 AGM,Federal Agricultural Mortgage Corporation,NYSE,845877,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 AGM-A,Federal Agricultural Mortgage Corporation,NYSE,845877,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 AGMB,AgomAb Therapeutics NV,NASDAQ,2020932,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -303,6 +302,7 @@ ANNA,"AleAnna, Inc.",NASDAQ,1845123,Energy,Energy,"Oil, Gas & Consumable Fuels",
 ANNX,"Annexon, Inc.",NASDAQ,1528115,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 ANPA,Rich Sparkle Holdings Limited,NASDAQ,2031688,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
 ANRO,"Alto Neuroscience, Inc.",NYSE,1999480,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+ANT,"Anthropic, PBC",NASDAQ,2130357,Information Technology,Software & Services,Software,Application Software,yahoo
 ANTA,Antalpha Platform Holding Company,NASDAQ,2044255,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 ANTX,"AN2 Therapeutics, Inc.",NASDAQ,1880438,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 ANVS,"Annovis Bio, Inc.",NYSE,1477845,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -360,7 +360,6 @@ AREC,American Resources Corporation,NASDAQ,1590715,Industrials,Commercial & Prof
 ARES,Ares Management Corporation,NYSE,1176948,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,sp1500
 ARGX,argenx SE,NASDAQ,1697862,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 ARHS,"Arhaus, Inc.",NASDAQ,1875444,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
-ARI,"Apollo Commercial Real Estate Finance, Inc",NYSE,1467760,Financials,Financial Services,Mortgage Real Estate Investment Trusts (REITs),Mortgage REITs,yahoo
 ARIS,Aris Mining Corporation,NYSE,1964504,Materials,Materials,Metals & Mining,Gold,yahoo
 ARKO,ARKO Corp.,NASDAQ,1823794,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
 ARKR,Ark Restaurants Corp.,NASDAQ,779544,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Restaurants,yahoo
@@ -419,7 +418,6 @@ ASUR,Asure Software Inc,NASDAQ,884144,Information Technology,Software & Services
 ASX,"ASE Technology Holding Co., Ltd.",NYSE,1122411,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
 ASYS,"Amtech Systems, Inc.",NASDAQ,720500,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,yahoo
 ATAT,Atour Lifestyle Holdings Limited,NASDAQ,1853717,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",yahoo
-ATCH,"AtlasClear Holdings, Inc.",AMEX,1963088,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,yahoo
 ATCX,Atlas Critical Minerals Corporation,NASDAQ,1684688,,,,,
 ATEC,"Alphatec Holdings, Inc.",NASDAQ,1350653,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 ATEN,"A10 Networks, Inc.",NYSE,1580808,Information Technology,Software & Services,Software,Systems Software,sp1500
@@ -488,6 +486,7 @@ AVTX,"Avalo Therapeutics, Inc.",NASDAQ,1534120,Health Care,"Pharmaceuticals, Bio
 AVX,Avax One Technology Ltd.,NASDAQ,1826397,Information Technology,Software & Services,Software,Systems Software,yahoo
 AVXL,Anavex Life Sciences Corp.,NASDAQ,1314052,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 AVY,Avery Dennison Corporation,NYSE,8818,Materials,Materials,Containers & Packaging,Paper & Plastic Packaging Products & Materials,sp1500
+AVZO,"Avenzo Therapeutics, Inc.",NASDAQ,1739410,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 AWI,Armstrong World Industries Inc,NYSE,7431,Industrials,Capital Goods,Building Products,Building Products,sp1500
 AWK,"American Water Works Company, Inc.",NYSE,1410636,Utilities,Utilities,Water Utilities,Water Utilities,sp1500
 AWR,American States Water Company,NYSE,1056903,Utilities,Utilities,Water Utilities,Water Utilities,sp1500
@@ -513,7 +512,7 @@ AZI,Autozi Internet Technology (Global) Ltd.,NASDAQ,1959726,Consumer Discretiona
 AZIO,"Azio AI Holdings, Inc.",NASDAQ,1563568,Information Technology,Software & Services,Software,Systems Software,yahoo
 AZN,AstraZeneca PLC,NYSE,901832,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 AZO,"AutoZone, Inc.",NYSE,866787,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Automotive Retail,sp1500
-AZR,"Azora Therapeutics, Inc.",NASDAQ,,,,,,
+AZR,"Azora Therapeutics, Inc.",NASDAQ,1513525,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 AZTA,"Azenta, Inc.",NASDAQ,933974,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,sp1500
 AZTR,Azitra Inc,AMEX,1701478,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 AZUL,Azul S.A.,NYSE,1432364,Industrials,Transportation,Passenger Airlines,Passenger Airlines,yahoo
@@ -556,7 +555,7 @@ BBNX,"Beta Bionics, Inc.",NASDAQ,1674632,Health Care,Health Care Equipment & Ser
 BBOT,"BridgeBio Oncology Therapeutics, Inc.",NASDAQ,1869105,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 BBSI,"Barrett Business Services, Inc.",NASDAQ,902791,Industrials,Commercial & Professional Services,Professional Services,Human Resource & Employment Services,yahoo
 BBT,Beacon Financial Corporation,NYSE,1108134,Financials,Banks,Banks,Regional Banks,sp1500
-BBTX,"Bambusa Therapeutics, Inc.",NASDAQ,,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+BBTX,"Bambusa Therapeutics, Inc.",NASDAQ,2044950,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 BBUC,Brookfield Business Corporation,NYSE,1654795,Industrials,Capital Goods,Industrial Conglomerates,Industrial Conglomerates,yahoo
 BBVA,Banco Bilbao Vizcaya Argentaria S.A.,NYSE,842180,Financials,Banks,Banks,Diversified Banks,yahoo
 BBW,"Build-A-Bear Workshop, Inc.",NYSE,1113809,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
@@ -609,6 +608,7 @@ BF-B,Brown Forman Inc,NYSE,14693,Consumer Staples,"Food, Beverage & Tobacco",Bev
 BFAM,Bright Horizons Family Solutions Inc.,NYSE,1437578,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Specialized Consumer Services,sp1500
 BFC,Bank First Corporation,NASDAQ,1746109,Financials,Banks,Banks,Regional Banks,yahoo
 BFH,"Bread Financial Holdings, Inc.",NYSE,1101215,Financials,Financial Services,Consumer Finance,Consumer Finance,sp1500
+BFLR,"BlueFlare, Inc.",NASDAQ,,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo
 BFLY,"Butterfly Network, Inc.",NYSE,1804176,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 BFRG,"Bullfrog AI Holdings, Inc.",NASDAQ,1829247,Health Care,Health Care Equipment & Services,Health Care Technology,Health Care Technology,yahoo
 BFRI,Biofrontera Inc.,NASDAQ,1858685,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
@@ -647,7 +647,7 @@ BIO-B,"Bio-Rad Laboratories, Inc.",NYSE,12208,Health Care,Health Care Equipment 
 BIOA,"BioAge Labs, Inc.",NASDAQ,1709941,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 BIOT,Instinct Bio Technical Company Holdings Inc.,NASDAQ,2072188,Consumer Staples,Household & Personal Products,Household Products,Household Products,yahoo
 BIOX,Bioceres Crop Solutions Corp.,NASDAQ,1769484,Materials,Materials,Chemicals,Fertilizers & Agricultural Chemicals,yahoo
-BIPC,Brookfield Infrastructure Corporation Brookfield Infrastructure Corporation,NYSE,1788348,Utilities,Utilities,Gas Utilities,Gas Utilities,yahoo
+BIP,Brookfield Infrastructure Partners Inc.,NYSE,2155396,Utilities,Utilities,Multi-Utilities,Multi-Utilities,yahoo
 BIRD,"Smartbird, Inc.",NASDAQ,1653909,Information Technology,Software & Services,Software,Systems Software,yahoo
 BIRK,Birkenstock Holding plc,NYSE,1977102,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods",Footwear,yahoo
 BIVI,BioVie Inc.,NASDAQ,1580149,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -657,7 +657,6 @@ BJDX,"Bluejay Diagnostics, Inc.",NASDAQ,1704287,Health Care,Health Care Equipmen
 BJRI,"BJ's Restaurants, Inc.",NASDAQ,1013488,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Restaurants,sp1500
 BKD,Brookdale Senior Living Inc.,NYSE,1332349,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
 BKE,"Buckle, Inc. (The)",NYSE,885245,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Apparel Retail,sp1500
-BKH,Black Hills Corporation,NYSE,1130464,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
 BKKT,"Bakkt, Inc.",NYSE,1820302,Information Technology,Software & Services,Software,Systems Software,yahoo
 BKNG,Booking Holdings Inc.,NASDAQ,1075531,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
 BKR,Baker Hughes Company,NASDAQ,1701605,Energy,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,sp1500
@@ -814,7 +813,6 @@ BWEN,"Broadwind, Inc.",NASDAQ,1120370,Industrials,Capital Goods,Machinery,Indust
 BWFG,"Bankwell Financial Group, Inc.",NASDAQ,1505732,Financials,Banks,Banks,Regional Banks,yahoo
 BWIN,"The Baldwin Insurance Group, Inc.",NASDAQ,1781755,Financials,Insurance,Insurance,Insurance Brokers,yahoo
 BWLP,BW LPG Limited,NYSE,1649313,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,yahoo
-BWMN,Bowman Consulting Group Ltd.,NASDAQ,1847590,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 BWMX,"Betterware de Mexico, S.A.P.I. de C.V.",NYSE,1788257,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
 BWXT,"BWX Technologies, Inc.",NYSE,1486957,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,sp1500
 BX,Blackstone Inc.,NYSE,1393818,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,sp1500
@@ -870,6 +868,7 @@ CARR,Carrier Global Corporation,NYSE,1783180,Industrials,Capital Goods,Building 
 CARS,Cars.com Inc.,NYSE,1683606,Communication Services,Media & Entertainment,Interactive Media & Services,Interactive Media & Services,yahoo
 CART,Maplebear Inc.,NASDAQ,1579091,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Distribution & Retail,Food Retail,sp1500
 CASH,"Pathward Financial, Inc.",NASDAQ,907471,Financials,Banks,Banks,Regional Banks,sp1500
+CASK,"Sempreon, Inc.",NASDAQ,835011,Consumer Staples,"Food, Beverage & Tobacco",Beverages,Distillers & Vintners,yahoo
 CASS,"Cass Information Systems, Inc",NASDAQ,708781,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
 CAST,"FreeCast, Inc.",NASDAQ,1633369,Communication Services,Media & Entertainment,Media,Broadcasting,yahoo
 CASY,"Caseys General Stores, Inc.",NASDAQ,726958,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Distribution & Retail,Food Retail,sp1500
@@ -897,7 +896,6 @@ CBSH,"Commerce Bancshares, Inc.",NASDAQ,22356,Financials,Banks,Banks,Regional Ba
 CBT,Cabot Corporation,NYSE,16040,Materials,Materials,Chemicals,Diversified Chemicals,sp1500
 CBU,"Community Financial System, Inc.",NYSE,723188,Financials,Banks,Banks,Regional Banks,sp1500
 CBUS,"Cibus, Inc.",NASDAQ,1705843,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-CBZ,"CBIZ, Inc.",NYSE,944148,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
 CC,Chemours Company (The),NYSE,1627223,Materials,Materials,Chemicals,Diversified Chemicals,sp1500
 CCAP,"Crescent Capital BDC, Inc.",NASDAQ,1633336,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
 CCB,Coastal Financial Corporation,NASDAQ,1437958,Financials,Banks,Banks,Regional Banks,yahoo
@@ -924,7 +922,7 @@ CCU,"Compania Cervecerias Unidas, S.A.",NYSE,888746,Consumer Staples,"Food, Beve
 CD,Chaince Digital Holdings Inc.,NASDAQ,1527762,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,yahoo
 CDE,"Coeur Mining, Inc.",NYSE,215466,Materials,Materials,Metals & Mining,Gold,sp1500
 CDIO,Cardio Diagnostics Holdings Inc.,NASDAQ,1870144,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-CDLR,Cadeler A/S American Depositary Share (each representing four (4),NYSE,1978867,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
+CDLR,Cadeler plc,NYSE,2063345,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 CDLX,"Cardlytics, Inc.",NASDAQ,1666071,Communication Services,Media & Entertainment,Media,Advertising,yahoo
 CDNA,"CareDx, Inc.",NASDAQ,1217234,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,yahoo
 CDNL,Cardinal Infrastructure Group Inc.,NASDAQ,2079999,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
@@ -961,7 +959,7 @@ CFBK,CF Bankshares Inc.,NASDAQ,1070680,Financials,Banks,Banks,Regional Banks,yah
 CFFI,C&F Financial Corporation,NASDAQ,913341,Financials,Banks,Banks,Regional Banks,yahoo
 CFFN,"Capitol Federal Financial, Inc.",NASDAQ,1490906,Financials,Banks,Banks,Regional Banks,sp1500
 CFG,"Citizens Financial Group, Inc.",NYSE,759944,Financials,Banks,Banks,Regional Banks,sp1500
-CFR,"Cullen/Frost Bankers, Inc.",NYSE,39263,Financials,Banks,Banks,Regional Banks,sp1500
+CFR,"Cullen/Frost Bankers, Inc.",TXSE,39263,Financials,Banks,Banks,Regional Banks,sp1500
 CG,The Carlyle Group Inc.,NASDAQ,1527166,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,sp1500
 CGAU,Centerra Gold Inc.,NYSE,1854640,Materials,Materials,Metals & Mining,Gold,yahoo
 CGBD,"Carlyle Secured Lending, Inc.",NASDAQ,1544206,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
@@ -1002,7 +1000,7 @@ CHT,"Chunghwa Telecom Co., Ltd.",NYSE,1132924,Communication Services,Telecommuni
 CHTR,"Charter Communications, Inc.",NASDAQ,1091667,Communication Services,Media & Entertainment,Media,Cable & Satellite,sp1500
 CHWM,Chilwa Minerals Limited,NASDAQ,2113605,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
 CHWY,"Chewy, Inc.",NYSE,1766502,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,sp1500
-CHYM,"Chime Financial, Inc.",NASDAQ,1795586,Information Technology,Software & Services,Software,Application Software,yahoo
+CHYM,"Chime Financial, Inc.",NASDAQ,1795586,Financials,Financial Services,Consumer Finance,Consumer Finance,sp1500
 CI,The Cigna Group,NYSE,1739940,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Services,sp1500
 CIA,"Citizens, Inc.",NYSE,24090,Financials,Insurance,Insurance,Life & Health Insurance,yahoo
 CIEN,Ciena Corporation,NYSE,936395,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,sp1500
@@ -1035,7 +1033,6 @@ CLDT,Chatham Lodging Trust (REIT),NYSE,1476045,Real Estate,Equity Real Estate In
 CLDX,"Celldex Therapeutics, Inc.",NASDAQ,744218,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 CLF,Cleveland-Cliffs Inc.,NYSE,764065,Materials,Materials,Metals & Mining,Steel,sp1500
 CLFD,"Clearfield, Inc.",NASDAQ,796505,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,yahoo
-CLGN,CollPlant Biotechnologies Ltd.,NASDAQ,1631487,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 CLH,"Clean Harbors, Inc.",NYSE,822818,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,sp1500
 CLIK,Click Holdings Limited,NASDAQ,2020027,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Specialized Consumer Services,yahoo
 CLIR,ClearSign Technologies Corporation,NASDAQ,1434524,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
@@ -1057,6 +1054,7 @@ CLVT,Clarivate Plc,NYSE,1764046,Information Technology,Software & Services,IT Se
 CLW,Clearwater Paper Corporation,NYSE,1441236,Materials,Materials,Paper & Forest Products,Paper Products,yahoo
 CLWT,Euro Tech Holdings Company Limited,NASDAQ,1026662,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
 CLX,Clorox Company (The),NYSE,21076,Consumer Staples,Household & Personal Products,Household Products,Household Products,sp1500
+CLYD,"Clywedog Therapeutics Holdings, Inc.",NASDAQ,2094256,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 CLYM,"Climb Bio, Inc.",NASDAQ,1768446,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 CM,Canadian Imperial Bank of Commerce,NYSE,1045520,Financials,Banks,Banks,Diversified Banks,yahoo
 CMBT,Cmb.Tech NV,NYSE,1604481,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,yahoo
@@ -1196,6 +1194,7 @@ CRL,"Charles River Laboratories International, Inc.",NYSE,1100682,Health Care,"P
 CRM,"Salesforce, Inc.",NYSE,1108524,Information Technology,Software & Services,Software,Application Software,sp1500
 CRMD,CorMedix Inc.,NASDAQ,1410098,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 CRML,Critical Metals Corp.,NASDAQ,1951089,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
+CRMN,Skyline Builders Group Holding Limited,NASDAQ,2031009,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 CRMT,"America's Car-Mart, Inc.",NASDAQ,799850,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Automotive Retail,yahoo
 CRNC,Cerence Inc.,NASDAQ,1768267,Information Technology,Software & Services,Software,Application Software,yahoo
 CRNT,Ceragon Networks Ltd.,NASDAQ,1119769,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,yahoo
@@ -1311,6 +1310,7 @@ CZFS,"Citizens Financial Services, Inc.",NASDAQ,739421,Financials,Banks,Banks,Re
 CZNC,Citizens & Northern Corp,NASDAQ,810958,Financials,Banks,Banks,Regional Banks,yahoo
 CZR,"Caesars Entertainment, Inc.",NASDAQ,1590895,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Casinos & Gaming,sp1500
 CZWI,"Citizens Community Bancorp, Inc.",NASDAQ,1367859,Financials,Banks,Banks,Regional Banks,yahoo
+CZZL,Cizzle Brands Corporation,NASDAQ,2105038,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,yahoo
 D,"Dominion Energy, Inc.",NYSE,715957,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
 DAC,Danaos Corporation,NYSE,1369241,Industrials,Transportation,Marine Transportation,Marine Transportation,yahoo
 DAIC,"CID HoldCo, Inc.",NASDAQ,2033770,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
@@ -1466,7 +1466,6 @@ DUOL,"Duolingo, Inc.",NASDAQ,1562088,Consumer Discretionary,Consumer Services,Di
 DUOT,"Duos Technologies Group, Inc.",NASDAQ,1396536,Information Technology,Software & Services,Software,Application Software,yahoo
 DV,"DoubleVerify Holdings, Inc.",NYSE,1819928,Communication Services,Media & Entertainment,Media,Advertising,sp1500
 DVA,DaVita Inc.,NYSE,927066,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Services,sp1500
-DVLT,Datavault AI Inc.,NASDAQ,1682149,Information Technology,Software & Services,Software,Systems Software,yahoo
 DVN,Devon Energy Corporation,NYSE,1090012,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,sp1500
 DWSN,Dawson Geophysical Company,NASDAQ,799165,Energy,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,yahoo
 DWTX,"Dogwood Therapeutics, Inc.",NASDAQ,1818844,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -1488,7 +1487,6 @@ EAT,"Brinker International, Inc.",NYSE,703351,Consumer Discretionary,Consumer Se
 EBAY,eBay Inc.,NASDAQ,1065088,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Broadline Retail,Broadline Retail,sp1500
 EBC,"Eastern Bankshares, Inc.",NASDAQ,1810546,Financials,Banks,Banks,Regional Banks,sp1500
 EBF,"Ennis, Inc.",NYSE,33002,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
-EBMT,"Eagle Bancorp Montana, Inc.",NASDAQ,1478454,Financials,Banks,Banks,Regional Banks,yahoo
 EBON,Ebang International Holdings Inc.,NASDAQ,1799290,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 EBS,Emergent BioSolutions Inc.,NYSE,1367644,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 EC,Ecopetrol S.A.,NYSE,1444406,Energy,Energy,"Oil, Gas & Consumable Fuels",Integrated Oil & Gas,yahoo
@@ -1669,6 +1667,7 @@ EVMN,"Evommune, Inc.",NYSE,2044725,Health Care,"Pharmaceuticals, Biotechnology &
 EVO,Evotec SE,NASDAQ,1412558,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 EVR,Evercore Inc.,NYSE,1360901,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,sp1500
 EVRG,"Evergy, Inc.",NASDAQ,1711269,Utilities,Utilities,Electric Utilities,Electric Utilities,sp1500
+EVRL,Everli Global Holdings,NASDAQ,2016221,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Broadline Retail,Broadline Retail,yahoo
 EVTC,"Evertec, Inc.",NYSE,1559865,Financials,Financial Services,Financial Services,Transaction & Payment Processing Services,sp1500
 EVTL,Vertical Aerospace Ltd.,NYSE,1867102,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
 EW,Edwards Lifesciences Corporation,NYSE,1099800,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,sp1500
@@ -1693,7 +1692,6 @@ EYE,"National Vision Holdings, Inc.",NASDAQ,1710155,Consumer Discretionary,Consu
 EYPT,"EyePoint, Inc.",NASDAQ,1314102,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 EZGO,EZGO Technologies Ltd.,NASDAQ,1806904,Consumer Discretionary,Consumer Durables & Apparel,Leisure Products,Leisure Products,yahoo
 EZPW,"EZCORP, Inc.",NASDAQ,876523,Financials,Financial Services,Consumer Finance,Consumer Finance,sp1500
-EZRA,"Reliance Global Group, Inc.",NASDAQ,1812727,Financials,Insurance,Insurance,Insurance Brokers,yahoo
 F,Ford Motor Company,NYSE,37996,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,sp1500
 FA,First Advantage Corporation,NASDAQ,1210677,Industrials,Commercial & Professional Services,Professional Services,Human Resource & Employment Services,sp1500
 FABC,"Fabric.AI, Inc.",NASDAQ,1086745,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
@@ -1756,7 +1754,7 @@ FFBC,First Financial Bancorp.,NASDAQ,708955,Financials,Banks,Banks,Regional Bank
 FFIN,"First Financial Bankshares, Inc.",NASDAQ,36029,Financials,Banks,Banks,Regional Banks,sp1500
 FFIV,"F5, Inc.",NASDAQ,1048695,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,sp1500
 FFR,FF EAI Robotics Ecosystem Inc.,NASDAQ,1460702,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
-FFTT,Masonglory Limited,NASDAQ,,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
+FFTT,Masonglory Limited,NASDAQ,2020228,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 FG,"F&G Annuities & Life, Inc.",NYSE,1934850,Financials,Insurance,Insurance,Life & Health Insurance,sp1500
 FGBI,"First Guaranty Bancshares, Inc.",NASDAQ,1408534,Financials,Banks,Banks,Regional Banks,yahoo
 FGC,FG Communities Holdings Inc.,NASDAQ,1591890,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
@@ -1811,6 +1809,7 @@ FLYW,Flywire Corporation,NASDAQ,1580560,Information Technology,Software & Servic
 FLYX,"flyExclusive, Inc.",AMEX,1843973,Industrials,Transportation,Passenger Airlines,Passenger Airlines,yahoo
 FMAO,"Farmers & Merchants Bancorp, Inc.",NASDAQ,792966,Financials,Banks,Banks,Regional Banks,yahoo
 FMBH,"First Mid Bancshares, Inc.",NASDAQ,700565,Financials,Banks,Banks,Regional Banks,yahoo
+FMBM,F&M Bank Corp.,AMEX,740806,Financials,Banks,Banks,Regional Banks,yahoo
 FMC,FMC Corporation,NYSE,37785,Materials,Materials,Chemicals,Fertilizers & Agricultural Chemicals,sp1500
 FMFC,Kandal M Venture Limited,NASDAQ,2024656,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods",Footwear,yahoo
 FMNB,Farmers National Banc Corp.,NASDAQ,709337,Financials,Banks,Banks,Regional Banks,yahoo
@@ -1821,7 +1820,6 @@ FN,Fabrinet,NYSE,1408710,Information Technology,Technology Hardware & Equipment,
 FNB,F.N.B. Corporation,NYSE,37808,Financials,Banks,Banks,Regional Banks,sp1500
 FND,"Floor & Decor Holdings, Inc.",NYSE,1507079,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Home Improvement Retail,sp1500
 FNF,"Fidelity National Financial, Inc.",NYSE,1331875,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
-FNGR,"FingerMotion, Inc.",NASDAQ,1602409,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo
 FNKO,"Funko, Inc.",NASDAQ,1704711,Consumer Discretionary,Consumer Durables & Apparel,Leisure Products,Leisure Products,yahoo
 FNLC,"First Bancorp, Inc (ME)",NASDAQ,765207,Financials,Banks,Banks,Regional Banks,yahoo
 FNRN,First Northern Community Bancorp,NASDAQ,1114927,Financials,Banks,Banks,Regional Banks,yahoo
@@ -1936,8 +1934,7 @@ GBFH,GBank Financial Holdings Inc.,NASDAQ,1791145,Financials,Banks,Banks,Regiona
 GBLI,"Global Indemnity Group, LLC",NASDAQ,1494904,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo
 GBR,"New Concept Energy, Inc",AMEX,105744,Real Estate,Real Estate Management & Development,Real Estate Management & Development,Real Estate Services,yahoo
 GBX,"Greenbrier Companies, Inc. (The)",NYSE,923120,Industrials,Capital Goods,Machinery,Construction Machinery & Heavy Transportation Equipment,sp1500
-GCBC,"Greene County Bancorp, Inc.",NASDAQ,1070524,Financials,Banks,Banks,Regional Banks,yahoo
-GCDT,Green Circle Decarbonize Technology Limited,AMEX,1926293,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
+GCBC,"Greene Bancorp, Inc.",NASDAQ,1070524,Financials,Banks,Banks,Regional Banks,yahoo
 GCL,GCL Global Holdings Ltd,NASDAQ,2002045,Communication Services,Media & Entertainment,Entertainment,Interactive Home Entertainment,yahoo
 GCMG,GCM Grosvenor Inc.,NASDAQ,1819796,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
 GCO,Genesco Inc.,NYSE,18498,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Apparel Retail,yahoo
@@ -2023,7 +2020,7 @@ GLUE,"Monte Rosa Therapeutics, Inc.",NASDAQ,1826457,Health Care,"Pharmaceuticals
 GLW,Corning Incorporated,NYSE,24741,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Components,sp1500
 GLXG,Galaxy Payroll Group Limited,NASDAQ,1905920,Industrials,Commercial & Professional Services,Professional Services,Human Resource & Employment Services,yahoo
 GLXY,Galaxy Digital Inc.,NASDAQ,1859392,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,yahoo
-GM,General Motors Company,NYSE,1467858,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,sp1500
+GM,General Motors Company,NASDAQ,1467858,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,sp1500
 GMAB,Genmab A/S,NASDAQ,1434265,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 GME,GameStop Corporation,NYSE,1326380,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Computer & Electronics Retail,sp1500
 GMED,"Globus Medical, Inc.",NYSE,1237831,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,sp1500
@@ -2041,7 +2038,6 @@ GNPX,"Genprex, Inc.",NASDAQ,1595248,Health Care,"Pharmaceuticals, Biotechnology 
 GNRC,Generac Holdlings Inc.,NYSE,1474735,Industrials,Capital Goods,Electrical Equipment,Heavy Electrical Equipment,sp1500
 GNS,Genius Group Limited,AMEX,1847806,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Education Services,yahoo
 GNSS,Genasys Inc.,NASDAQ,924383,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Equipment & Instruments,yahoo
-GNTA,Genenta Science S.p.A.,NASDAQ,1838716,Industrials,Capital Goods,Industrial Conglomerates,Industrial Conglomerates,yahoo
 GNTX,Gentex Corporation,NASDAQ,355811,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,sp1500
 GNW,Genworth Financial Inc,NYSE,1276520,Financials,Insurance,Insurance,Multi-line Insurance,sp1500
 GO,Grocery Outlet Holding Corp.,NASDAQ,1771515,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Distribution & Retail,Food Retail,sp1500
@@ -2078,7 +2074,7 @@ GRBK,"Green Brick Partners, Inc.",NYSE,1373670,Consumer Discretionary,Consumer D
 GRC,Gorman-Rupp Company (The),NYSE,42682,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
 GRCE,"Grace Therapeutics, Inc.",NASDAQ,1444192,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 GRDN,"Guardian Pharmacy Services, Inc.",NYSE,1802255,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
-GRDX,GridAI Technologies Corp.,NASDAQ,1604191,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+GRDX,GridAI Power Corp.,NASDAQ,1604191,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 GRFS,"Grifols, S.A.",NASDAQ,1438569,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 GRI,"GRI Bio, Inc.",NASDAQ,1824293,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 GRML,Greenland Mines Ltd,NASDAQ,1907223,Materials,Materials,Metals & Mining,Precious Metals & Minerals,yahoo
@@ -2118,6 +2114,7 @@ GTN,"Gray Media, Inc.",NYSE,43196,Communication Services,Media & Entertainment,M
 GTN-A,"Gray Media, Inc.",NYSE,43196,Communication Services,Media & Entertainment,Media,Broadcasting,yahoo
 GTX,Garrett Motion Inc.,NASDAQ,1735707,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,yahoo
 GTY,Getty Realty Corporation,NYSE,1052752,Real Estate,Equity Real Estate Investment Trusts (REITs),Retail REITs,Retail REITs,sp1500
+GUER,"Guerrilla RF, Inc.",NASDAQ,1832487,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
 GUNN,Gunnison Copper Corp.,AMEX,1514860,Materials,Materials,Metals & Mining,Copper,yahoo
 GURE,"Gulf Resources, Inc.",NASDAQ,885462,Materials,Materials,Chemicals,Diversified Chemicals,yahoo
 GUTS,"Fractyl Health, Inc.",NASDAQ,1572616,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -2162,7 +2159,6 @@ HCI,"HCI Group, Inc.",NYSE,1400810,Financials,Insurance,Insurance,Property & Cas
 HCKT,"The Hackett Group, Inc.",NASDAQ,1057379,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
 HCM,HUTCHMED (China) Limited,NASDAQ,1648257,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 HCSG,"Healthcare Services Group, Inc.",NASDAQ,731012,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,sp1500
-HCTI,"Healthcare Triangle, Inc.",NASDAQ,1839285,Health Care,Health Care Equipment & Services,Health Care Technology,Health Care Technology,yahoo
 HCWB,HCW Biologics Inc.,NASDAQ,1828673,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 HD,"Home Depot, Inc. (The)",NYSE,354950,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Home Improvement Retail,sp1500
 HDB,HDFC Bank Limited,NYSE,1144967,Financials,Banks,Banks,Regional Banks,yahoo
@@ -2210,8 +2206,7 @@ HLMN,Hillman Solutions Corp.,NASDAQ,1822492,Industrials,Capital Goods,Machinery,
 HLN,Haleon plc,NYSE,1900304,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 HLNE,Hamilton Lane Incorporated,NASDAQ,1433642,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,sp1500
 HLP,Hongli Group Inc.,NASDAQ,1855557,Materials,Materials,Metals & Mining,Steel,yahoo
-HLSQ,Tessera Defense and Homeland Security Inc.,AMEX,1739174,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
-HLT,Hilton Worldwide Holdings Inc.,NYSE,1585689,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
+HLT,Hilton Worldwide Holdings Inc.,NASDAQ,1585689,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
 HMC,"Honda Motor Company, Ltd.",NYSE,715153,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,yahoo
 HMH,HMH Holding Inc.,NASDAQ,2021880,Energy,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,yahoo
 HMN,Horace Mann Educators Corporation,NYSE,850141,Financials,Insurance,Insurance,Multi-line Insurance,sp1500
@@ -2223,7 +2218,6 @@ HNNA,"Hennessy Advisors, Inc.",NASDAQ,1145255,Financials,Financial Services,Capi
 HNRG,Hallador Energy Company,NASDAQ,788965,Utilities,Utilities,Independent Power and Renewable Electricity Producers,Independent Power Producers & Energy Traders,yahoo
 HNST,"The Honest Company, Inc.",NASDAQ,1530979,Consumer Staples,Household & Personal Products,Household Products,Household Products,yahoo
 HNVR,"Hanover Bancorp, Inc.",NASDAQ,1828588,Financials,Banks,Banks,Regional Banks,yahoo
-HODO,House of Doge Inc.,NASDAQ,1903595,Information Technology,Software & Services,Software,Application Software,yahoo
 HOFT,Hooker Furnishings Corporation,NASDAQ,1077688,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Home Furnishings,yahoo
 HOG,"Harley-Davidson, Inc.",NYSE,793952,Consumer Discretionary,Automobiles & Components,Automobiles,Motorcycle Manufacturers,sp1500
 HOLO,MicroCloud Hologram Inc.,NASDAQ,1841209,Information Technology,Software & Services,Software,Application Software,yahoo
@@ -2311,6 +2305,7 @@ HYMC,Hycroft Mining Holding Corporation,NASDAQ,1718405,Materials,Materials,Metal
 HYNE,"Hoyne Bancorp, Inc.",NASDAQ,2073153,Financials,Banks,Banks,Regional Banks,yahoo
 HYPD,"Hyperion DeFi, Inc.",NASDAQ,1682639,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 HYPR,"Hyperfine, Inc.",NASDAQ,1833769,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
+HZN,Bright Horizon Energy Corporation,NYSE,1130464,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
 HZO,"MarineMax, Inc. (FL)",NYSE,1057060,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,sp1500
 IA,"Innovative Solutions and Support, Inc.",NASDAQ,836690,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
 IAG,Iamgold Corporation,NYSE,1203464,Materials,Materials,Metals & Mining,Gold,yahoo
@@ -2324,7 +2319,6 @@ IBIO,"iBio, Inc.",NASDAQ,1420720,Health Care,"Pharmaceuticals, Biotechnology & L
 IBKR,"Interactive Brokers Group, Inc.",NASDAQ,1381197,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,sp1500
 IBM,International Business Machines Corporation,NYSE,51143,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,sp1500
 IBN,ICICI Bank Limited,NYSE,1103838,Financials,Banks,Banks,Regional Banks,yahoo
-IBO,"Impact BioMedical, Inc.",AMEX,1834105,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 IBOC,International Bancshares Corporation,TXSE,315709,Financials,Banks,Banks,Regional Banks,sp1500
 IBP,"Installed Building Products, Inc.",NYSE,1580905,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Homebuilding,sp1500
 IBRX,"ImmunityBio, Inc.",NASDAQ,1326110,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -2404,7 +2398,6 @@ INDB,Independent Bank Corp.,NASDAQ,776901,Financials,Banks,Banks,Regional Banks,
 INDI,"indie Semiconductor, Inc.",NASDAQ,1841925,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
 INDO,Indonesia Energy Corporation Limited,AMEX,1757840,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
 INDP,"Indaptus Therapeutics, Inc.",NASDAQ,1857044,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-INDV,"Indivior Pharmaceuticals, Inc.",NASDAQ,1625297,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,sp1500
 INEO,INNEOVA Holdings Limited,NASDAQ,1933951,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,yahoo
 INFQ,"Infleqtion, Inc.",NYSE,2007825,Information Technology,Software & Services,Software,Systems Software,yahoo
 INFU,"InfuSystems Holdings, Inc.",AMEX,1337013,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
@@ -2418,7 +2411,6 @@ INIO,Innio N.V.,NASDAQ,2109150,Industrials,Capital Goods,Machinery,Industrial Ma
 INKT,"MiNK Therapeutics, Inc.",NASDAQ,1840229,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 INLF,Inlif Limited,NASDAQ,1991592,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
 INLX,"Intellinetics, Inc.",AMEX,1081745,Information Technology,Software & Services,Software,Application Software,yahoo
-INM,InMed Pharmaceuticals Inc.,NASDAQ,1728328,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 INMB,INmune Bio Inc.,NASDAQ,1711754,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 INMD,InMode Ltd.,NASDAQ,1742692,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 INN,"Summit Hotel Properties, Inc.",NYSE,1497645,Real Estate,Equity Real Estate Investment Trusts (REITs),Hotel & Resort REITs,Hotel & Resort REITs,yahoo
@@ -2492,7 +2484,6 @@ ISRG,"Intuitive Surgical, Inc.",NASDAQ,1035267,Health Care,Health Care Equipment
 ISTR,Investar Holding Corporation,NASDAQ,1602658,Financials,Banks,Banks,Regional Banks,yahoo
 IT,"Gartner, Inc.",NYSE,749251,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,sp1500
 ITG,"ITG, Inc.",NASDAQ,2110117,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
-ITGR,Integer Holdings Corporation,NYSE,1114483,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,sp1500
 ITIC,Investors Title Company,NASDAQ,720858,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo
 ITOC,iTonic Holdings Ltd,NASDAQ,1970544,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 ITP,"IT Tech Packaging, Inc.",AMEX,1358190,Materials,Materials,Paper & Forest Products,Paper Products,yahoo
@@ -2543,7 +2534,7 @@ JF,J and Friends Holdings Limited,NASDAQ,1716338,Financials,Financial Services,C
 JFIN,Jiayin Group Inc.,NASDAQ,1743102,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 JFU,9F Inc.,NASDAQ,1619544,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
 JG,Aurora Mobile Limited,NASDAQ,1737339,Information Technology,Software & Services,Software,Application Software,yahoo
-JHX,James Hardie Industries plc.,NYSE,1159152,Materials,Materials,Construction Materials,Construction Materials,yahoo
+JHX,James Hardie Industries plc.,NYSE,1159152,Materials,Materials,Construction Materials,Construction Materials,sp1500
 JILL,"J. Jill, Inc.",NYSE,1687932,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Apparel Retail,yahoo
 JJSF,J & J Snack Foods Corp.,NASDAQ,785956,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,sp1500
 JKHY,"Jack Henry & Associates, Inc.",NASDAQ,779152,Financials,Financial Services,Financial Services,Transaction & Payment Processing Services,sp1500
@@ -2580,7 +2571,6 @@ KALU,Kaiser Aluminum Corporation,NASDAQ,811596,Materials,Materials,Metals & Mini
 KAPA,"Kairos Pharma, Ltd.",AMEX,1962011,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 KARD,"Kardigan, Inc.",NASDAQ,2123613,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 KARO,Karooooo Ltd.,NASDAQ,1828102,Information Technology,Software & Services,Software,Application Software,yahoo
-KAZR,Skyline Builders Group Holding Limited,NASDAQ,2031009,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 KB,KB Financial Group Inc,NYSE,1445930,Financials,Banks,Banks,Regional Banks,yahoo
 KBDC,"Kayne Anderson BDC, Inc.",NYSE,1747172,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
 KBH,KB Home,NYSE,795266,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Homebuilding,sp1500
@@ -2634,7 +2624,6 @@ KN,Knowles Corporation,NYSE,1587523,Information Technology,Technology Hardware &
 KNDI,"Kandi Technologies Group, Inc.",NASDAQ,1720250,Consumer Discretionary,Consumer Durables & Apparel,Leisure Products,Leisure Products,yahoo
 KNF,Knife Riv Holding Co.,NYSE,1955520,Materials,Materials,Construction Materials,Construction Materials,sp1500
 KNOP,KNOT Offshore Partners LP,NYSE,1564180,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,yahoo
-KNRX,Knorex Ltd.,AMEX,1982960,Information Technology,Software & Services,Software,Application Software,yahoo
 KNSA,"Kiniksa Pharmaceuticals International, plc",NASDAQ,1730430,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 KNSL,"Kinsale Capital Group, Inc.",NYSE,1669162,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
 KNTK,Kinetik Holdings Inc.,NYSE,1692787,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,sp1500
@@ -2649,7 +2638,6 @@ KOS,Kosmos Energy Ltd.,NYSE,1509991,Energy,Energy,"Oil, Gas & Consumable Fuels",
 KOSS,Koss Corporation,NASDAQ,56701,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Consumer Electronics,yahoo
 KPLT,"Katapult Holdings, Inc.",NASDAQ,1785424,Information Technology,Software & Services,Software,Systems Software,yahoo
 KPRX,"Kiora Pharmaceuticals, Inc.",NASDAQ,1372514,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-KPTI,Karyopharm Therapeutics Inc.,NASDAQ,1503802,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 KR,Kroger Company (The),NYSE,56873,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Distribution & Retail,Food Retail,sp1500
 KRC,Kilroy Realty Corporation,NYSE,1025996,Real Estate,Equity Real Estate Investment Trusts (REITs),Office REITs,Office REITs,sp1500
 KREF,KKR Real Estate Finance Trust Inc.,NYSE,1631596,Financials,Financial Services,Mortgage Real Estate Investment Trusts (REITs),Mortgage REITs,yahoo
@@ -2679,7 +2667,6 @@ KULR,"KULR Technology Group, Inc.",AMEX,1662684,Information Technology,Technolog
 KURA,"Kura Oncology, Inc.",NASDAQ,1422143,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 KUST,"Kustom Entertainment, Inc.",NASDAQ,1342958,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
 KVHI,"KVH Industries, Inc.",NASDAQ,1007587,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo
-KVUE,Kenvue Inc.,NYSE,1944048,Consumer Staples,Household & Personal Products,Personal Care Products,Personal Care Products,sp1500
 KVYO,"Klaviyo, Inc.",NYSE,1835830,Information Technology,Software & Services,Software,Application Software,yahoo
 KWR,Quaker Houghton,NYSE,81362,Materials,Materials,Chemicals,Specialty Chemicals,sp1500
 KWY,Kingsway Corporation,NYSE,1072627,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
@@ -2702,7 +2689,7 @@ LAND,Gladstone Land Corporation,NASDAQ,1495240,Real Estate,Equity Real Estate In
 LANV,Lanvin Group Holdings Limited,NYSE,1922097,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods","Apparel, Accessories & Luxury Goods",yahoo
 LAR,Lithium Argentina AG,NYSE,1440972,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
 LARK,Landmark Bancorp Inc.,NASDAQ,1141688,Financials,Banks,Banks,Regional Banks,yahoo
-LASE,Laser Photonics Corporation,NASDAQ,1807887,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
+LASE,LASE Corp.,NASDAQ,1807887,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
 LASR,"nLIGHT, Inc.",NASDAQ,1124796,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
 LAUR,"Laureate Education, Inc.",NASDAQ,912766,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Education Services,sp1500
 LAW,"CS Disco, Inc.",NYSE,1625641,Information Technology,Software & Services,Software,Application Software,yahoo
@@ -2869,8 +2856,6 @@ LWLG,"Lightwave Logic, Inc.",NASDAQ,1325964,Materials,Materials,Chemicals,Specia
 LX,LexinFintech Holdings Ltd.,NASDAQ,1708259,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 LXEH,"Lixiang Education Holding Co., Ltd.",NASDAQ,1814067,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Education Services,yahoo
 LXEO,"Lexeo Therapeutics, Inc.",NASDAQ,1907108,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-LXFR,Luxfer Holdings PLC,NYSE,1096056,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
-LXP,LXP Industrial Trust,NYSE,910108,Real Estate,Equity Real Estate Investment Trusts (REITs),Diversified REITs,Diversified REITs,sp1500
 LXRX,"Lexicon Pharmaceuticals, Inc.",NASDAQ,1062822,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 LXU,"LSB Industries, Inc.",NYSE,60714,Materials,Materials,Chemicals,Diversified Chemicals,yahoo
 LYB,LyondellBasell Industries NV,NYSE,1489393,Materials,Materials,Chemicals,Specialty Chemicals,sp1500
@@ -2943,7 +2928,6 @@ MCRB,"Seres Therapeutics, Inc.",NASDAQ,1609809,Health Care,"Pharmaceuticals, Bio
 MCRI,"Monarch Casino & Resort, Inc.",NASDAQ,907242,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Casinos & Gaming,sp1500
 MCRP,Micropolis AI Robotics,AMEX,1993431,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 MCS,Marcus Corporation (The),NYSE,62234,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
-MCTA,Charming Medical Limited,NASDAQ,2035992,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
 MCY,Mercury General Corporation,NYSE,64996,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
 MD,"Pediatrix Medical Group, Inc.",NYSE,893949,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Services,sp1500
 MDA,MDA Space Ltd.,NYSE,1857047,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
@@ -2955,6 +2939,7 @@ MDGL,"Madrigal Pharmaceuticals, Inc.",NASDAQ,1157601,Health Care,"Pharmaceutical
 MDIA,Mediaco Holding Inc.,NASDAQ,1784254,Communication Services,Media & Entertainment,Media,Broadcasting,yahoo
 MDLN,Medline Inc.,NASDAQ,2046386,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Supplies,yahoo
 MDLZ,"Mondelez International, Inc.",NASDAQ,1103982,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,sp1500
+MDRN,Modern Mining Technology Corp.,AMEX,1898722,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
 MDRR,"Medalist Diversified, Inc.",NASDAQ,1654595,Real Estate,Real Estate Management & Development,Real Estate Management & Development,Real Estate Services,yahoo
 MDT,Medtronic plc.,NYSE,1613103,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,sp1500
 MDU,"MDU Resources Group, Inc.",NYSE,67716,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
@@ -2970,7 +2955,6 @@ MEI,"Methode Electronics, Inc.",NYSE,65270,Information Technology,Technology Har
 MELI,"MercadoLibre, Inc.",NASDAQ,1099590,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Broadline Retail,Broadline Retail,yahoo
 MENS,Jyong Biotech Ltd.,NASDAQ,1954488,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 MEOH,Methanex Corporation,NASDAQ,886977,Materials,Materials,Chemicals,Diversified Chemicals,yahoo
-MERC,Mercer International Inc.,NASDAQ,1333274,Materials,Materials,Paper & Forest Products,Paper Products,yahoo
 MESO,Mesoblast Limited,NASDAQ,1345099,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 MET,"MetLife, Inc.",NYSE,1099219,Financials,Insurance,Insurance,Life & Health Insurance,sp1500
 META,"Meta Platforms, Inc.",NASDAQ,1326801,Communication Services,Media & Entertainment,Interactive Media & Services,Interactive Media & Services,sp1500
@@ -2993,7 +2977,6 @@ MGM,MGM Resorts International,NYSE,789570,Consumer Discretionary,Consumer Servic
 MGN,Megan Holdings Limited,NASDAQ,1995075,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 MGNI,"Magnite, Inc.",NASDAQ,1595974,Communication Services,Media & Entertainment,Media,Advertising,yahoo
 MGNX,"MacroGenics, Inc.",NASDAQ,1125345,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-MGPI,"MGP Ingredients, Inc.",NASDAQ,835011,Consumer Staples,"Food, Beverage & Tobacco",Beverages,Distillers & Vintners,yahoo
 MGRC,McGrath RentCorp,NASDAQ,752714,Industrials,Capital Goods,Trading Companies & Distributors,Trading Companies & Distributors,yahoo
 MGRT,Mega Fortune Company Limited,NASDAQ,2033377,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
 MGRX,"Mangoceuticals, Inc.",NASDAQ,1938046,Health Care,Health Care Equipment & Services,Health Care Technology,Health Care Technology,yahoo
@@ -3029,7 +3012,6 @@ MKZR,"MacKenzie Realty Capital, Inc.",NASDAQ,1550913,Real Estate,Equity Real Est
 MLAB,"Mesa Laboratories, Inc.",NASDAQ,724004,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Equipment & Instruments,yahoo
 MLCI,Mount Logan Capital Inc.,NASDAQ,2051820,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
 MLCO,Melco Resorts & Entertainment Limited,NASDAQ,1381640,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Casinos & Gaming,yahoo
-MLEC,Moolec Science SA,NASDAQ,1937737,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 MLGO,"MicroAlgo, Inc.",NASDAQ,1800392,Information Technology,Software & Services,Software,Systems Software,yahoo
 MLI,"Mueller Industries, Inc.",NYSE,89439,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,sp1500
 MLKN,"MillerKnoll, Inc.",NASDAQ,66382,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Office Services & Supplies,sp1500
@@ -3066,7 +3048,7 @@ MO,"Altria Group, Inc.",NYSE,764180,Consumer Staples,"Food, Beverage & Tobacco",
 MOB,Mobilicom Limited,NASDAQ,1898643,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
 MOBI,"Mobia Medical, Inc.",NASDAQ,1489993,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 MOBX,"Mobix Labs, Inc.",NASDAQ,1855467,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
-MOD,Modine Manufacturing Company,NYSE,67347,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,yahoo
+MOD,"Modexus Solutions, Inc.",NYSE,67347,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,yahoo
 MODD,"Modular Medical, Inc.",NASDAQ,1074871,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 MOG-A,Moog Inc.,NYSE,67887,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,sp1500
 MOG-B,Moog Inc.,NYSE,67887,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
@@ -3117,7 +3099,7 @@ MSCI,MSCI Inc.,NYSE,1408198,Financials,Financial Services,Capital Markets,Financ
 MSEX,Middlesex Water Company,NASDAQ,66004,Utilities,Utilities,Water Utilities,Water Utilities,sp1500
 MSFT,Microsoft Corporation,NASDAQ,789019,Information Technology,Software & Services,Software,Systems Software,sp1500
 MSGE,Madison Square Garden Entertainment Corp.,NYSE,1952073,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
-MSGK,MSG Knickerbockers Corp.,NYSE,,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
+MSGK,MSG Knickerbockers Corp.,NYSE,1636519,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,sp1500
 MSGM,Motorsport Games Inc.,NASDAQ,1821175,Communication Services,Media & Entertainment,Entertainment,Interactive Home Entertainment,yahoo
 MSGR,MSG Rangers Corp.,NYSE,2132873,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
 MSI,"Motorola Solutions, Inc.",NYSE,68505,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,sp1500
@@ -3142,6 +3124,7 @@ MTLS,Materialise NV,NASDAQ,1091223,Information Technology,Software & Services,So
 MTN,"Vail Resorts, Inc.",NYSE,812011,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
 MTNB,"Matinas Biopharma Holdings, Inc.",AMEX,1582554,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 MTR,Mesa Royalty Trust,NYSE,313364,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
+MTRI,"Mentari Therapeutics, Inc.",NASDAQ,1728328,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 MTRN,Materion Corporation,NYSE,1104657,Materials,Materials,Metals & Mining,Diversified Metals & Mining,sp1500
 MTRX,Matrix Service Company,NASDAQ,866273,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 MTSI,"MACOM Technology Solutions Holdings, Inc.",NASDAQ,1493594,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,sp1500
@@ -3188,11 +3171,12 @@ NAMI,Jinxin Technology Holding Company,NASDAQ,1967631,Communication Services,Med
 NAMM,Namib Minerals,NASDAQ,2026514,Materials,Materials,Metals & Mining,Gold,yahoo
 NAMS,NewAmsterdam Pharma Company N.V.,NASDAQ,1936258,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 NANO,Forge Nano Holdings Inc.,NASDAQ,2101833,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,yahoo
+NARA,"Narragansett Bancorp, Inc.",NASDAQ,2138186,Financials,Banks,Banks,Regional Banks,yahoo
 NAT,Nordic American Tankers Limited,NYSE,1000177,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,yahoo
 NATL,NCR Atleos Corporation,NYSE,1974138,Financials,Financial Services,Financial Services,Transaction & Payment Processing Services,sp1500
 NATR,"Nature's Sunshine Products, Inc.",NASDAQ,275053,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,yahoo
 NAUT,"Nautilus Biotechnology, Inc.",NASDAQ,1808805,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-NAVI,"Navient Holdings, Inc.",NASDAQ,1593538,Financials,Financial Services,Consumer Finance,Consumer Finance,sp1500
+NAVI,"Navient Holdings, Inc.",NASDAQ,2152623,Financials,Financial Services,Consumer Finance,Consumer Finance,sp1500
 NAVN,"Navan, Inc.",NASDAQ,1639723,Information Technology,Software & Services,Software,Application Software,yahoo
 NB,NioCorp Developments Ltd.,NASDAQ,1512228,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
 NBBK,"NB Bancorp, Inc.",NASDAQ,1979330,Financials,Banks,Banks,Regional Banks,yahoo
@@ -3388,7 +3372,6 @@ NVTS,Navitas Semiconductor Corporation,NASDAQ,1821769,Information Technology,Sem
 NVX,NOVONIX Limited,NASDAQ,1859795,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,yahoo
 NWBI,"Northwest Bancshares, Inc.",NASDAQ,1471265,Financials,Banks,Banks,Regional Banks,sp1500
 NWCL,newcleo plc,NASDAQ,2131813,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
-NWE,"NorthWestern Energy Group, Inc.",NASDAQ,1993004,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
 NWFL,Norwood Financial Corp.,NASDAQ,1013272,Financials,Banks,Banks,Regional Banks,yahoo
 NWG,NatWest Group plc,NYSE,844150,Financials,Banks,Banks,Regional Banks,yahoo
 NWGL,CL Workshop Group Limited,NASDAQ,1948294,Industrials,Capital Goods,Building Products,Building Products,yahoo
@@ -3415,7 +3398,6 @@ NXT,Nextpower Inc.,NASDAQ,1852131,Industrials,Capital Goods,Electrical Equipment
 NXTC,"NextCure, Inc.",NASDAQ,1661059,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 NXTS,Nexentis Technologies Inc.,NASDAQ,1789192,Materials,Materials,Chemicals,Fertilizers & Agricultural Chemicals,yahoo
 NXTT,Next Technology Holding Inc.,NASDAQ,1784970,Information Technology,Software & Services,Software,Application Software,yahoo
-NXXT,"NextNRG, Inc.",NASDAQ,1817004,Utilities,Utilities,Independent Power and Renewable Electricity Producers,Renewable Electricity,yahoo
 NYAX,Nayax Ltd.,NASDAQ,1901279,Information Technology,Software & Services,Software,Systems Software,yahoo
 NYC,American Strategic Investment Co.,NYSE,1595527,Real Estate,Real Estate Management & Development,Real Estate Management & Development,Real Estate Services,yahoo
 NYT,New York Times Company (The),NYSE,71691,Communication Services,Media & Entertainment,Media,Publishing,sp1500
@@ -3426,6 +3408,7 @@ OBDC,Blue Owl Capital Corporation,NYSE,1655888,Financials,Financial Services,Cap
 OBE,Obsidian Energy Ltd.,AMEX,1334388,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
 OBIO,"Orchestra BioMed Holdings, Inc.",NASDAQ,1814114,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 OBK,"Origin Bancorp, Inc.",TXSE,1516912,Financials,Banks,Banks,Regional Banks,yahoo
+OBMT,"Opportunity Bancorp, Inc.",NASDAQ,,Financials,Banks,Banks,Regional Banks,yahoo
 OBT,"Orange County Bancorp, Inc.",NASDAQ,1754226,Financials,Banks,Banks,Regional Banks,yahoo
 OBX,"Obsidian Therapeutics, Inc.",NASDAQ,2130606,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 OC,Owens Corning Inc,NYSE,1370946,Industrials,Capital Goods,Building Products,Building Products,sp1500
@@ -3472,7 +3455,7 @@ OKYO,OKYO Pharma Limited,NASDAQ,1849296,Health Care,"Pharmaceuticals, Biotechnol
 OLB,"The OLB Group, Inc.",NASDAQ,1314196,Information Technology,Software & Services,Software,Systems Software,yahoo
 OLED,Universal Display Corporation,NASDAQ,1005284,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,sp1500
 OLLI,"Ollie's Bargain Outlet Holdings, Inc.",NASDAQ,1639300,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Broadline Retail,Broadline Retail,sp1500
-OLMA,"Olema Pharmaceuticals, Inc.",NASDAQ,1750284,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+OLMA,"Olema Oncology, Inc.",NASDAQ,1750284,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 OLN,Olin Corporation,NYSE,74303,Materials,Materials,Chemicals,Diversified Chemicals,yahoo
 OLOX,Olenox Industries Inc.,NASDAQ,1023994,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
 OLP,"One Liberty Properties, Inc.",NYSE,712770,Real Estate,Equity Real Estate Investment Trusts (REITs),Diversified REITs,Diversified REITs,yahoo
@@ -3510,6 +3493,7 @@ OPCH,"Option Care Health, Inc.",NASDAQ,1014739,Health Care,Health Care Equipment
 OPEN,Opendoor Technologies Inc,NASDAQ,1801169,Real Estate,Real Estate Management & Development,Real Estate Management & Development,Real Estate Services,yahoo
 OPFI,OppFi Inc.,NYSE,1818502,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 OPHC,"OptimumBank Holdings, Inc.",AMEX,1288855,Financials,Banks,Banks,Regional Banks,yahoo
+OPHI,CollPlant Biotechnologies Ltd.,NASDAQ,1631487,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 OPK,"Opko Health, Inc.",NASDAQ,944809,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,yahoo
 OPLN,"OPENLANE, Inc.",NYSE,1395942,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,sp1500
 OPNW,"OpenWorld, Inc.",NASDAQ,1104038,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
@@ -3590,7 +3574,6 @@ PAR,PAR Technology Corporation,NYSE,708821,Information Technology,Software & Ser
 PARA,"Parabolic Technologies, Inc.",NASDAQ,1826011,Information Technology,Software & Services,Software,Application Software,yahoo
 PARK,"Park Dental Partners, Inc.",NASDAQ,2069604,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
 PARR,"Par Pacific Holdings, Inc.",NYSE,821483,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Refining & Marketing,sp1500
-PASG,"Passage Bio, Inc.",NASDAQ,1787297,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 PASW,"Ping An Biomedical Co., Ltd.",NASDAQ,1897532,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods",Textiles,yahoo
 PATH,"UiPath, Inc.",NYSE,1734722,Information Technology,Software & Services,Software,Systems Software,sp1500
 PATK,"Patrick Industries, Inc.",NASDAQ,76605,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,sp1500
@@ -3623,7 +3606,6 @@ PCB,PCB Bancorp,NASDAQ,1423869,Financials,Banks,Banks,Regional Banks,yahoo
 PCG,Pacific Gas & Electric Co.,NYSE,1004980,Utilities,Utilities,Multi-Utilities,Multi-Utilities,sp1500
 PCLA,PicoCELA Inc.,NASDAQ,2018462,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo
 PCOR,"Procore Technologies, Inc.",NYSE,1611052,Information Technology,Software & Services,Software,Application Software,yahoo
-PCRX,"Pacira BioSciences, Inc.",NASDAQ,1396814,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,sp1500
 PCSA,"Processa Pharmaceuticals, Inc.",NASDAQ,1533743,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 PCT,"PureCycle Technologies, Inc.",NASDAQ,1830033,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
 PCTY,Paylocity Holding Corporation,NASDAQ,1591698,Industrials,Commercial & Professional Services,Professional Services,Human Resource & Employment Services,sp1500
@@ -3708,7 +3690,6 @@ PLAY,"Dave & Buster's Entertainment, Inc.",NASDAQ,1525769,Communication Services
 PLBC,Plumas Bancorp,NASDAQ,1168455,Financials,Banks,Banks,Regional Banks,yahoo
 PLBL,Polibeli Group Ltd,NASDAQ,2035697,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Broadline Retail,Broadline Retail,yahoo
 PLBY,"Playboy, Inc.",NASDAQ,1803914,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods","Apparel, Accessories & Luxury Goods",yahoo
-PLCE,"Children's Place, Inc. (The)",NASDAQ,1041859,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods","Apparel, Accessories & Luxury Goods",yahoo
 PLD,"Prologis, Inc.",NYSE,1045609,Real Estate,Equity Real Estate Investment Trusts (REITs),Industrial REITs,Industrial REITs,sp1500
 PLG,Platinum Group Metals Ltd.,AMEX,1095052,Materials,Materials,Metals & Mining,Precious Metals & Minerals,yahoo
 PLGO,Pelagos Insurance Capital Limited,NYSE,1636639,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo
@@ -3790,7 +3771,7 @@ PRK,Park National Corporation,AMEX,805676,Financials,Banks,Banks,Regional Banks,
 PRKS,United Parks & Resorts Inc.,NYSE,1564902,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Leisure Facilities,sp1500
 PRLB,"Proto Labs, Inc.",NYSE,1443669,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,sp1500
 PRLD,Prelude Therapeutics Incorporated,NASDAQ,1678660,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-PRM,"Perimeter Solutions, SA",NYSE,1880319,Materials,Materials,Chemicals,Specialty Chemicals,yahoo
+PRM,Perimeter Group Inc.,NYSE,1880319,Materials,Materials,Chemicals,Specialty Chemicals,yahoo
 PRMB,Primo Brands Corporation,NYSE,2042694,Consumer Staples,"Food, Beverage & Tobacco",Beverages,Soft Drinks & Non-alcoholic Beverages,yahoo
 PRME,"Prime Medicine, Inc.",NASDAQ,1894562,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 PROF,Profound Medical Corp.,NASDAQ,1628808,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
@@ -3822,7 +3803,6 @@ PSNL,"Personalis, Inc.",NASDAQ,1527753,Health Care,"Pharmaceuticals, Biotechnolo
 PSNY,Polestar Automotive Holding UK Limited,NASDAQ,1884082,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,yahoo
 PSNYW,Polestar Automotive Holding UK Limited,NASDAQ,1884082,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,yahoo
 PSO,"Pearson, Plc",NYSE,938323,Communication Services,Media & Entertainment,Media,Publishing,yahoo
-PSQH,"PSQ Holdings, Inc.",NYSE,1847064,Information Technology,Software & Services,Software,Application Software,yahoo
 PSQL,Pasqal Holding SA,NASDAQ,2119292,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 PSTL,"Postal Realty Trust, Inc.",NYSE,1759774,Real Estate,Equity Real Estate Investment Trusts (REITs),Office REITs,Office REITs,yahoo
 PSX,Phillips 66,NYSE,1534701,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Refining & Marketing,sp1500
@@ -3832,7 +3812,6 @@ PTEN,"Patterson-UTI Energy, Inc.",NASDAQ,889900,Energy,Energy,Energy Equipment &
 PTGX,"Protagonist Therapeutics, Inc.",NASDAQ,1377121,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,sp1500
 PTHS,Pelthos Therapeutics Inc.,AMEX,1919246,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 PTIV,Pineapple Financial Inc.,AMEX,1938109,Financials,Financial Services,Financial Services,Commercial & Residential Mortgage Finance,yahoo
-PTLE,PTL Ltd,NASDAQ,2016337,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
 PTLO,Portillo's Inc.,NASDAQ,1871509,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Restaurants,yahoo
 PTN,"Palatin Technologies, Inc.",NASDAQ,911216,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 PTON,"Peloton Interactive, Inc.",NASDAQ,1639825,Consumer Discretionary,Consumer Durables & Apparel,Leisure Products,Leisure Products,sp1500
@@ -3880,6 +3859,7 @@ QNTM,Quantum Biopharma Ltd.,NASDAQ,1771885,Health Care,"Pharmaceuticals, Biotech
 QRHC,Quest Resource Holding Corporation,NASDAQ,1442236,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
 QS,QuantumScape Corporation,NASDAQ,1811414,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,yahoo
 QSI,Quantum-Si Incorporated,NASDAQ,1816431,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
+QSPC,"Quantum Space, Inc. Class A-1",NYSE,2145371,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
 QSR,Restaurant Brands International Inc.,NYSE,1618756,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Restaurants,yahoo
 QTEX,QTREX Quantum Ltd.,NASDAQ,1837493,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 QTI,"QT Imaging Holdings, Inc.",NASDAQ,1844505,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
@@ -3890,6 +3870,7 @@ QUAD,"Quad Graphics, Inc",NYSE,1481792,Industrials,Commercial & Professional Ser
 QUBT,Quantum Computing Inc.,NASDAQ,1758009,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 QUCY,Quantum Cyber N.V.,NASDAQ,1874252,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,yahoo
 QUIK,QuickLogic Corporation,NASDAQ,882508,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,yahoo
+QUIT,"Achieve Life Sciences, Inc.",NASDAQ,949858,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 QURE,uniQure N.V.,NASDAQ,1590560,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 QVCG,"QVC Group, Inc.",NASDAQ,1254699,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo
 QXL,Quantum X Labs Inc.,NASDAQ,797542,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
@@ -3900,7 +3881,6 @@ RADX,Radiopharm Theranostics Limited,NASDAQ,1949257,Health Care,"Pharmaceuticals
 RAIL,"Freightcar America, Inc.",NASDAQ,1320854,Industrials,Transportation,Ground Transportation,Rail Transportation,yahoo
 RAIN,"Rain Enhancement Technologies Holdco, Inc.",NASDAQ,2028293,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,yahoo
 RAL,Ralliant Corporation,NYSE,2041385,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Equipment & Instruments,sp1500
-RAMP,"LiveRamp Holdings, Inc.",NYSE,733269,Information Technology,Software & Services,Software,Application Software,sp1500
 RAND,Rand Capital Corporation,NASDAQ,81955,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
 RANI,"Rani Therapeutics Holdings, Inc.",NASDAQ,1856725,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 RAPP,"Rapport Therapeutics, Inc.",NASDAQ,2012593,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -4009,7 +3989,6 @@ RLGT,"Radiant Logistics, Inc.",AMEX,1171155,Industrials,Transportation,Air Freig
 RLI,RLI Corp.,NYSE,84246,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
 RLJ,RLJ Lodging Trust,NYSE,1511337,Real Estate,Equity Real Estate Investment Trusts (REITs),Hotel & Resort REITs,Hotel & Resort REITs,yahoo
 RLMD,"Relmada Therapeutics, Inc.",NASDAQ,1553643,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-RLYB,Rallybio Corporation,NASDAQ,1739410,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 RM,Regional Management Corp.,NYSE,1519401,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 RMBI,"Richmond Mutual Bancorporation, Inc.",NASDAQ,1767837,Financials,Banks,Banks,Regional Banks,yahoo
 RMBS,"Rambus, Inc.",NASDAQ,917273,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,sp1500
@@ -4022,6 +4001,7 @@ RMNI,"Rimini Street, Inc.",NASDAQ,1635282,Information Technology,Software & Serv
 RMR,The RMR Group Inc.,NASDAQ,1644378,Real Estate,Real Estate Management & Development,Real Estate Management & Development,Real Estate Services,yahoo
 RMSG,Real Messenger Corporation,NASDAQ,1983324,Information Technology,Software & Services,Software,Application Software,yahoo
 RMTI,"Rockwell Medical, Inc.",NASDAQ,1041024,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
+RMTX,"Remix Therapeutics, Inc.",NASDAQ,,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 RNA,"Atrium Therapeutics, Inc.",NASDAQ,2093101,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 RNAC,"Cartesian Therapeutics, Inc.",NASDAQ,1453687,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 RNAZ,"TransCode Therapeutics, Inc.",NASDAQ,1829635,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -4039,7 +4019,6 @@ ROCK,"Gibraltar Industries, Inc.",NASDAQ,912562,Industrials,Capital Goods,Buildi
 ROG,Rogers Corporation,NYSE,84748,Information Technology,Technology Hardware & Equipment,"Electronic Equipment, Instruments & Components",Electronic Components,sp1500
 ROIV,Roivant Sciences Ltd.,NASDAQ,1635088,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,sp1500
 ROK,"Rockwell Automation, Inc.",NYSE,1024478,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,sp1500
-ROKU,"Roku, Inc.",NASDAQ,1428439,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,sp1500
 ROL,"Rollins, Inc.",NYSE,84839,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Environmental & Facilities Services,sp1500
 ROLR,"High Roller Technologies, Inc.",AMEX,1947210,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Casinos & Gaming,yahoo
 ROMA,Roma Green Finance Limited,NASDAQ,1945240,Industrials,Commercial & Professional Services,Professional Services,Research & Consulting Services,yahoo
@@ -4106,9 +4085,9 @@ SA,"Seabridge Gold, Inc.",NYSE,1231346,Materials,Materials,Metals & Mining,Gold,
 SABR,Sabre Corporation,NASDAQ,1597033,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
 SABS,"SAB Biotherapeutics, Inc.",NASDAQ,1833214,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 SACH,Sachem Capital Corp.,AMEX,1682220,Financials,Financial Services,Mortgage Real Estate Investment Trusts (REITs),Mortgage REITs,yahoo
+SAEN,Genenta Science S.p.A.,NASDAQ,1838716,Industrials,Capital Goods,Industrial Conglomerates,Industrial Conglomerates,yahoo
 SAFE,Safehold Inc.,NYSE,1095651,Real Estate,Equity Real Estate Investment Trusts (REITs),Specialized REITs,Other Specialized REITs,sp1500
 SAFT,"Safety Insurance Group, Inc.",NASDAQ,1172052,Financials,Insurance,Insurance,Property & Casualty Insurance,sp1500
-SAFX,"XCF Global, Inc.",NASDAQ,2019793,Utilities,Utilities,Independent Power and Renewable Electricity Producers,Renewable Electricity,yahoo
 SAGT,Sagtec Global Limited,NASDAQ,2029138,Information Technology,Software & Services,Software,Application Software,yahoo
 SAH,"Sonic Automotive, Inc.",NYSE,1043509,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Automotive Retail,sp1500
 SAIA,"Saia, Inc.",NASDAQ,1177702,Industrials,Transportation,Ground Transportation,Cargo Ground Transportation,sp1500
@@ -4148,7 +4127,6 @@ SCCO,Southern Copper Corporation,NYSE,1001838,Materials,Materials,Metals & Minin
 SCHL,Scholastic Corporation,NASDAQ,866729,Communication Services,Media & Entertainment,Media,Publishing,sp1500
 SCHW,Charles Schwab Corporation (The),NYSE,316709,Financials,Financial Services,Capital Markets,Investment Banking & Brokerage,sp1500
 SCI,Service Corporation International,NYSE,89089,Consumer Discretionary,Consumer Services,Diversified Consumer Services,Specialized Consumer Services,sp1500
-SCKT,"Socket Mobile, Inc.",NASDAQ,944075,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 SCL,Stepan Company,NYSE,94049,Materials,Materials,Chemicals,Specialty Chemicals,sp1500
 SCLX,Scilex Holding Company,NASDAQ,1820190,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 SCM,Stellus Capital Investment Corporation,NYSE,1551901,Financials,Financial Services,Capital Markets,Asset Management & Custody Banks,yahoo
@@ -4208,7 +4186,7 @@ SGHC,Super Group (SGHC) Limited,NYSE,1878057,Consumer Discretionary,Consumer Ser
 SGHT,"Sight Sciences, Inc.",NASDAQ,1531177,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 SGI,Somnigroup International Inc.,NYSE,1206264,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Home Furnishings,sp1500
 SGLD,Scorpio Gold Corporation,NASDAQ,1467093,Materials,Materials,Metals & Mining,Gold,yahoo
-SGLY,Singularity Future Technology Ltd.,NASDAQ,1422892,Industrials,Transportation,Air Freight & Logistics,Air Freight & Logistics,yahoo
+SGLY,Compower Ltd.,NASDAQ,1422892,Industrials,Transportation,Air Freight & Logistics,Air Freight & Logistics,yahoo
 SGML,Sigma Lithium Corporation,NASDAQ,1848309,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
 SGMT,Sagimet Biosciences Inc.,NASDAQ,1400118,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 SGP,"SpyGlass Pharma, Inc.",NASDAQ,1778922,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -4221,7 +4199,6 @@ SHBI,"Shore Bancshares, Inc.",NASDAQ,1035092,Financials,Banks,Banks,Regional Ban
 SHC,Sotera Health Company,NASDAQ,1822479,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Services,sp1500
 SHEL,Shell PLC,NYSE,1306965,Energy,Energy,"Oil, Gas & Consumable Fuels",Integrated Oil & Gas,yahoo
 SHEN,Shenandoah Telecommunications Co,NASDAQ,354963,Communication Services,Telecommunication Services,Wireless Telecommunication Services,Wireless Telecommunication Services,sp1500
-SHFS,"SHF Holdings, Inc.",NASDAQ,1854963,Financials,Banks,Banks,Regional Banks,yahoo
 SHG,Shinhan Financial Group Co Ltd,NYSE,1263043,Financials,Banks,Banks,Regional Banks,yahoo
 SHIM,Shimmick Corporation,NASDAQ,1887944,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 SHIP,Seanergy Maritime Holdings Corp.,NASDAQ,1448397,Industrials,Transportation,Marine Transportation,Marine Transportation,yahoo
@@ -4423,7 +4400,6 @@ SSNC,"SS&C Technologies Holdings, Inc.",NASDAQ,1402436,Information Technology,So
 SSP,E.W. Scripps Company (The),NASDAQ,832428,Communication Services,Media & Entertainment,Media,Broadcasting,yahoo
 SSRM,SSR Mining Inc.,NASDAQ,921638,Materials,Materials,Metals & Mining,Gold,yahoo
 SST,"System1, Inc.",NYSE,1805833,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
-SSTI,"SoundThinking, Inc.",NASDAQ,1351636,Information Technology,Software & Services,Software,Application Software,yahoo
 SSTK,"Shutterstock, Inc.",NYSE,1549346,Communication Services,Media & Entertainment,Interactive Media & Services,Interactive Media & Services,yahoo
 SSYS,"Stratasys, Ltd.",NASDAQ,1517396,Information Technology,Technology Hardware & Equipment,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",yahoo
 ST,Sensata Technologies Holding plc,NYSE,1477294,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,sp1500
@@ -4479,7 +4455,7 @@ SUNB,"Sunbelt Rentals Holdings, Inc.",NYSE,2083785,Industrials,Capital Goods,Tra
 SUNC,SunocoCorp LLC,TXSE,2089661,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Storage & Transportation,yahoo
 SUNE,"SUNation Energy, Inc.",NASDAQ,22701,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,yahoo
 SUNS,"Sunrise Realty Trust, Inc.",NASDAQ,2012706,Financials,Financial Services,Mortgage Real Estate Investment Trusts (REITs),Mortgage REITs,yahoo
-SUPN,"Supernus Pharmaceuticals, Inc.",NASDAQ,1356576,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,sp1500
+SUPN,"Supernus, Inc.",NASDAQ,1625297,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,sp1500
 SUPV,Grupo Supervielle S.A.,NYSE,1517399,Financials,Banks,Banks,Regional Banks,yahoo
 SUPX,SuperX AI Technology Limited,NASDAQ,1897087,Information Technology,Software & Services,Software,Systems Software,yahoo
 SURG,"SurgePays, Inc.",NASDAQ,1392694,Communication Services,Telecommunication Services,Diversified Telecommunication Services,Integrated Telecommunication Services,yahoo
@@ -4541,7 +4517,6 @@ TBI,"TrueBlue, Inc.",NYSE,768899,Industrials,Commercial & Professional Services,
 TBLA,Taboola.com Ltd.,NASDAQ,1840502,Communication Services,Media & Entertainment,Interactive Media & Services,Interactive Media & Services,yahoo
 TBN,Tamboran Resources Corporation,NYSE,1997652,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
 TC,Token Cat Limited,NASDAQ,1743340,Communication Services,Media & Entertainment,Media,Advertising,yahoo
-TCBI,"Texas Capital Bancshares, Inc.",TXSE,1077428,Financials,Banks,Banks,Regional Banks,sp1500
 TCBK,TriCo Bancshares,NASDAQ,356171,Financials,Banks,Banks,Regional Banks,yahoo
 TCBS,"Texas Community Bancshares, Inc.",NASDAQ,1849466,Financials,Banks,Banks,Regional Banks,yahoo
 TCBX,"Third Coast Bancshares, Inc.",NYSE,1781730,Financials,Banks,Banks,Regional Banks,yahoo
@@ -4764,11 +4739,13 @@ TWIN,"Twin Disc, Incorporated",NASDAQ,100378,Industrials,Capital Goods,Machinery
 TWLO,Twilio Inc.,NYSE,1447669,Information Technology,Software & Services,Software,Systems Software,sp1500
 TWST,Twist Bioscience Corporation,NASDAQ,1581280,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 TX,Ternium S.A. Ternium S.A.,NYSE,1342874,Materials,Materials,Metals & Mining,Steel,yahoo
+TXCP,"Texas Capital Bancshares, Inc.",TXSE,1077428,Financials,Banks,Banks,Regional Banks,yahoo
 TXG,"10x Genomics, Inc.",NASDAQ,1770787,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 TXMD,"TherapeuticsMD, Inc.",NASDAQ,25743,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 TXN,Texas Instruments Incorporated,NASDAQ,97476,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors & Semiconductor Equipment,Semiconductors,sp1500
 TXNM,"TXNM Energy, Inc.",NYSE,1108426,Utilities,Utilities,Electric Utilities,Electric Utilities,sp1500
 TXO,"TXO Partners, L.P.",NYSE,1559432,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
+TXR,Torex Resources Inc.,NYSE,1561540,Materials,Materials,Metals & Mining,Gold,yahoo
 TXRH,"Texas Roadhouse, Inc.",NASDAQ,1289460,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure",Restaurants,sp1500
 TXT,Textron Inc.,NYSE,217346,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,sp1500
 TYGO,"Tigo Energy, Inc.",NASDAQ,1855447,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,yahoo
@@ -4864,7 +4841,6 @@ UTI,Universal Technical Institute Inc,NYSE,1261654,Consumer Discretionary,Consum
 UTL,UNITIL Corporation,NYSE,755001,Utilities,Utilities,Electric Utilities,Electric Utilities,sp1500
 UTMD,"Utah Medical Products, Inc.",NASDAQ,706698,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Supplies,yahoo
 UTSI,UTStarcom Holdings Corp,NASDAQ,1030471,Information Technology,Technology Hardware & Equipment,Communications Equipment,Communications Equipment,yahoo
-UTZ,Utz Brands Inc,NYSE,1739566,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,yahoo
 UUUU,Energy Fuels Inc,AMEX,1385849,Energy,Energy,"Oil, Gas & Consumable Fuels",Coal & Consumable Fuels,yahoo
 UVE,Universal Insurance Holdings Inc,NYSE,891166,Financials,Insurance,Insurance,Property & Casualty Insurance,yahoo
 UVSP,Univest Financial Corporation,NASDAQ,102212,Financials,Banks,Banks,Regional Banks,yahoo
@@ -4883,7 +4859,6 @@ VALU,"Value Line, Inc.",NASDAQ,717720,Financials,Financial Services,Capital Mark
 VANI,"Vivani Medical, Inc.",NASDAQ,1266806,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 VATE,INNOVATE Corp.,NYSE,1006837,Industrials,Capital Goods,Construction & Engineering,Construction & Engineering,yahoo
 VBIO,"Valion Bio, Inc.",NASDAQ,1787740,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
-VBNK,VersaBank,NASDAQ,1690639,Financials,Banks,Banks,Regional Banks,yahoo
 VC,Visteon Corporation,NASDAQ,1111335,Consumer Discretionary,Automobiles & Components,Automobile Components,Automotive Parts & Equipment,sp1500
 VCEL,Vericel Corporation,NASDAQ,887359,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,sp1500
 VCIG,VCI Global Limited,NASDAQ,1930510,Industrials,Commercial & Professional Services,Professional Services,Research & Consulting Services,yahoo
@@ -4902,6 +4877,7 @@ VERA,"Vera Therapeutics, Inc.",NASDAQ,1831828,Health Care,"Pharmaceuticals, Biot
 VERI,"Veritone, Inc.",NASDAQ,1615165,Information Technology,Software & Services,Software,Systems Software,yahoo
 VERU,Veru Inc.,NASDAQ,863894,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 VERX,"Vertex, Inc.",NASDAQ,1806837,Information Technology,Software & Services,Software,Application Software,yahoo
+VESI,"Vesicor Therapeutics Holdings, Inc.",NASDAQ,2000775,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 VET,Vermilion Energy Inc. Common (Canada),NYSE,1293135,Energy,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,yahoo
 VFC,V.F. Corporation,NYSE,103379,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods","Apparel, Accessories & Luxury Goods",sp1500
 VFF,"Village Farms International, Inc.",NASDAQ,1584549,Consumer Staples,"Food, Beverage & Tobacco",Food Products,Packaged Foods & Meats,yahoo
@@ -4970,6 +4946,7 @@ VREX,Varex Imaging Corporation,NASDAQ,1681622,Health Care,Health Care Equipment 
 VRM,"Vroom, Inc.",NASDAQ,1580864,Financials,Financial Services,Consumer Finance,Consumer Finance,yahoo
 VRNS,"Varonis Systems, Inc.",NASDAQ,1361113,Information Technology,Software & Services,Software,Systems Software,yahoo
 VRRM,Verra Mobility Corporation,NASDAQ,1682745,Industrials,Commercial & Professional Services,Professional Services,Data Processing & Outsourced Services,sp1500
+VRSA,Versa Bancorp,NASDAQ,2100848,Financials,Banks,Banks,Regional Banks,yahoo
 VRSK,"Verisk Analytics, Inc.",NASDAQ,1442145,Industrials,Commercial & Professional Services,Professional Services,Research & Consulting Services,sp1500
 VRSN,"VeriSign, Inc.",NASDAQ,1014473,Information Technology,Software & Services,IT Services,Internet Services & Infrastructure,sp1500
 VRT,"Vertiv Holdings, LLC",NYSE,1674101,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,sp1500
@@ -4997,8 +4974,8 @@ VTS,"Vitesse Energy, Inc.",NYSE,1944558,Energy,Energy,"Oil, Gas & Consumable Fue
 VTSI,"VirTra, Inc.",NASDAQ,1085243,Information Technology,Software & Services,Software,Application Software,yahoo
 VTVT,vTv Therapeutics Inc.,NASDAQ,1641489,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 VUZI,Vuzix Corporation,NASDAQ,1463972,Consumer Discretionary,Consumer Durables & Apparel,Household Durables,Consumer Electronics,yahoo
-VVOS,"Vivos Therapeutics, Inc.",NASDAQ,1716166,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Equipment,yahoo
 VVV,Valvoline Inc.,NYSE,1674910,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Automotive Retail,sp1500
+VVVV,vVARDIS Holding AG,NYSE,1907709,Health Care,Health Care Equipment & Services,Health Care Equipment & Supplies,Health Care Supplies,yahoo
 VVX,"V2X, Inc.",NYSE,1601548,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,sp1500
 VWAV,"VisionWave Holdings, Inc.",NASDAQ,2038439,Industrials,Capital Goods,Aerospace & Defense,Aerospace & Defense,yahoo
 VYGR,"Voyager Therapeutics, Inc.",NASDAQ,1640266,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
@@ -5047,7 +5024,7 @@ WFC,Wells Fargo & Company,NYSE,72971,Financials,Banks,Banks,Diversified Banks,sp
 WFCF,"Where Food Comes From, Inc.",NASDAQ,1360565,Industrials,Commercial & Professional Services,Commercial Services & Supplies,Diversified Support Services,yahoo
 WFF,WF Holding Limited,NASDAQ,1980210,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,yahoo
 WFG,West Fraser Timber Co. Ltd,NYSE,1402388,Industrials,Capital Goods,Building Products,Building Products,yahoo
-WFRD,Weatherford International plc,NASDAQ,1603923,Energy,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,sp1500
+WFRD,Weatherford International Corp,NASDAQ,1603923,Energy,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,sp1500
 WGO,"Winnebago Industries, Inc.",NYSE,107687,Consumer Discretionary,Automobiles & Components,Automobiles,Automobile Manufacturers,sp1500
 WGS,GeneDx Holdings Corp.,NASDAQ,1818331,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,yahoo
 WH,"Wyndham Hotels & Resorts, Inc.",NYSE,1722684,Consumer Discretionary,Consumer Services,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",sp1500
@@ -5126,6 +5103,7 @@ WULF,TeraWulf Inc.,NASDAQ,1083301,Financials,Financial Services,Capital Markets,
 WVE,"Wave Life Sciences, Inc.",NASDAQ,1631574,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 WVVI,"Willamette Valley Vineyards, Inc.",NASDAQ,838875,Consumer Staples,"Food, Beverage & Tobacco",Beverages,Distillers & Vintners,yahoo
 WW,"WW International, Inc.",NASDAQ,105319,Health Care,Health Care Equipment & Services,Health Care Providers & Services,Health Care Facilities,yahoo
+WWB,Windward Bio Group AG,NASDAQ,2145089,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 WWD,"Woodward, Inc.",NASDAQ,108312,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,sp1500
 WWR,"Westwater Resources, Inc.",AMEX,839470,Materials,Materials,Metals & Mining,Diversified Metals & Mining,yahoo
 WWW,"Wolverine World Wide, Inc.",NYSE,110471,Consumer Discretionary,Consumer Durables & Apparel,"Textiles, Apparel & Luxury Goods",Footwear,sp1500
@@ -5148,6 +5126,7 @@ XENE,Xenon Pharmaceuticals Inc.,NASDAQ,1582313,Health Care,"Pharmaceuticals, Bio
 XERS,"Xeris Biopharma Holdings, Inc.",NASDAQ,1867096,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 XFOR,"X4 Pharmaceuticals, Inc.",NASDAQ,1501697,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
 XGN,Exagen Inc.,NASDAQ,1274737,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Life Sciences Tools & Services,Life Sciences Tools & Services,yahoo
+XGPU,"Reliance Global Group, Inc.",NASDAQ,1812727,Financials,Insurance,Insurance,Insurance Brokers,yahoo
 XHG,XChange TEC.INC,NASDAQ,1769256,Financials,Insurance,Insurance,Insurance Brokers,yahoo
 XHLD,"TEN Holdings, Inc.",NASDAQ,2030954,Communication Services,Media & Entertainment,Media,Broadcasting,yahoo
 XHR,"Xenia Hotels & Resorts, Inc.",NYSE,1616000,Real Estate,Equity Real Estate Investment Trusts (REITs),Hotel & Resort REITs,Hotel & Resort REITs,sp1500
@@ -5248,6 +5227,7 @@ ZLAB,Zai Lab Limited,NASDAQ,1704292,Health Care,"Pharmaceuticals, Biotechnology 
 ZM,"Zoom Communications, Inc.",NASDAQ,1585521,Information Technology,Software & Services,Software,Application Software,yahoo
 ZNB,Zeta Network Group,NASDAQ,1747661,Communication Services,Media & Entertainment,Entertainment,Movies & Entertainment,yahoo
 ZNTL,"Zentalis Pharmaceuticals, Inc.",NASDAQ,1725160,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+ZOAR,Zoar Limited,AMEX,2078148,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 ZONE,Zone Frontier Inc.,AMEX,1956741,Information Technology,Software & Services,IT Services,IT Consulting & Other Services,yahoo
 ZOOZ,ZOOZ Strategy Ltd.,NASDAQ,1992818,Industrials,Capital Goods,Electrical Equipment,Electrical Components & Equipment,yahoo
 ZS,"Zscaler, Inc.",NASDAQ,1713683,Information Technology,Software & Services,Software,Systems Software,yahoo
@@ -5263,3 +5243,4 @@ ZVRA,"Zevra Therapeutics, Inc.",NASDAQ,1434647,Health Care,"Pharmaceuticals, Bio
 ZWS,Zurn Elkay Water Solutions Corporation,NYSE,1439288,Industrials,Capital Goods,Machinery,Industrial Machinery & Supplies & Components,sp1500
 ZYBT,Zhengye Biotechnology Holding Limited,NASDAQ,1975641,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Pharmaceuticals,Pharmaceuticals,yahoo
 ZYME,Zymeworks Inc.,NASDAQ,1937653,Health Care,"Pharmaceuticals, Biotechnology & Life Sciences",Biotechnology,Biotechnology,yahoo
+ZYN,PTL Ltd,NASDAQ,2016337,Consumer Discretionary,Consumer Discretionary Distribution & Retail,Specialty Retail,Other Specialty Retail,yahoo

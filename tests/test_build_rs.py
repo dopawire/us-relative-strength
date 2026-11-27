@@ -115,6 +115,22 @@ def test_primary_share_classes_keeps_most_traded():
     assert dropped == {"GOOGL": "GOOG", "FOXA": "FOX"}
 
 
+def test_yahoo_closes_drops_the_session_still_trading(monkeypatch):
+    """At 11:00 on 29 Jul Yahoo's daily chart already has a 29 Jul bar (the
+    live price): it must not enter the data until that session has closed."""
+    import build_rs
+    payload = {"chart": {"result": [{
+        "timestamp": [_ts(2026, 7, 27), _ts(2026, 7, 28), _ts(2026, 7, 29)],
+        "indicators": {"quote": [{"close": [100.0, 101.0, 99.0], "high": [101.0, 102.0, 103.0],
+                                  "low": [99.0, 100.0, 98.0], "volume": [10, 20, 5]}]},
+    }]}}
+    patch_session(monkeypatch, FakeSession(FakeResp(200, payload=payload)))
+    monkeypatch.setattr(build_rs, "latest_session", lambda now=None: "2026-07-28")
+    closes, highs, lows, vols, err = yahoo_closes("X", "1mo")
+    assert err is None and sorted(closes) == ["2026-07-27", "2026-07-28"]
+    assert "2026-07-29" not in highs and "2026-07-29" not in lows and "2026-07-29" not in vols
+
+
 def test_yahoo_closes_null_highlow_falls_back_to_close(monkeypatch):
     payload = {"chart": {"result": [{
         "timestamp": [_ts(2026, 7, 27)],
@@ -557,7 +573,7 @@ def test_read_universe_blanks_lower_levels_for_mapped(tmp_path, monkeypatch):
 
 
 def test_rs_data_structure(rs_data):
-    assert set(rs_data) == {"meta", "breadth", "rotation", "levels"}
+    assert set(rs_data) >= {"meta", "breadth", "rotation", "levels"}
     assert rs_data["meta"]["n_stocks"] > 3000
     assert [lv["key"] for lv in rs_data["levels"]] == ["macro", "sector", "industry", "basic"]
     b = rs_data["breadth"]
@@ -650,8 +666,8 @@ def test_macro_breadth_math(price_cache, rs_data):
 
 def test_window_coverage_consistent(rs_data, price_cache):
     """n_stocks (universe) ≥ n_window (stocks in the levels), and every
-    excluded stock genuinely lacks ≥1 of the 26 window dates — i.e. no stock
-    with complete window data is silently dropped."""
+    excluded stock genuinely lacks ≥1 of the 26 window dates or is thinly
+    traded — i.e. no liquid stock with complete window data is silently dropped."""
     meta = rs_data["meta"]
     union = {m["s"] for lvl in rs_data["levels"] for g in lvl["groups"]
              for m in g["members"] if not m.get("nw")}       # new listings: IPO watch
@@ -665,7 +681,9 @@ def test_window_coverage_consistent(rs_data, price_cache):
     if ref_dates and max(bench) != ref_dates[-1]:
         pytest.skip("price cache updated since the build — run build_rs.py to resync")
     unclassified = {u["sym"] for u in build_rs.read_universe() if not u["basic"]}
-    for s in meta["excluded"][:50]:
+    illiquid = set(meta.get("illiquid", []))
+    assert illiquid <= set(meta["excluded"]) and not illiquid & union
+    for s in [x for x in meta["excluded"] if x not in illiquid][:50]:
         if s in unclassified:
             continue                  # no group to rank in — shown on New Listings (uc)
         ser = price_cache.get(s, {})
@@ -694,7 +712,10 @@ def test_members_have_rs_ema21_flag(rs_data, price_cache):
     for lvl in rs_data["levels"]:
         for g in lvl["groups"][::17]:
             for m in g["members"][:1]:
-                expect = rs_ema_flag(price_cache[m["s"]], bench)
+                ser = price_cache[m["s"]]
+                brk = build_rs.last_break_date(ser, 252)     # post-break bars only
+                post = {d: v for d, v in ser.items() if d >= brk} if brk else ser
+                expect = rs_ema_flag(post, bench)
                 assert m["b"] == expect, (m["s"], m["b"], expect)
                 checked += 1
     assert checked >= 10
@@ -738,7 +759,10 @@ def test_rs_pct_matches_full_precision_recompute(price_cache, rs_data):
                 sample.append((lvl["key"], g["name"], m["s"], m["p"]))
     assert len(sample) >= 15
     for key, gname, sym, stored in sample:
-        srs, _ = equal_weight_rs([price_cache[sym]], bench, ref_dates)
+        ser = price_cache[sym]
+        # a new listing is ranked over its sessions since listing
+        dates = [d for d in ref_dates if d >= min(ser)]
+        srs, _ = equal_weight_rs([ser], bench, dates)
         full = round(percentrank_inc(srs, srs[-1]), 4)
         assert full == pytest.approx(stored, abs=1e-9), (key, gname, sym, stored, full)
 
@@ -756,3 +780,16 @@ def test_ema_flags_restart_after_corporate_action():
     assert ema_flags(ser)[0][0] == 0                     # naive: "below EMA20"
     post = {d: v for d, v in ser.items() if d >= brk}
     assert ema_flags(post)[0] == [-1] * len(build_rs.EMA_PERIODS)
+
+
+def test_members_carry_returns_and_size_class(rs_data):
+    """Scans need 1M / 3M returns and a size class on every member (market-cap
+    bands: hundreds of large caps, never more than a quarter of the list)."""
+    from collections import Counter
+    ms = {m["s"]: m for g in rs_data["levels"][0]["groups"] for m in g["members"]}
+    caps = Counter(m.get("cap") for m in ms.values())
+    assert set(caps) <= {"Large", "Mid", "Small", "Micro", "New"}
+    assert all(0 < caps[c] for c in ("Large", "Mid", "Small", "Micro"))
+    assert caps["Large"] < 0.25 * len(ms)
+    with_m1 = [m for m in ms.values() if m.get("m1") is not None]
+    assert len(with_m1) > 0.8 * len(ms)

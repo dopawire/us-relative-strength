@@ -23,6 +23,9 @@
     watchlistOnly: false,
     rotationData: null,   // cached rotation RS-lines
     rotRange: '6M',       // rotation period: ~2px per session → every day hoverable
+    scan: { dim: 'cap' },   // Scans breakdown tab
+    decide: null,         // Focus / Swing decisions (rs_engine.decide)
+    track: null,          // their track record
     selected: new Set(), // selected symbols for TradingView export
     breadthData: null,   // cached breadth oscillator data
     theme: 'dark',
@@ -63,6 +66,7 @@
       n_groups_per_level: staticData.levels.map(l => l.groups.length),
       n_window: m.n_window || 0,
       excluded: m.excluded || [],
+      illiquid: m.illiquid || [],
       src: m.src || {},
       ipo: m.ipo || [],
     };
@@ -78,6 +82,7 @@
       span: b.dates.length ? `${b.dates[0]} → ${b.dates[b.dates.length - 1]}` : '',
       macros: b.macros || [],
       divergence: b.divergence || {},
+      market: b.market || {},
     };
   }
 
@@ -115,6 +120,12 @@
     },
     async breadth() {
       return staticData ? staticBreadth() : api.get('/api/breadth');
+    },
+    async decide() {
+      return staticData ? (staticData.decide || {}) : api.get('/api/decide');
+    },
+    async track() {
+      return staticData ? (staticData.track || {}) : api.get('/api/track');
     },
     async rotation() {
       return staticData
@@ -221,8 +232,8 @@
     state.activeTab = tab;
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
     // Toolbars: level tables get search + filters; New Listings gets search only
-    const isLevel = !['breadth', 'rotation', 'ipo'].includes(tab);
-    $.toolbarSection.style.display = (tab === 'breadth' || tab === 'rotation') ? 'none' : '';
+    const isLevel = !['breadth', 'rotation', 'ipo', 'scans', 'focus', 'swing'].includes(tab);
+    $.toolbarSection.style.display = ['breadth', 'rotation', 'scans', 'focus', 'swing'].includes(tab) ? 'none' : '';
     $.toolbarSection.classList.toggle('search-only', tab === 'ipo');
     $.note.style.display = isLevel ? '' : 'none';
     renderTab(tab);
@@ -249,6 +260,18 @@
     }
     if (tab === 'ipo') {
       renderIpo();
+      return;
+    }
+    if (tab === 'scans') {
+      await renderScans();
+      return;
+    }
+    if (tab === 'focus') {
+      await renderFocus();
+      return;
+    }
+    if (tab === 'swing') {
+      await renderSwing();
       return;
     }
 
@@ -280,6 +303,12 @@
   function refreshCurrentView() {
     if (state.activeTab === 'breadth') {
       renderBreadth(true);   // use cached data — avoid re-fetching
+    } else if (state.activeTab === 'scans') {
+      if (state.levelData.macro && state.levelData.macro.groups) drawScans();
+    } else if (state.activeTab === 'focus') {
+      renderFocus();
+    } else if (state.activeTab === 'swing') {
+      renderSwing();
     } else if (state.activeTab === 'ipo') {
       renderIpo();
     } else if (state.levelData[state.activeTab]) {
@@ -936,7 +965,7 @@
 
   function renderIpo() {
     const ipo = (state.meta && state.meta.ipo) || [];
-    const win = ((state.meta && state.meta.window_dates) || []).length || 26;
+    const win = (state.meta && state.meta.window) || 26;
     const q = ($.searchInput.value || '').trim().toLowerCase();
     const shown = ipoMatches(ipo, q);
     $.searchInfo.textContent = q ? `${shown.length} of ${ipo.length} new listing(s)` : '';
@@ -984,6 +1013,624 @@
       ${ranked('Too new to measure', fresh, 'first session only')}`;
     $.content.querySelectorAll('.ipo-row').forEach(r => {
       r.addEventListener('click', () => openStockModal(r.dataset.sym));
+    });
+  }
+
+
+  // =========================================================================
+  // FOCUS + SWING: decision pages.  The rules live in rs_engine/decide.py —
+  // the build computes them once, so the pages, the pick log (track record)
+  // and the evening Telegram brief always say the same thing.
+  // =========================================================================
+  // One record per stock with its macro / sector / industry / basic names.
+  function stockIndex() {
+    const stocks = new Map();
+    for (const g of state.levelData.macro.groups) {
+      for (const m of g.members) stocks.set(m.s, { ...m, macro: g.name });
+    }
+    for (const key of ['sector', 'industry', 'basic']) {
+      for (const g of (state.levelData[key] && state.levelData[key].groups) || []) {
+        for (const m of g.members) { const st = stocks.get(m.s); if (st) st[key] = g.name; }
+      }
+    }
+    return [...stocks.values()];
+  }
+
+  async function loadDecisionData() {
+    for (const lv of state.levels) {
+      if (!state.levelData[lv.key] || state.levelData[lv.key]._error) {
+        state.levelData[lv.key] = await api.level(lv.key);
+      }
+    }
+    if (!state.decide) state.decide = await api.decide();
+    if (!state.track) {
+      try { state.track = await api.track(); } catch (e) { state.track = {}; }
+    }
+  }
+
+  const sgn = (v, dp = 1) => v == null ? '—' : `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(dp)}%`;
+  const tone = (v, dp = 1) => v == null ? '—' : `<span class="${v >= 0 ? 'pos' : 'neg'}">${sgn(v, dp)}</span>`;
+  const pctTxt = v => v == null ? '—' : `${v.toFixed(0)}%`;
+
+  const REGIME = {
+    on: { word: 'Risk-on', line: 'trend and breadth agree — normal size, act on breakouts in the leading groups.',
+      size: 'Exposure 75–100% · risk ~1% of capital per trade · 4–6 positions' },
+    mixed: { word: 'Mixed', line: 'signals disagree — be selective: half size, only the best setups in leading groups, book profits sooner.',
+      size: 'Exposure 25–50% · risk ~0.5% per trade · 2–3 positions' },
+    off: { word: 'Risk-off', line: 'trend and breadth are weak — protect capital: mostly cash, small pilot positions only.',
+      size: 'Exposure 0–20% · risk ≤0.5% per trade · pilots only' },
+  };
+  const QUAD_TIP = {
+    Leading: 'beating the average stock over 1M and 3M',
+    Improving: 'behind over 3M but beating the average stock over 1M — turning up',
+    Weakening: 'ahead over 3M but lagging over 1M — losing steam',
+    Lagging: 'behind the average stock over 1M and 3M',
+  };
+  const quadTag = q => `<span class="dc-q q-${q.toLowerCase()}" title="${QUAD_TIP[q]}">${q}</span>`;
+
+  const asOfText = () => {
+    const d = ((state.meta && state.meta.drange) || '').split('→').pop().trim();
+    if (!/^\d{4}-\d\d-\d\d$/.test(d)) return '';
+    const [y, m, dd] = d.split('-');
+    return `${+dd} ${MON[+m - 1]} ${y}`;
+  };
+  const stockLink = m => `<button type="button" class="dc-stk" data-sym="${utils.esc(m.s)}" title="${utils.esc(m.n || m.s)}">${utils.esc(m.s)}</button>`;
+  const bindStockLinks = () => $.content.querySelectorAll('[data-sym]').forEach(el =>
+    el.addEventListener('click', () => openStockModal(el.dataset.sym)));
+  const decisionError = e => {
+    $.content.innerHTML = `<div class="brd-empty">Failed to load data: ${utils.esc(e.message)}</div>`;
+  };
+  const noDecisions = () => {
+    $.content.innerHTML = '<div class="brd-empty">No Focus / Swing data yet — run a build (<code>build_rs.py</code>).</div>';
+  };
+
+  // ---- track record ---------------------------------------------------------
+  const HZ = ['5', '10', '20'];
+  // one stat cell: average edge + how often the call was right
+  const edgeCell = (e, hitWord) => !e ? '<td class="tnum">—</td>'
+    : `<td class="tnum">${tone(e.avg * 100, 1)}<span class="dc-hit">${(e.hit * 100).toFixed(0)}% ${hitWord}</span></td>`;
+  const listCell = l => !l ? '<td class="tnum">—</td>'
+    : `<td class="tnum">${tone(l.ex * 100, 1)}<span class="dc-hit">${(l.hit * 100).toFixed(0)}% beat N500</span></td>`;
+  function trackIntro(t) {
+    if (!t || !t.n) return '';
+    const fmt = d => { const [y, m, dd] = d.split('-'); return `${+dd} ${MON[+m - 1]} ${y}`; };
+    return `<div class="dc-note">${t.n} sessions of calls since ${fmt(t.since)}${t.live_since
+      ? ` (logged live since ${fmt(t.live_since)}; earlier days rebuilt from price history with the same rules)`
+      : ' — rebuilt from price history with the same rules; live logging adds a day every build'}.
+      Results use the next 5 / 10 / 20 sessions. Days overlap, so treat hit rates as a guide, not proof.</div>`;
+  }
+  function focusTrack(t) {
+    const s = t && t.summary;
+    if (!s || !Object.keys(s).length) return '<div class="dc-empty">The first results appear 5 sessions after the first logged call.</div>';
+    const row = (label, key, word, tip) => `<tr><td title="${tip}">${label}</td>${HZ.map(h => edgeCell(s[h] && s[h][key], word)).join('')}</tr>`;
+    const recent = (t.rows || []).slice(0, 12).map(r => {
+      const x = r.h['10'] || r.h['5'];
+      const which = r.h['10'] ? '10' : r.h['5'] ? '5' : '';
+      return `<tr><td>${r.date}${r.bt ? '' : ' <span class="dc-live">live</span>'}</td>
+        <td><span class="dc-q ${r.regime === 'on' ? 'q-leading' : r.regime === 'mixed' ? 'q-weakening' : 'q-lagging'}">${REGIME[r.regime].word}</span></td>
+        <td class="dc-ind">${utils.esc(r.focus.join(', '))}</td><td>${utils.esc(CAP_LABEL[r.cap] || r.cap || '—')}</td>
+        <td class="tnum">${x && x.focus != null ? tone(x.focus * 100) : '<span class="dc-muted">pending</span>'}${which ? `<span class="dc-hit">${which}d</span>` : ''}</td></tr>`;
+    }).join('');
+    return `${trackIntro(t)}
+      <div class="scan-table-wrap"><table class="scan-table dc-table dc-track">
+        <thead><tr><th>Call</th><th>5 sessions</th><th>10 sessions</th><th>20 sessions</th></tr></thead>
+        <tbody>${row('Focus sectors vs the average stock', 'focus', 'of days ahead', 'average return of the focus sectors’ stocks minus the average stock')}
+          ${row('Avoid sectors trailed the average stock by', 'avoid', 'of days right', 'average stock minus the avoid sectors’ stocks — positive = the avoid call was right')}
+          ${row('Size pick vs the average stock', 'cap', 'of days ahead', 'the picked size class minus the average stock')}</tbody></table></div>
+      <h3 class="dc-h3b">Recent calls</h3>
+      <div class="scan-table-wrap"><table class="scan-table dc-table dc-track">
+        <thead><tr><th>Date</th><th>Market</th><th>Focus sectors</th><th>Size</th><th title="focus sectors vs the average stock over the next 10 sessions (5 when 10 aren't in yet)">Result</th></tr></thead>
+        <tbody>${recent}</tbody></table></div>`;
+  }
+  function swingTrack(t) {
+    const s = t && t.summary;
+    if (!s || !Object.keys(s).length) return '<div class="dc-empty">The first results appear 5 sessions after the first logged call.</div>';
+    const reg = h => {
+      const r = s[h] && s[h].regime;
+      if (!r) return '<td>—</td>';
+      return `<td class="dc-reg">${['on', 'mixed', 'off'].filter(k => r[k]).map(k =>
+        `<div>${REGIME[k].word} ${tone(r[k].nifty * 100)} <i>${(r[k].up * 100).toFixed(0)}% up · ${r[k].n}d</i></div>`).join('')}</td>`;
+    };
+    const brkReg = h => {
+      const r = s[h] && s[h].brk_regime;
+      if (!r) return '<td>—</td>';
+      return `<td class="dc-reg">${['on', 'mixed', 'off'].filter(k => r[k]).map(k =>
+        `<div>${REGIME[k].word} ${tone(r[k].ex * 100)} <i>${(r[k].hit * 100).toFixed(0)}% beat · ${r[k].n}d</i></div>`).join('')}</td>`;
+    };
+    return `${trackIntro(t)}
+      <div class="scan-table-wrap"><table class="scan-table dc-table dc-track">
+        <thead><tr><th>Call</th><th>5 sessions</th><th>10 sessions</th><th>20 sessions</th></tr></thead>
+        <tbody><tr><td title="average return of the day's top 25 breakout candidates minus the benchmark">Breakout watch vs ${utils.esc(bm())}</td>${HZ.map(h => listCell(s[h] && s[h].brk)).join('')}</tr>
+          <tr><td title="average return of the day's top 15 pullback candidates minus the benchmark">Pullbacks vs ${utils.esc(bm())}</td>${HZ.map(h => listCell(s[h] && s[h].pb)).join('')}</tr>
+          <tr><td title="average return of the day's top 15 IPO bases minus the benchmark">IPO bases vs ${utils.esc(bm())}</td>${HZ.map(h => listCell(s[h] && s[h].ipo)).join('')}</tr>
+          <tr><td title="average return of the day's top 25 weekly-trend stocks (above a rising 10-week SMA) minus the benchmark">Weekly trend vs ${utils.esc(bm())}</td>${HZ.map(h => listCell(s[h] && s[h].wkl)).join('')}</tr>
+          <tr><td title="average return of the day's high-tight-flag list (in the flag or just broken out) minus the benchmark">High tight flags vs ${utils.esc(bm())}</td>${HZ.map(h => listCell(s[h] && s[h].htf)).join('')}</tr>
+          <tr><td title="breakout watch vs the benchmark, split by the market regime on the day of the call">Breakouts by regime</td>${HZ.map(brkReg).join('')}</tr>
+          <tr><td title="the benchmark's average return after days with each regime reading">${utils.esc(bm())} after each regime</td>${HZ.map(reg).join('')}</tr></tbody></table></div>
+      <div class="dc-note">Lists are bought at that day's close and held, without stops or costs — the raw edge of the screen, not a trading result.</div>`;
+  }
+
+  // ---- FOCUS: one answer + one-liners --------------------------------------
+  async function renderFocus() {
+    try { await loadDecisionData(); } catch (e) { return decisionError(e); }
+    const D = state.decide;
+    if (!D || !D.sectors || !D.sectors.length) return noDecisions();
+    const reg = D.regime, R = REGIME[reg.level], base = D.base || {};
+    const sec = Object.fromEntries(D.sectors.map(r => [r.name, r]));
+    const byS = new Map(stockIndex().map(m => [m.s, m]));
+    const focus = D.focus.map(n => sec[n]).filter(Boolean);
+    const turning = D.turning.map(n => sec[n]).filter(Boolean);
+    const avoid = D.avoid.map(n => sec[n]).filter(Boolean);
+    const capTop = D.caps.find(r => r.name === D.cap);
+    const capName = k => CAP_LABEL[k] || k;
+    const line = r => `median stock ${sgn(r.m1)} in 1M and ${sgn(r.m3)} in 3M (all stocks ${sgn(base.m1)} / ${sgn(base.m3)}) · `
+      + `${pctTxt(r.p50)} above the 50-day EMA · ${r.lead} leader${r.lead === 1 ? '' : 's'} (RS ≥ 80)`;
+    const secRow = (r, extra) => `<div class="dc-row">
+        <div class="dc-row-h"><b>${utils.esc(r.name)}</b>${quadTag(r.quad)}<span class="dc-score" title="composite score vs other sectors (0-100)">${r.score.toFixed(0)}</span></div>
+        <div class="dc-line">${line(r)}</div>${extra || ''}</div>`;
+    const focusRows = focus.map(r => {
+      const ind = r.inds || [], ld = (r.leaders || []).map(s => byS.get(s) || { s });
+      return secRow(r, `<div class="dc-sub">${ind.length ? `Strongest industries: ${ind.map(utils.esc).join(', ')}` : ''}${ld.length ? `${ind.length ? ' · ' : ''}Leaders: ${ld.map(stockLink).join(' ')}` : ''}</div>`);
+    }).join('');
+    const capRows = D.caps.map((r, i) => `<div class="dc-row">
+        <div class="dc-row-h"><b>${capName(r.name)}</b><span class="dc-q ${i === 0 ? 'q-leading' : i === 1 ? 'q-improving' : 'q-lagging'}">${i === 0 ? 'Focus' : i === 1 ? 'Next best' : 'Lighter'}</span><span class="dc-score">${r.score.toFixed(0)}</span></div>
+        <div class="dc-line">median ${sgn(r.w1)} 1W · ${sgn(r.m1)} 1M · ${sgn(r.m3)} 3M · ${pctTxt(r.p50)} above 50-EMA · ${pctTxt(r.nearHi)} within 10% of a 52-week high</div></div>`).join('');
+    const names = focus.map(r => `<b>${utils.esc(r.name)}</b>`);
+    const answer = `Focus on ${names.length > 1 ? names.slice(0, -1).join(', ') + (names.length > 2 ? ', and ' : ' and ') + names[names.length - 1] : names[0]}`
+      + (capTop ? `, in <b>${capName(capTop.name).toLowerCase()}s</b>` : '');
+    $.content.innerHTML = `<div class="scan-card dc">
+      <div class="scan-head"><div><div class="scan-title">Where to focus next</div>
+        <div class="scan-sub">one answer from RS, momentum, participation and breadth · as of ${asOfText()}</div></div></div>
+      <div class="dc-body">
+        <div class="dc-answer"><span class="dc-dot r-${reg.level}"></span><div>
+          <div class="dc-answer-t">${answer}.</div>
+          <div class="dc-answer-s">Market: <b class="r-${reg.level}-t">${R.word}</b> (${reg.pass} of ${reg.known} checks) — ${R.line}</div></div></div>
+        <ul class="dc-bullets">
+          <li><b>Sectors:</b> ${focus.map(r => `${utils.esc(r.name)} (${r.quad.toLowerCase()})`).join(', ')} lead on combined strength.</li>
+          ${turning.length ? `<li><b>Turning up:</b> ${turning.map(r => `${utils.esc(r.name)} (${sgn(r.rel1)} vs the average stock in 1M)`).join(', ')} — early, watch for follow-through.</li>` : ''}
+          ${capTop ? `<li><b>Size:</b> ${capName(capTop.name)} is strongest — median ${sgn(capTop.m1)} in 1M, ${pctTxt(capTop.p50)} above the 50-day EMA.</li>` : ''}
+          ${avoid.length ? `<li><b>Avoid for now:</b> ${avoid.map(r => utils.esc(r.name)).join(', ')}.</li>` : ''}
+        </ul>
+        <div class="dc-grid">
+          <section><h3>Sectors to focus</h3>${focusRows}</section>
+          <section><h3>Market cap</h3>${capRows}</section>
+          ${turning.length ? `<section><h3>Turning up — watch next</h3>${turning.map(r => secRow(r)).join('')}</section>` : ''}
+          ${avoid.length ? `<section><h3>Avoid for now</h3>${avoid.map(r => secRow(r)).join('')}</section>` : ''}
+        </div>
+        <section class="dc-wide"><h3>Track record — did these calls work?</h3>${focusTrack(state.track)}</section>
+        <div class="dc-foot">How it's decided: sectors with ≥ 5 stocks are ranked on 1M (30%) and 3M (20%) median return vs the average stock,
+          share above the 50-day EMA (20%), share of RS ≥ 80 leaders (15%) and the group's RS_STS% (15%).
+          Leading / Improving / Weakening / Lagging compare 3M and 1M with the average stock. Size classes are ranked the same way.
+          Not investment advice.</div>
+      </div></div>`;
+    bindStockLinks();
+  }
+
+  // average daily traded value in US$ millions: 1 decimal under $10M
+  const fmtM = v => v == null ? '—' : v.toFixed(v < 10 ? 1 : 0);
+
+  // ---- SWING: what I'd check every evening ----------------------------------
+  const TAG_WORD = { tight: 'Tight', dry: 'Vol dry-up', surge: 'Vol surge', near10: 'Near 10W', vdry: 'Flag vol dry-up' };
+  const TAG_TIP = {
+    tight: '10-day range within 2.5 average daily ranges — a quiet base (ranked higher)',
+    dry: '10-day volume below 85% of the prior 50 days — sellers drying up (ranked higher)',
+    surge: 'today’s volume ≥ 1.5× average — buying this close is chasing; wait for a pause (ranked lower)',
+    near10: 'within 5% above its 10-week SMA — close to the weekly support line, a low-risk entry',
+    vdry: 'average volume in the flag under 70% of the pole’s — sellers gone; in the NSE test these HTFs did far better (ranked first)',
+  };
+  // upcoming event within 14 days: results get the loud badge (gap risk)
+  function evBadge(ev) {
+    if (!ev) return '';
+    const [d, ...rest] = ev.split(' ');
+    const what = rest.join(' ');
+    const [, mo, dd] = d.split('-');
+    const res = /\bResults\b/.test(what);
+    return ` <span class="dc-ev${res ? ' res' : ''}" title="${utils.esc(what)} on ${d} — ${res ? 'results can gap the stock past any stop: avoid holding through them' : 'corporate event'}">${res ? '⚠ ' : ''}${utils.esc(what.split(',')[0])} ${+dd} ${MON[+mo - 1]}</span>`;
+  }
+  async function renderSwing() {
+    try { await loadDecisionData(); } catch (e) { return decisionError(e); }
+    const D = state.decide;
+    if (!D || !D.regime) return noDecisions();
+    const reg = D.regime, R = REGIME[reg.level], S = D.rules;
+    const byS = new Map(stockIndex().map(m => [m.s, m]));
+    const hot = new Set(D.hot || []);
+    const inLead = m => hot.has(m.industry) || hot.has(m.sector);
+    const pick = syms => syms.map(s => byS.get(s)).filter(Boolean);
+    const breakouts = pick(D.breakouts), pullbacks = pick(D.pullbacks), extended = pick(D.extended);
+    const ipos = pick(D.ipos || []), IR = D.ipo_rules || {};
+    const weekly = pick(D.weekly || []), WR = D.weekly_rules || {};
+    // older rs_data.json (built before the HTF list) has no rules: defaults
+    const htfs = pick(D.htf || []), HR = { minPole: 100, poleWeeks: 9, maxFlag: 25, flagWeeks: [1, 8], boDays: 5, ...(D.htf_rules || {}) };
+    const inBrk = new Set(D.breakouts.slice(0, 25));
+    const inIpo = new Set((D.ipos || []).slice(0, 15));
+    const ind = Object.fromEntries(D.industries.map(r => [r.name, r]));
+    const leadInd = D.lead_ind.map(n => ind[n]).filter(Boolean);
+
+    const table = (list, max, empty) => list.length ? `<div class="scan-table-wrap"><table class="scan-table dc-table">
+      <thead><tr><th>#</th><th>Stock</th><th>Industry</th><th>Price</th>
+        <th title="RS rating 1-99 vs all stocks">RS</th><th>1W</th><th>1M</th>
+        <th title="% below the 52-week high">Off high</th><th title="average daily range, 20 days — size the stop with it">ADR</th>
+        <th title="average daily traded value, 20 sessions (US$ millions)">$M/day</th>
+        <th title="10-session high-low range as % of price — small = a tight base">10d range</th>
+        <th title="today's volume ÷ its 50-session average">Vol ×</th><th>Setup</th></tr></thead>
+      <tbody>${list.slice(0, max).map((m, i) => `<tr class="dc-tr" data-sym="${utils.esc(m.s)}">
+        <td class="tnum">${i + 1}</td>
+        <td class="dc-nm">${utils.esc(m.n.replace(/\s+(Limited|Ltd\.?)$/i, ''))}<span class="msym">${utils.esc(m.s)} · ${utils.esc((CAP_LABEL[m.cap] || '').replace(' cap', ''))}${evBadge(m.ev)}</span></td>
+        <td class="dc-ind">${inLead(m) ? '<span class="dc-hot" title="in a leading industry / sector">●</span>' : ''}${utils.esc(m.industry || '')}</td>
+        <td class="tnum">${utils.fmtPrice(m.l)}</td>
+        <td class="tnum"><b>${m.rr ?? '—'}</b></td>
+        <td class="tnum">${tone(m.w1)}</td><td class="tnum">${tone(m.m1)}</td>
+        <td class="tnum">${m.h == null ? '—' : m.h.toFixed(1) + '%'}</td>
+        <td class="tnum">${m.a == null ? '—' : m.a.toFixed(1) + '%'}</td>
+        <td class="tnum">${fmtM(m.tv)}</td>
+        <td class="tnum">${m.tt == null ? '—' : m.tt.toFixed(1) + '%'}</td>
+        <td class="tnum">${m.vr == null ? '—' : m.vr.toFixed(1) + '×'}</td>
+        <td>${((D.tags || {})[m.s] || []).map(t => `<span class="dc-tag t-${t}" title="${TAG_TIP[t]}">${TAG_WORD[t]}</span>`).join('')}</td></tr>`).join('')}</tbody></table></div>`
+      : `<div class="dc-empty">${empty}</div>`;
+
+    const fmtDay = d => { const [, mo, dd] = d.split('-'); return `${+dd} ${MON[+mo - 1]}`; };
+    const tagCell = m => ((D.tags || {})[m.s] || []).map(t => `<span class="dc-tag t-${t}" title="${TAG_TIP[t]}">${TAG_WORD[t]}</span>`).join('');
+    const ipoTable = list => list.length ? `<div class="scan-table-wrap"><table class="scan-table dc-table">
+      <thead><tr><th>#</th><th>Stock</th><th>Industry</th><th title="listing day · market sessions since">Listed</th>
+        <th title="IPO issue price (Nasdaq IPO calendar)">Issue</th><th>Price</th><th title="% above the issue price">vs issue</th>
+        <th title="out-/under-performance vs ${utils.esc(bm())} since the listing-day close">vs index</th><th>1W</th>
+        <th title="% below the highest intraday price since listing">Off high</th><th title="average daily range, 20 days">ADR</th>
+        <th title="average daily traded value, 20 sessions (US$ millions)">$M/day</th>
+        <th title="10-session high-low range as % of price — small = a tight base">10d range</th><th>Setup</th></tr></thead>
+      <tbody>${list.slice(0, 15).map((m, i) => `<tr class="dc-tr" data-sym="${utils.esc(m.s)}">
+        <td class="tnum">${i + 1}</td>
+        <td class="dc-nm">${utils.esc(m.n.replace(/\s+(Limited|Ltd\.?)$/i, ''))}<span class="msym">${utils.esc(m.s)}${evBadge(m.ev)}</span></td>
+        <td class="dc-ind">${inLead(m) ? '<span class="dc-hot" title="in a leading industry / sector">●</span>' : ''}${utils.esc(m.industry || '')}</td>
+        <td class="tnum">${fmtDay(m.ipo.d)}<span class="dc-sub2">${m.ipo.n} sessions</span></td>
+        <td class="tnum">${m.ipo.p == null ? '—' : utils.fmtPrice(m.ipo.p)}</td>
+        <td class="tnum">${utils.fmtPrice(m.l)}</td>
+        <td class="tnum">${tone(m.ipo.g, 0)}</td><td class="tnum">${tone(m.ipo.x, 0)}</td>
+        <td class="tnum">${tone(m.w1)}</td>
+        <td class="tnum">${m.h == null ? '—' : m.h.toFixed(1) + '%'}</td>
+        <td class="tnum">${m.a == null ? '—' : m.a.toFixed(1) + '%'}</td>
+        <td class="tnum">${fmtM(m.tv)}</td>
+        <td class="tnum">${m.tt == null ? '—' : m.tt.toFixed(1) + '%'}</td>
+        <td>${tagCell(m)}</td></tr>`).join('')}</tbody></table></div>`
+      : '<div class="dc-empty">No recent IPO is basing near its high right now.</div>';
+    const weeklyTable = list => list.length ? `<div class="scan-table-wrap"><table class="scan-table dc-table">
+      <thead><tr><th>#</th><th>Stock</th><th>Industry</th><th>Price</th>
+        <th title="RS rating 1-99 vs all stocks">RS</th>
+        <th title="10-week simple moving average of weekly closes (this week's bar closes at the latest price)">10W SMA</th>
+        <th title="% the price is above the 10-week SMA — small = near the weekly support line">vs 10W</th>
+        <th title="weekly closes in a row above the 10-week SMA (this week included)">Weeks above</th>
+        <th>1W</th><th>1M</th><th title="% below the 52-week high">Off high</th>
+        <th title="average daily range, 20 days">ADR</th><th title="average daily traded value, 20 sessions (US$ millions)">$M/day</th><th>Setup</th></tr></thead>
+      <tbody>${list.slice(0, 25).map((m, i) => `<tr class="dc-tr" data-sym="${utils.esc(m.s)}">
+        <td class="tnum">${i + 1}</td>
+        <td class="dc-nm">${utils.esc(m.n.replace(/\s+(Limited|Ltd\.?)$/i, ''))}<span class="msym">${utils.esc(m.s)} · ${utils.esc((CAP_LABEL[m.cap] || '').replace(' cap', ''))}${evBadge(m.ev)}</span></td>
+        <td class="dc-ind">${inLead(m) ? '<span class="dc-hot" title="in a leading industry / sector">●</span>' : ''}${utils.esc(m.industry || '')}</td>
+        <td class="tnum">${utils.fmtPrice(m.l)}</td>
+        <td class="tnum"><b>${m.rr ?? '—'}</b></td>
+        <td class="tnum">${utils.fmtPrice(m.wk.s)}</td>
+        <td class="tnum">${tone(m.wk.d)}</td>
+        <td class="tnum">${m.wk.n}</td>
+        <td class="tnum">${tone(m.w1)}</td><td class="tnum">${tone(m.m1)}</td>
+        <td class="tnum">${m.h == null ? '—' : m.h.toFixed(1) + '%'}</td>
+        <td class="tnum">${m.a == null ? '—' : m.a.toFixed(1) + '%'}</td>
+        <td class="tnum">${fmtM(m.tv)}</td>
+        <td>${inBrk.has(m.s) ? '<span class="dc-tag t-brk" title="also in today\'s breakout watch (top 25)">Breakout watch</span>' : ''}${inIpo.has(m.s) ? '<span class="dc-tag t-brk" title="also in today\'s IPO bases list — a listing under a year old">IPO base</span>' : ''}${tagCell(m)}</td></tr>`).join('')}</tbody></table></div>`
+      : '<div class="dc-empty">No leader is in a rising weekly trend that isn\'t already extended right now.</div>';
+    const when = d => d ? `${fmtDay(d)} close` : '';
+    const volX = x => x == null ? '' : ` · ${x.toFixed(1)}× vol`;
+    const htfState = h => h.bo == null
+      ? `<span class="tnum">${(-h.dist).toFixed(1)}% below</span><span class="dc-sub2">in the flag</span>`
+      : `<span class="tnum">${tone(h.dist)} above</span><span class="dc-sub2">broke out ${when(h.bod)}${volX(h.vx)}</span>`;
+    // early trigger: the high of a tight 10-day range inside the flag (stop: its low)
+    const htfEarly = h => {
+      if (h.et == null || (h.bo != null && h.eb == null)) return '<span class="dc-muted">—</span>';
+      // risk of the early entry: trigger → stop (not today's price → stop)
+      const risk = ` (${((1 - h.es / h.et) * 100).toFixed(0)}% risk)`;
+      return h.eb != null
+        ? `<b class="tnum">${utils.fmtPrice(h.et)} hit</b><span class="dc-sub2">${when(h.ebd)} · stop ${utils.fmtPrice(h.es)}${risk}</span>`
+        : `<span class="tnum">${utils.fmtPrice(h.et)}</span><span class="dc-sub2" title="a close above it is the early entry">stop ${utils.fmtPrice(h.es)}${risk}</span>`;
+    };
+    const htfTable = list => list.length ? `<div class="scan-table-wrap"><table class="scan-table dc-table">
+      <thead><tr><th>#</th><th>Stock</th><th>Industry</th><th>Price</th>
+        <th title="RS rating 1-99 vs all stocks">RS</th>
+        <th title="the run-up: low to the pole high, and how many sessions it took">Pole</th>
+        <th title="deepest pullback from the pole high, and sessions since the pole high">Flag</th>
+        <th title="the pole high — the breakout level (set your alert here)">Pivot</th>
+        <th title="the last close vs the pivot — completed sessions only (the data updates after the 15:30 close)">vs pivot</th>
+        <th title="the high of a tight 10-day range inside the flag (≤ 2.5 ADR): a close above it is the early, lower-priced entry; stop under the range low">Early trigger</th>
+        <th title="average volume in the flag ÷ average volume in the pole — under 0.7 = drying up">Flag vol</th>
+        <th title="average daily range, 20 days — size the stop with it">ADR</th>
+        <th title="average daily traded value, 20 sessions (US$ millions)">$M/day</th><th>Setup</th></tr></thead>
+      <tbody>${list.slice(0, 15).map((m, i) => `<tr class="dc-tr" data-sym="${utils.esc(m.s)}">
+        <td class="tnum">${i + 1}</td>
+        <td class="dc-nm">${utils.esc(m.n.replace(/\s+(Limited|Ltd\.?)$/i, ''))}<span class="msym">${utils.esc(m.s)} · ${utils.esc((CAP_LABEL[m.cap] || '').replace(' cap', ''))}${evBadge(m.ev)}</span></td>
+        <td class="dc-ind">${inLead(m) ? '<span class="dc-hot" title="in a leading industry / sector">●</span>' : ''}${utils.esc(m.industry || '')}</td>
+        <td class="tnum">${utils.fmtPrice(m.l)}</td>
+        <td class="tnum"><b>${m.rr ?? '—'}</b></td>
+        <td class="tnum">+${m.htf.g.toFixed(0)}%<span class="dc-sub2">${m.htf.pw} sessions</span></td>
+        <td class="tnum">−${m.htf.fd.toFixed(0)}%<span class="dc-sub2">${m.htf.fw} sessions</span></td>
+        <td class="tnum">${utils.fmtPrice(m.htf.p)}</td>
+        <td>${htfState(m.htf)}</td>
+        <td>${htfEarly(m.htf)}</td>
+        <td class="tnum">${m.htf.dry == null ? '—' : m.htf.dry.toFixed(2) + '×'}</td>
+        <td class="tnum">${m.a == null ? '—' : m.a.toFixed(1) + '%'}</td>
+        <td class="tnum">${fmtM(m.tv)}</td>
+        <td>${inBrk.has(m.s) ? '<span class="dc-tag t-brk" title="also in today\'s breakout watch (top 25)">Breakout watch</span>' : ''}${tagCell(m)}</td></tr>`).join('')}</tbody></table></div>`
+      : '<div class="dc-empty">No liquid stock is in a high tight flag right now — they are rare (a few a month, mostly in strong markets).</div>';
+    const checks = reg.checks.map(c => `<li class="${c.ok === null ? 'na' : c.ok ? 'ok' : 'no'}">
+        <span class="dc-ck">${c.ok === null ? '–' : c.ok ? '✓' : '✗'}</span>${c.t}<span class="dc-cv">${utils.esc(c.v)}</span></li>`).join('');
+    const indRows = leadInd.map(r => `<div class="dc-ind-row"><b>${utils.esc(r.name)}</b>
+        <span class="dc-muted">${utils.esc(r.sector)}</span>${quadTag(r.quad)}
+        <span class="dc-line">${sgn(r.m1)} 1M · ${pctTxt(r.p50)} > 50-EMA · ${r.lead} leaders</span></div>`).join('');
+    const ext = extended.map(m => `${stockLink(m)} <span class="dc-muted">${sgn(m.w1, 0)} 1W</span>`).join(' · ');
+    // TradingView export: each list in rank order (all that pass, not just the
+    // rows shown); "All 3 lists" is one watchlist file with a ### section each
+    const TV_LISTS = {
+      brk: { name: 'Breakout watch', file: 'breakouts', list: breakouts },
+      pb: { name: 'Pullbacks in leaders', file: 'pullbacks', list: pullbacks },
+      ipo: { name: 'IPO bases', file: 'ipo_bases', list: ipos },
+      wk: { name: 'Weekly trend above 10W SMA', file: 'weekly_10w', list: weekly },
+      htf: { name: 'High tight flags', file: 'high_tight_flags', list: htfs },
+    };
+    const tvList = k => TV_LISTS[k].list.map(m => tvSym(m.s)).join(',');
+    const tvAll = () => Object.values(TV_LISTS).filter(t => t.list.length)
+      .map(t => `###${t.name},${t.list.map(m => tvSym(m.s)).join(',')}`).join(',');
+    const tvButtons = (k, shown) => {
+      const n = TV_LISTS[k].list.length;
+      if (!n) return '';
+      const what = n > shown ? `all ${n} that pass, in rank order (the table shows the top ${shown})` : `the ${n} stocks, in rank order`;
+      return `<span class="dc-tv">
+        <button type="button" class="dc-tvb" data-tv="${k}" data-act="copy" title="Copy ${what} as EXCHANGE:SYMBOL — paste into a TradingView watchlist's add-symbol box">Copy ${n} for TradingView</button>
+        <button type="button" class="dc-tvb" data-tv="${k}" data-act="dl" title="Download ${what} as a .txt — TradingView: watchlist menu → Import list">⬇ .txt</button></span>`;
+    };
+    const tvDay = D.asof || '';
+    let sec = 8;
+    $.content.innerHTML = `<div class="scan-card dc">
+      <div class="scan-head"><div><div class="scan-title">Swing-trading desk</div>
+        <div class="scan-sub">what I would check every evening before the next session · as of ${asOfText()}</div></div>
+        ${breakouts.length + pullbacks.length + ipos.length + weekly.length + htfs.length ? `<button type="button" class="dc-tvb dc-tv-all" data-act="all"
+          title="One TradingView watchlist with a section per list (Breakout watch / Pullbacks / IPO bases / Weekly trend / High tight flags) — TradingView: watchlist menu → Import list">⬇ TradingView watchlist · all lists</button>` : ''}</div>
+      <div class="dc-body">
+        <div class="dc-answer"><span class="dc-dot r-${reg.level}"></span><div>
+          <div class="dc-answer-t">Market: <b class="r-${reg.level}-t">${R.word}</b> — ${reg.pass} of ${reg.known} checks pass.</div>
+          <div class="dc-answer-s">${R.size}. ${R.line.charAt(0).toUpperCase() + R.line.slice(1)}</div></div></div>
+        <div class="dc-grid">
+          <section><h3>1 · Market regime checklist</h3><ul class="dc-checks">${checks}</ul></section>
+          <section><h3>2 · Leading industries — where setups work best</h3>${indRows || '<div class="dc-empty">No industry is beating the average stock right now.</div>'}</section>
+        </div>
+        <section class="dc-wide"><div class="dc-h3row"><h3>3 · Breakout watch — leaders near their highs <span class="dc-muted">${breakouts.length} stocks</span></h3>${tvButtons('brk', 25)}</div>
+          <div class="dc-note">RS ≥ ${S.minRS}, above the 20/50/100/150/200-day EMAs, RS line above its 21-EMA, within ${S.maxOffHigh}% of the 52-week high,
+            ADR ${S.minAdr}–${S.maxAdr}%, ≥ $${S.minTurnoverM}M/day, not up > ${S.maxWeek}% this week or > ${S.maxMonth}% this month. ● = in a leading group (ranked first).
+            Buy only on a breakout from a tight range on rising volume; stop under the range low (≈ 1 ADR).
+            Ranked higher when the 10-day range is <b>tight</b> and volume is <b>drying up</b>; a volume-surge day ranks lower
+            (in the NSE backtest buying that close lagged). <span class="dc-ev res">⚠ Results</span> = reports within 14 days — don't hold through it.</div>
+          ${table(breakouts, 25, 'No stock passes the breakout filter today — that itself says: stay patient.')}</section>
+        <section class="dc-wide"><div class="dc-h3row"><h3>4 · Pullbacks in leaders — lower-risk entries <span class="dc-muted">${pullbacks.length} stocks</span></h3>${tvButtons('pb', 15)}</div>
+          <div class="dc-note">RS ≥ ${S.pbMinRS}, above the 50 and 200-day EMAs but back below the 20-day, ${S.pbOffHigh[0]}–${S.pbOffHigh[1]}% off the high.
+            Enter when it turns back up (reclaims the prior day's high / the 20-EMA); stop under the pullback low.</div>
+          ${table(pullbacks, 15, 'No leader is pulling back in an orderly way right now.')}</section>
+        <section class="dc-wide"><div class="dc-h3row"><h3>5 · IPO bases — new listings near their highs <span class="dc-muted">${ipos.length} stocks</span></h3>${tvButtons('ipo', 15)}</div>
+          <div class="dc-note">IPOs ${IR.minAge}–${IR.maxAge} sessions old — too young for an RS rating or a 200-day EMA, so the breakout watch can't see them.
+            Above the issue price, ahead of the ${utils.esc(bm())} since the listing day, above every EMA it has, within ${IR.maxOffHigh}% of the high since listing,
+            ADR ${IR.minAdr}–${IR.maxAdr}%, ≥ $${S.minTurnoverM}M/day, not up > ${IR.maxWeek}% this week.
+            The classic entry is a breakout above the post-listing high after a few quiet weeks; stop under the base low. Young stocks move fast — size smaller.</div>
+          ${ipoTable(ipos)}</section>
+        <section class="dc-wide"><div class="dc-h3row"><h3>6 · Weekly trend — leaders above the 10-week SMA <span class="dc-muted">${weekly.length} stocks</span></h3>${tvButtons('wk', 25)}</div>
+          <div class="dc-note">Weekly timeframe: the weekly close is above a rising ${WR.sma}-week SMA (as on TradingView's weekly chart — this week's bar closes at the latest price),
+            RS ≥ ${WR.minRS}, ADR ${WR.minAdr}–${WR.maxAdr}%, ≥ $${S.minTurnoverM}M/day, not up > ${WR.maxWeek}% this week or > ${WR.maxMonth}% this month; strongest RS first.
+            A positional swing: hold while the weekly close stays above the 10-week line, exit on a weekly close below it.
+            <span class="dc-tag t-near10">Near 10W</span> = within ${WR.near}% of the line — the lower-risk entry; far above it, wait for a pullback toward the line.</div>
+          ${weeklyTable(weekly)}</section>
+        <section class="dc-wide"><div class="dc-h3row"><h3>7 · High tight flags — a +${HR.minPole}% pole, then a tight flag <span class="dc-muted">${htfs.length} stocks</span></h3>${tvButtons('htf', 15)}</div>
+          <div class="dc-note">The rare, explosive pattern: up ≥ ${HR.minPole}% in ≤ ${HR.poleWeeks} weeks (the pole), then a pullback of ≤ ${HR.maxFlag}% lasting ${HR.flagWeeks[0]}–${HR.flagWeeks[1]} weeks (the flag);
+            buy the first close above the pivot (the pole high). Listed while in the flag, and for ${HR.boDays} sessions after a breakout that holds. ≥ $${S.minTurnoverM}M/day only.
+            <span class="dc-tag t-vdry">Flag vol dry-up</span> ranks first — in the NSE test (86 breakouts, 2024–26) those beat NIFTY 500 by +6.8% over 20 sessions and 26% went +50% within 3 months
+            (without dry-up +2.8%, 15%); but the median trade was flat, so use a stop (≈ 8% / under the flag low) and let the few big winners run.
+            <b>Early trigger</b> — a close above a tight 10-day range inside the flag gets you in a median 8% below the pivot: in the test (44 cases) 41% reached 2× the risk before the stop
+            (+0.24R a trade vs +0.06R buying the pivot), and 68% went on to clear the pivot. The stop is the range low — often 10–13% away, and a tighter stop just got shaken out — so take a smaller position.</div>
+          ${htfTable(htfs)}</section>
+        ${extended.length ? `<section class="dc-wide"><h3>${sec++} · Don't chase — extended leaders</h3>
+          <div class="dc-note">Up > 20% in a week or > ${S.maxMonth}% in a month: wait for a base or a pullback.</div>
+          <div class="dc-chips">${ext}</div></section>` : ''}
+        <section class="dc-wide"><h3>${sec++} · Track record — does the screen work?</h3>${swingTrack(state.track)}</section>
+        <section class="dc-wide"><h3>${sec++} · Rules I'd trade by</h3>
+          <ul class="dc-rules">
+            <li><b>Regime first:</b> size follows the checklist above — cut size when it turns Mixed, mostly cash when Risk-off.</li>
+            <li><b>Risk per trade:</b> decide the stop before entry; lose at most 0.5–1% of capital if it hits. Shares = risk $ ÷ (entry − stop).</li>
+            <li><b>Stop:</b> below the setup's low, usually ≤ 1× ADR from entry; never widen it.</li>
+            <li><b>Profits:</b> sell a third to half at 2–3× risk or after 3–5 strong days; move the stop to breakeven; trail the rest with the 10/20-day EMA.</li>
+            <li><b>Leaders only:</b> RS ≥ 80 stocks in leading groups; skip stocks reporting results within the holding period.</li>
+            <li><b>Review:</b> if 3–4 breakouts in a row fail, the market is telling you to step back.</li>
+          </ul></section>
+        <div class="dc-foot">Screens use the latest close; levels are a starting point for your own chart review, not investment advice.
+          Click a stock for its RS chart.</div>
+      </div></div>`;
+    bindStockLinks();
+    $.content.querySelectorAll('.dc-tvb').forEach(b => b.addEventListener('click', () => {
+      const k = b.dataset.tv, act = b.dataset.act, label = b.textContent;
+      const done = msg => {
+        b.textContent = msg; b.classList.add('done');
+        setTimeout(() => { b.textContent = label; b.classList.remove('done'); }, 1600);
+      };
+      if (act === 'copy') {
+        toClipboard(tvList(k)).then(ok => done(ok ? `Copied ${TV_LISTS[k].list.length} ✓` : 'Copy failed'));
+      } else if (act === 'dl') {
+        saveText(tvList(k), `swing_${TV_LISTS[k].file}_${tvDay}.txt`);
+        done('Saved ✓');
+      } else {
+        saveText(tvAll(), `swing_watchlist_${tvDay}.txt`);
+        done('Saved ✓');
+      }
+    }));
+  }
+
+  // =========================================================================
+  // Date labels shared by the Focus / Swing / Scans pages
+  // =========================================================================
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const WDAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const monLabel = m => `${MON[+m.slice(5, 7) - 1]} ${m.slice(0, 4)}`;
+  const fmtD = d => { const [y, m, dd] = d.split('-'); return `${+dd} ${MON[+m - 1]} ${y}`; };
+  const dayLabel = d => `${WDAY[new Date(d + 'T00:00:00Z').getUTCDay()]} ${fmtD(d)}`;
+
+  // =========================================================================
+  // SCANS: scan summary of the 1-month gainers by sector / sub-industry / size
+  // =========================================================================
+  // 1-month gainer: up >= 14% over 20 sessions, average daily traded value
+  // >= US$10M (20 sessions), price >= $10 (the NSE rule's ₹10 crore / ₹100,
+  // set at US liquidity).  Grouped by GICS sector / industry group / size —
+  // the lower levels only hold official GICS (S&P 1500) stocks.
+  const GAINER = { minGain: 14, minTurnoverM: 10, minPrice: 10 };
+  const SCAN_DIMS = [['macro', 'Sector', 'sectors'], ['sector', 'Industry group', 'industry groups'],
+    ['cap', 'Market cap', 'sizes']];
+  const CAP_ORDER = ['Large', 'Mid', 'Small', 'Micro', 'New'];
+  const CAP_LABEL = { Large: 'Large cap', Mid: 'Mid cap', Small: 'Small cap', Micro: 'Micro cap',
+    New: 'No market cap' };
+  const SCAN_SLOTS = 5;   // coloured donut segments; smaller groups fold into "Other"
+
+  async function renderScans() {
+    // a stock's sector / sub-industry comes from those levels' members
+    try {
+      for (const lv of state.levels) {
+        if (!state.levelData[lv.key] || state.levelData[lv.key]._error) {
+          state.levelData[lv.key] = await api.level(lv.key);
+        }
+      }
+    } catch (e) {
+      $.content.innerHTML = `<div class="brd-empty">Failed to load data: ${utils.esc(e.message)}</div>`;
+      return;
+    }
+    drawScans();
+  }
+
+  function median(xs) {
+    const v = xs.filter(x => x != null).sort((a, b) => a - b);
+    if (!v.length) return null;
+    const h = v.length >> 1;
+    return v.length % 2 ? v[h] : (v[h - 1] + v[h]) / 2;
+  }
+
+  // Donut of the scan's split: one stroked circle per segment, 2px surface gap
+  function scanDonut(segs, total, groupsN, unit) {
+    const R = 74, W = 22, C = 2 * Math.PI * R, GAP = 2;
+    let off = 0;
+    const arcs = segs.map((sg, i) => {
+      const len = total ? C * sg.n / total : 0;
+      const dash = Math.max(0, len - (segs.length > 1 ? GAP : 0));
+      const el = `<circle class="sd-seg" data-i="${i}" r="${R}" cx="100" cy="100" fill="none"
+        style="stroke:${sg.color}" stroke-width="${W}" stroke-dasharray="${dash.toFixed(2)} ${(C - dash).toFixed(2)}"
+        stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 100 100)"/>`;
+      off += len;
+      return el;
+    }).join('');
+    return `<svg class="scan-donut" viewBox="0 0 200 200" role="img"
+      aria-label="${total} stocks across ${groupsN} ${unit}">
+      <circle r="${R}" cx="100" cy="100" fill="none" class="sd-track" stroke-width="${W}"/>
+      ${arcs}
+      <text x="100" y="93" text-anchor="middle" class="sd-hero"${String(total).length > 3 ? ' style="font-size:30px"' : ''}>${total}</text>
+      <text x="100" y="113" text-anchor="middle" class="sd-sub">stocks</text>
+      <text x="100" y="128" text-anchor="middle" class="sd-sub">${groupsN} ${unit}</text>
+    </svg>`;
+  }
+
+  function drawScans() {
+    const dim = state.scan.dim;
+    const all = stockIndex();
+    const hits = all.filter(m => m.m1 != null && m.m1 >= GAINER.minGain
+      && m.tv != null && m.tv >= GAINER.minTurnoverM && m.l != null && m.l >= GAINER.minPrice);
+    const groupOf = m => (dim === 'cap' ? (m.cap || 'New') : m[dim]);
+    const total = new Map(), by = new Map(), members = new Map();
+    for (const m of all) {
+      const k = groupOf(m);
+      if (!k) continue;
+      total.set(k, (total.get(k) || 0) + 1);
+      if (!members.has(k)) members.set(k, []);
+      members.get(k).push(m);
+    }
+    // whole-group move (every stock in the group, not just the gainers):
+    // equal-weight average of the members' 1-day / 1-week changes
+    const mean = xs => { const v = xs.filter(x => x != null); return v.length ? v.reduce((a, x) => a + x, 0) / v.length : null; };
+    const chg = (v, dp) => v == null ? '—' : `<span class="${v >= 0 ? 'pos' : 'neg'}">${v >= 0 ? '+' : ''}${v.toFixed(dp)}%</span>`;
+    for (const m of hits) {
+      const k = groupOf(m);
+      if (!k) continue;
+      if (!by.has(k)) by.set(k, []);
+      by.get(k).push(m);
+    }
+    const count = k => (by.get(k) || []).length;
+    const keys = dim === 'cap'
+      ? CAP_ORDER.filter(k => total.has(k))
+      : [...by.keys()].sort((a, b) => count(b) - count(a) || a.localeCompare(b));
+    // colour follows the entity: fixed per size class; otherwise the largest
+    // groups of the list take the first slots and the rest share "Other"
+    const OTHER = 'var(--sc-other)';
+    const color = {};
+    keys.forEach((k, i) => {
+      if (dim === 'cap') color[k] = k === 'New' ? OTHER : `var(--sc-${CAP_ORDER.indexOf(k) + 1})`;
+      else color[k] = i < SCAN_SLOTS ? `var(--sc-${i + 1})` : OTHER;
+    });
+    let segs = keys.filter(k => count(k)).map(k => ({ name: dim === 'cap' ? CAP_LABEL[k] : k, n: count(k), color: color[k] }));
+    if (dim !== 'cap' && segs.length > SCAN_SLOTS) {
+      const rest = segs.slice(SCAN_SLOTS);
+      segs = segs.slice(0, SCAN_SLOTS).concat([{ name: `Other (${rest.length})`,
+        n: rest.reduce((a, x) => a + x.n, 0), color: OTHER }]);
+    }
+    const n = hits.length;
+    const pctOf = (c, t) => (t ? (c / t * 100).toFixed(c / t < 0.1 ? 1 : 0) : '0.0') + '%';
+    const rows = keys.map(k => {
+      const list = by.get(k) || [], c = list.length, tot = total.get(k) || 0;
+      const share = n ? c / n * 100 : 0;
+      const rs = median(list.map(m => m.rr));
+      const m3 = median(list.map(m => m.m3));
+      const grp = members.get(k) || [];
+      const g1d = mean(grp.map(m => m.d1)), g1w = mean(grp.map(m => m.w1));
+      return `<tr class="scan-row${c ? '' : ' empty'}">
+        <td class="sg-name"><span class="sw" style="background:${c ? color[k] : 'transparent'}"></span>${utils.esc(dim === 'cap' ? CAP_LABEL[k] : k)}</td>
+        <td class="tnum sg-n">${c}</td>
+        <td class="sg-share"><span class="bar"><span style="width:${share.toFixed(1)}%;background:${color[k]}"></span></span><span class="tnum">${c ? share.toFixed(0) + '%' : '—'}</span></td>
+        <td class="tnum sg-of">${c} of ${tot} <span class="muted">(${pctOf(c, tot)})</span></td>
+        <td class="tnum">${rs == null ? '—' : Math.round(rs)}</td>
+        <td class="tnum">${chg(m3, 0)}</td>
+        <td class="tnum sg-grp">${chg(g1d, 2)}</td>
+        <td class="tnum">${chg(g1w, 2)}</td>
+      </tr>`;
+    }).join('');
+    const asOf = ((state.meta && state.meta.drange) || '').split('→').pop().trim();   // window end
+    const fmtDay = d => { const [y, mo, da] = d.split('-'); return `${+da} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+mo - 1]} ${y}`; };
+    const [, label, unit] = SCAN_DIMS.find(d => d[0] === dim);
+    const nGroups = keys.filter(k => count(k)).length;
+    $.content.innerHTML = `<div class="scan-card">
+      <div class="scan-head">
+        <div><div class="scan-title">Scan summary · 1-month gainers</div>
+          <div class="scan-sub">${n} stocks · as of ${/^\d{4}-\d\d-\d\d$/.test(asOf) ? fmtDay(asOf) : '—'}</div></div>
+        <div class="seg">${SCAN_DIMS.map(([k, v]) => `<button type="button" data-dim="${k}" class="${k === dim ? 'on' : ''}">${v}</button>`).join('')}</div>
+      </div>
+      <div class="scan-body">
+        <div class="scan-viz">${scanDonut(segs, n, nGroups, unit)}<div class="mtip scan-tip" id="scan-tip"></div></div>
+        <div class="scan-table-wrap"><table class="scan-table">
+          <thead><tr><th>${dim === 'cap' ? 'Size' : label}</th><th>Stocks</th><th>Share of list</th>
+            <th>Of the group</th><th title="median RS rating (1-99)">RS</th><th title="median 3-month return">3M</th>
+            <th class="sg-grp" title="whole group: average 1-day change of all its stocks (not just the gainers)">Group 1D</th>
+            <th title="whole group: average 1-week (5-session) change of all its stocks (not just the gainers)">Group 1W</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="8" class="brd-empty">No 1-month gainers today.</td></tr>'}</tbody>
+        </table></div>
+      </div>
+    </div>`;
+
+    $.content.querySelectorAll('[data-dim]').forEach(b => b.addEventListener('click', () => {
+      state.scan.dim = b.dataset.dim;
+      drawScans();
+    }));
+    const tip = $.content.querySelector('#scan-tip');
+    $.content.querySelectorAll('.sd-seg').forEach(c => {
+      c.addEventListener('mousemove', ev => {
+        const sg = segs[+c.dataset.i];
+        tip.innerHTML = `<b>${utils.esc(sg.name)}</b>${sg.n} stock${sg.n === 1 ? '' : 's'} · ${(sg.n / n * 100).toFixed(0)}%`;
+        const box = c.ownerSVGElement.parentNode.getBoundingClientRect();
+        tip.style.left = (ev.clientX - box.left + 12) + 'px';
+        tip.style.top = (ev.clientY - box.top - 10) + 'px';
+        tip.style.visibility = 'visible';
+      });
+      c.addEventListener('mouseleave', () => { tip.style.visibility = 'hidden'; });
     });
   }
 
@@ -1146,10 +1793,33 @@
     if (state.watchlist.has(sym)) state.watchlist.delete(sym);
     else state.watchlist.add(sym);
     localStorage.setItem('rs_watchlist', JSON.stringify([...state.watchlist]));
+    syncWatchlist();
     document.querySelectorAll(`.wstar[data-sym="${CSS.escape(sym)}"]`).forEach(b => {
       b.classList.toggle('on', state.watchlist.has(sym));
       b.textContent = state.watchlist.has(sym) ? '★' : '☆';
     });
+  }
+
+  // Local server: mirror the stars to ~/.config/us-rs/watchlist.txt so the
+  // evening Telegram brief can alert on them (the static site can't).
+  function syncWatchlist() {
+    if (staticData) return;
+    fetch('/api/watchlist', { method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symbols: [...state.watchlist] }) }).catch(() => {});
+  }
+  async function mergeServerWatchlist() {
+    if (staticData) return;
+    try {
+      const r = await fetch('/api/watchlist');
+      if (!r.ok) return;
+      const server = (await r.json()).symbols || [];
+      const before = state.watchlist.size;
+      server.forEach(s => state.watchlist.add(s));
+      if (state.watchlist.size !== before) {
+        localStorage.setItem('rs_watchlist', JSON.stringify([...state.watchlist]));
+      }
+      if (state.watchlist.size !== server.length) syncWatchlist();
+    } catch (e) { /* older server without /api/watchlist */ }
   }
 
   // ---- CSV export of the current level tab ----
@@ -1341,6 +2011,7 @@
   const TV_PREFIX = new Set(['NASDAQ', 'NYSE', 'AMEX', 'CBOE']);
 
   function exchOf(sym) {
+    if (state.exch && state.exch[sym]) return state.exch[sym];
     for (const lv of Object.values(state.levelData)) {
       for (const g of (lv && lv.groups) || []) {
         const m = (g.members || []).find(x => x.s === sym);
@@ -1350,47 +2021,54 @@
     return null;
   }
 
+  const tvSym = s => {
+    const x = exchOf(s), t = s.replace(/-/g, '.');
+    return TV_PREFIX.has(x) ? `${x}:${t}` : t;
+  };
+
   function tvText() {
-    return Array.from(state.selected).map(s => {
-      const x = exchOf(s), t = s.replace(/-/g, '.');
-      return TV_PREFIX.has(x) ? `${x}:${t}` : t;
-    }).join(',\n');
+    return Array.from(state.selected).map(tvSym).join(',\n');
   }
 
-  function copyTV() {
-    if (!state.selected.size) { flashMsg('Nothing selected'); return; }
-    const txt = tvText();
+  // → Promise<boolean>: clipboard API, else the hidden-textarea fallback
+  function toClipboard(txt) {
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(
-        () => flashMsg('Copied ' + state.selected.size),
-        () => fallbackCopy(txt)
-      );
-    } else {
-      fallbackCopy(txt);
+      return navigator.clipboard.writeText(txt).then(() => true, fallback);
     }
+    return Promise.resolve(fallback());
   }
 
-  function fallbackCopy(txt) {
-    const ta = document.createElement('textarea');
-    ta.value = txt;
-    ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); flashMsg('Copied ' + state.selected.size); }
-    catch (e) { flashMsg('Copy failed'); }
-    document.body.removeChild(ta);
-  }
-
-  function downloadTV() {
-    if (!state.selected.size) { flashMsg('Nothing selected'); return; }
-    const blob = new Blob([tvText()], { type: 'text/plain' });
+  function saveText(txt, name) {
+    const blob = new Blob([txt], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'tradingview_watchlist.txt';
+    a.download = name;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
+  }
+
+  function copyTV() {
+    if (!state.selected.size) { flashMsg('Nothing selected'); return; }
+    const n = state.selected.size;
+    toClipboard(tvText()).then(ok => flashMsg(ok ? 'Copied ' + n : 'Copy failed'));
+  }
+
+  function downloadTV() {
+    if (!state.selected.size) { flashMsg('Nothing selected'); return; }
+    saveText(tvText(), 'tradingview_watchlist.txt');
     flashMsg('Downloaded ' + state.selected.size);
   }
 
@@ -1556,6 +2234,8 @@
                     state.groupMembers = {};
                     state.breadthData = null;
                     state.rotationData = null;
+                    state.decide = null;
+                    state.track = null;
                     document.getElementById('meta-drange').textContent = meta.drange;
                     document.getElementById('stat-gen').textContent = (meta.generated || '').split(' ')[0] || '';
                     document.getElementById('stat-gen-sub').textContent = (meta.generated || '').split(' ')[1] || '';
@@ -1621,6 +2301,7 @@
     // Boot the API — falls back to rs_data.json on the static export
     try {
       await bootApi();
+      await mergeServerWatchlist();
     } catch (e) {
       $.content.innerHTML = `<div class="brd-empty">Failed to load data.<br><br><code>${utils.esc(e.message)}</code></div>`;
       return;
@@ -1651,8 +2332,11 @@
     // Populate stat cards
     document.getElementById('stat-stocks').textContent = state.meta.n_stocks.toLocaleString();
     const nWindow = state.meta.n_window || state.meta.n_stocks;
-    document.getElementById('stat-stocks-sub').textContent =
-      `${nWindow.toLocaleString()} in window · ${(state.meta.n_stocks - nWindow).toLocaleString()} excluded today`;
+    const nThin = (state.meta.illiquid || []).length;
+    const sub = document.getElementById('stat-stocks-sub');
+    sub.textContent = `${nWindow.toLocaleString()} ranked · ${(state.meta.n_stocks - nWindow).toLocaleString()} left out today`
+      + (nThin ? ` (${nThin} thinly traded)` : '');
+    if (nThin) sub.title = `Thinly traded — skipped a session in the last ${state.meta.window || 26} and trade under $1M a day, so their RS isn't real: ${state.meta.illiquid.join(', ')}`;
     const totalGroups = state.meta.n_groups_per_level.reduce((a, b) => a + b, 0);
     document.getElementById('stat-groups').textContent = totalGroups;
     document.getElementById('stat-groups-sub').textContent =
@@ -1679,6 +2363,9 @@
     tabHTML += '<button class="tab" data-tab="breadth">Market Breadth</button>';
     tabHTML += '<button class="tab" data-tab="rotation">Rotation</button>';
     tabHTML += '<button class="tab" data-tab="ipo">New Listings</button>';
+    tabHTML += '<button class="tab" data-tab="scans">Scans</button>';
+    tabHTML += '<button class="tab" data-tab="focus">Focus</button>';
+    tabHTML += '<button class="tab" data-tab="swing">Swing</button>';
     $.tabBar.innerHTML = tabHTML;
 
     // Tab click handlers
@@ -1710,7 +2397,7 @@
     // Route to the correct tab from URL hash
     const initialTab = getHashTab();
     // Validate against known levels
-    const validTabs = state.levels.map(l => l.key).concat(['breadth', 'rotation', 'ipo']);
+    const validTabs = state.levels.map(l => l.key).concat(['breadth', 'rotation', 'ipo', 'scans', 'focus', 'swing']);
     const tab = validTabs.includes(initialTab) ? initialTab : 'macro';
     if (tab !== initialTab) setHashTab(tab);
     else activateTab(tab);

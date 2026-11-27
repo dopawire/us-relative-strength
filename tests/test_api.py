@@ -120,3 +120,22 @@ def test_reload_drops_cached_prices(client):
     m._price_cache = {"STALE": {"2020-01-01": 1.0}}
     assert client.post("/api/reload").status_code == 200
     assert m._price_cache is None
+
+
+def test_decide_and_track(client):
+    d = client.get("/api/decide").json()
+    if d:
+        assert d["regime"]["level"] in ("on", "mixed", "off")
+        assert isinstance(d["breakouts"], list) and len(d["focus"]) <= 3
+    t = client.get("/api/track").json()
+    assert isinstance(t, dict)
+
+
+def test_watchlist_roundtrip(client, tmp_path, monkeypatch):
+    import watchlist
+    monkeypatch.setattr(watchlist, "WATCHLIST", str(tmp_path / "wl.txt"))
+    assert client.get("/api/watchlist").json() == {"symbols": []}
+    r = client.put("/api/watchlist", json={"symbols": ["tcs", "INFY", "TCS"]})
+    assert r.json() == {"symbols": ["TCS", "INFY"]}
+    assert client.get("/api/watchlist").json() == {"symbols": ["TCS", "INFY"]}
+    assert client.put("/api/watchlist", json={"symbols": ["X"] * 501}).status_code == 400

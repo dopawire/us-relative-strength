@@ -4,6 +4,7 @@ API/unit tests cannot see.
 
 Skipped when NO_BROWSER=1 or Playwright is unavailable.
 """
+import re
 import os
 import sys
 import socket
@@ -88,7 +89,7 @@ def test_page_loads_without_js_errors(browser_page):
     assert errors == [], f"page errors: {errors}"
     # stat cards must be populated (the stat-stocks-sub regression)
     assert page.inner_text("#stat-stocks").strip() not in ("", "—")
-    assert "in window" in page.inner_text("#stat-stocks-sub")
+    assert "ranked" in page.inner_text("#stat-stocks-sub")
 
 
 def test_breadth_tab_renders_macro_dashboard(browser_page):
@@ -231,4 +232,88 @@ def test_rotation_draws_every_session(server, browser):
     page.click(".rot-range[data-range='All']")
     page.wait_for_timeout(300)
     assert page.eval_on_selector("#rot-0 polyline", count) == n_all
+    ctx.close()
+
+
+@skip_browser
+def test_scans_page_breaks_down_gainers(server, browser):
+    """Scans: deep link works, the market-cap split lists the size classes in
+    order and adds up to the scan count, and the sector tab adds up too."""
+    ctx = browser.new_context()
+    page = ctx.new_page()
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(server + "/#/scans", wait_until="networkidle", timeout=30000)
+    page.wait_for_selector(".scan-card")
+    assert page.inner_text(".scan-title") == "Scan summary · 1-month gainers"
+    n = int(page.text_content(".sd-hero"))              # SVG text
+    names = [r.inner_text().split("\t")[0].strip() for r in page.query_selector_all(".scan-row")]
+    order = ["Large cap", "Mid cap", "Small cap", "Micro cap", "No market cap"]
+    assert names[:4] == order[:4] and names == order[:len(names)]   # "No market cap" only with fresh IPOs
+    assert sum(int(c.inner_text()) for c in page.query_selector_all(".scan-row .sg-n")) == n
+    page.click("[data-dim='sector']")
+    page.wait_for_timeout(200)
+    assert sum(int(c.inner_text()) for c in page.query_selector_all(".scan-row .sg-n")) == n
+    heads = [h.inner_text().strip().lower() for h in page.query_selector_all(".scan-table th")]
+    assert heads[1:] == ["stocks", "share of list", "of the group", "rs", "3m", "group 1d", "group 1w"]
+    assert errors == [], errors
+    ctx.close()
+
+
+@skip_browser
+def test_focus_and_swing_pages(server, browser):
+    """Focus gives one answer + sector / size verdicts; Swing shows the regime
+    checklist and the setup tables — both deep-linkable, no JS errors."""
+    ctx = browser.new_context()
+    page = ctx.new_page()
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(server + "/#/focus", wait_until="networkidle", timeout=30000)
+    page.wait_for_selector(".dc-answer")
+    assert page.inner_text(".dc-answer-t").startswith("Focus on ")
+    assert "Market:" in page.inner_text(".dc-answer-s")
+    caps = [r.inner_text() for r in page.query_selector_all(".dc-grid section:nth-child(2) .dc-row-h b")]
+    assert set(caps) <= {"Large cap", "Mid cap", "Small cap", "Micro cap"} and caps
+    page.goto(server + "/#/swing", wait_until="networkidle", timeout=30000)
+    page.wait_for_selector(".dc-checks")
+    assert len(page.query_selector_all(".dc-checks li")) == 6     # NSE's 7th check (FII) has no US twin
+    assert page.inner_text(".scan-title") == "Swing-trading desk"
+    heads = [h.inner_text() for h in page.query_selector_all(".dc-wide h3")]
+    assert any(h.upper().startswith("5 · IPO BASES") for h in heads), heads
+    assert any(h.upper().startswith("6 · WEEKLY TREND") for h in heads), heads
+    assert any(h.upper().startswith("7 · HIGH TIGHT FLAGS") for h in heads), heads
+    assert any("HIGH TIGHT FLAGS" in t.upper() for t in
+               [r.inner_text() for r in page.query_selector_all(".dc-track td:first-child")])
+    assert any("WEEKLY TREND" in t.upper() for t in
+               [r.inner_text() for r in page.query_selector_all(".dc-track td:first-child")])
+    track_rows = [r.inner_text() for r in page.query_selector_all(".dc-track td:first-child")]
+    assert any("IPO BASES" in t.upper() for t in track_rows)
+    # TradingView export: per-list copy / .txt and one sectioned watchlist file
+    btn = page.query_selector("[data-tv='brk'][data-act='copy']")
+    if btn:
+        n = int(btn.inner_text().split()[1])
+        with page.expect_download() as dl:
+            page.click("[data-tv='brk'][data-act='dl']")
+        txt = open(dl.value.path()).read()
+        syms = txt.split(",")
+        # EXCHANGE:SYMBOL with TradingView's dot class form (NYSE:BRK.B); bare
+        # for exchanges TradingView has no prefix for (TXSE)
+        tv = re.compile(r"^((NASDAQ|NYSE|AMEX|CBOE):)?[A-Z0-9]+(\.[A-Z0-9]+)?$")
+        assert len(syms) == n and all(tv.match(s) for s in syms), syms[:5]
+        first = page.query_selector(".dc-wide .dc-tr .msym").inner_text().split(" ·")[0].strip()
+        assert syms[0].split(":")[-1] == first.replace("-", ".")   # rank order
+        with page.expect_download() as dl:
+            page.click("[data-act='all']")
+        allt = open(dl.value.path()).read()
+        assert allt.startswith("###Breakout watch,") and txt in allt
+        if page.query_selector("[data-tv='wk']"):
+            assert "###Weekly trend above 10W SMA," in allt
+        page.click("[data-tv='brk'][data-act='copy']")
+        page.wait_for_timeout(100)
+        assert "Copied" in btn.inner_text() or "failed" in btn.inner_text()
+    rows = page.query_selector_all(".dc-tr")
+    if rows:                                   # click opens the stock RS chart
+        rows[0].click()
+        page.wait_for_selector("#stock-modal.open", timeout=5000)
+    assert errors == [], errors
     ctx.close()

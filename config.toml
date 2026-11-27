@@ -14,3 +14,4 @@ benchmark = "S&P 500"       # display name of the benchmark
 bench_symbol = "^GSPC"      # Yahoo ticker of the benchmark
 yahoo_workers = 8           # concurrent Yahoo fetches
 min_price = 1.0             # stocks below this last price are kept out of the rankings
+illiquid_turnover_m = 1.0     # US$ M/day: under this AND a skipped session = thinly traded, left out of the rankings

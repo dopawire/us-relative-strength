@@ -18,7 +18,7 @@ Beverages - Non-Alcoholic,Soft Drinks & Non-alcoholic Beverages,auto,8/8
 Beverages - Wineries & Distilleries,Distillers & Vintners,auto,1/1
 Biotechnology,Biotechnology,auto,22/28
 Broadcasting,Broadcasting,auto,1/1
-Building Materials,Construction Materials,auto,6/6
+Building Materials,Construction Materials,auto,7/7
 Building Products & Equipment,Building Products,auto,16/19
 Business Equipment & Supplies,Office Services & Supplies,manual,1/1
 Capital Markets,Investment Banking & Brokerage,auto,13/19
@@ -57,7 +57,7 @@ Grocery Stores,Food Retail,auto,4/4
 Health Information Services,Health Care Technology,auto,6/10
 Healthcare Plans,Managed Health Care,auto,5/9
 Home Improvement Retail,Home Improvement Retail,auto,3/3
-Household & Personal Products,Household Products,auto,6/12
+Household & Personal Products,Household Products,auto,6/11
 Industrial Distribution,Trading Companies & Distributors,auto,10/12
 Information Technology Services,IT Consulting & Other Services,auto,9/23
 Infrastructure Operations,Construction & Engineering,manual,0/0
@@ -119,7 +119,7 @@ Security & Protection Services,Security & Alarm Services,manual,1/8
 Semiconductor Equipment & Materials,Semiconductor Materials & Equipment,auto,16/18
 Semiconductors,Semiconductors,auto,27/29
 Silver,Silver,manual,0/0
-Software - Application,Application Software,auto,29/49
+Software - Application,Application Software,auto,29/50
 Software - Infrastructure,Systems Software,auto,11/40
 Solar,Electrical Components & Equipment,manual,2/5
 Specialty Business Services,Diversified Support Services,auto,5/14
@@ -138,7 +138,7 @@ Trucking,Cargo Ground Transportation,auto,10/10
 Uranium,Coal & Consumable Fuels,auto,1/1
 Utilities - Diversified,Multi-Utilities,auto,2/4
 Utilities - Independent Power Producers,Independent Power Producers & Energy Traders,manual,2/4
-Utilities - Regulated Electric,Electric Utilities,auto,18/30
+Utilities - Regulated Electric,Electric Utilities,auto,18/29
 Utilities - Regulated Gas,Gas Utilities,auto,8/11
 Utilities - Regulated Water,Water Utilities,auto,6/6
 Utilities - Renewable,Renewable Electricity,auto,2/2

@@ -23,7 +23,7 @@ fi
 gen="$("$PY" -c "import json; print(json.load(open('rs_data.json'))['meta']['gen'])")"
 # the master too: the cloud fallback build (daily_build.yml) reads the
 # committed universe, so new listings must be pushed for it to see them
-git add rs_data.json us_stock_master.csv yahoo_to_gics.csv
+git add rs_data.json us_stock_master.csv yahoo_to_gics.csv us_cap_classes.csv us_picks.jsonl us_events.csv us_ipos.csv
 if git diff --cached --quiet; then
     echo "rs_data.json unchanged — nothing to publish"
     exit 0

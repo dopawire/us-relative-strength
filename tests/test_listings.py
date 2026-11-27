@@ -221,3 +221,64 @@ def test_standard_company_keeps_acronyms():
     assert f("IBM CORP") == "IBM Corp"                                 # acronym
     assert f("BANK OF AMERICA CORP") == "Bank of America Corp"
     assert f("NVIDIA Corporation") == "NVIDIA Corporation"            # mixed: untouched
+
+
+# --------------------------------------------------------------------------- #
+#  Broken sources must never empty the master (Nov 2026: the website served a
+#  bot-check page with HTTP 200 and an empty universe was written)
+# --------------------------------------------------------------------------- #
+def test_listing_text_falls_back_to_ftp_on_a_bot_page(monkeypatch):
+    import io
+    import urllib.request
+
+    class Resp:
+        status_code = 200
+        text = "<html>bot check</html>"
+        headers = {"content-type": "text/html"}
+    monkeypatch.setattr(ru.requests, "get", lambda *a, **k: Resp())
+    monkeypatch.setattr(urllib.request, "urlopen",
+                        lambda url, timeout: io.BytesIO(NASDAQ_TXT.encode()))
+    assert ru._listing_text(ru.NASDAQ_LISTED).startswith("Symbol|")
+    monkeypatch.setattr(urllib.request, "urlopen",
+                        lambda url, timeout: io.BytesIO(b"<html>also blocked</html>"))
+    assert ru._listing_text(ru.NASDAQ_LISTED) is None
+
+
+def test_refresh_keeps_master_when_listings_fail_or_shrink(monkeypatch):
+    import os
+    import pytest
+    ru.save_master([_row(f"S{i}", str(i)) for i in range(2000)])
+    before = open(ru.MASTER).read()
+    for live in (None, {}, {f"S{i}": {"symbol": f"S{i}", "company": "x", "exchange": "NYSE"}
+                            for i in range(1500)}):
+        monkeypatch.setattr(ru, "fetch_listings", lambda live=live: live)
+        monkeypatch.setattr("sys.argv", ["refresh_universe.py"])
+        with pytest.raises(SystemExit):
+            ru.main()
+        assert open(ru.MASTER).read() == before
+    assert not os.path.exists(ru.DELISTED)
+
+
+def test_build_refuses_an_empty_universe(tmp_path, monkeypatch):
+    import pytest
+    p = tmp_path / "m.csv"
+    p.write_text("symbol,company,exchange,cik,sector,industryGroup,industry,subIndustry,source\n")
+    monkeypatch.setattr(build_rs, "MASTER_CSV", str(p))
+    monkeypatch.setattr(build_rs, "RS_DATA_JSON", str(tmp_path / "rs.json"))
+    monkeypatch.setattr(build_rs, "BUILD_LOCK", str(tmp_path / "lock"))
+    monkeypatch.setattr("sys.argv", ["build_rs.py", "--html-only"])
+    with pytest.raises(SystemExit):
+        build_rs.main()
+    assert not (tmp_path / "rs.json").exists()
+
+
+def test_txse_code_and_unarchive_on_relisting():
+    live = ru.parse_listings(
+        NASDAQ_TXT.split("\n")[0] + "\n",
+        OTHER_TXT.split("\n")[0] + "\nET|Energy Transfer LP Common Units|F|ET|N|100|N|ET\n")
+    assert live["ET"]["exchange"] == "TXSE"
+    ru._append_csv(ru.DELISTED, ru.FIELDS + ["delisted_on"],
+                   [dict(_row("ET", "1"), delisted_on="2026-11-27"),
+                    dict(_row("GONE", "2"), delisted_on="2026-11-27")])
+    assert ru.unarchive(live) == ["ET"]
+    assert [r["symbol"] for r in _read(ru.DELISTED)] == ["GONE"]

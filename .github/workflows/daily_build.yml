@@ -48,6 +48,10 @@ jobs:
         if: steps.need.outputs.build == 'true'
         run: pip install requests
 
+      - name: Refresh earnings dates + IPOs
+        if: steps.need.outputs.build == 'true'
+        run: python refresh_events.py || true
+
       - name: Build rankings
         if: steps.need.outputs.build == 'true'
         run: python build_rs.py
@@ -78,7 +82,7 @@ jobs:
           git config user.name "dopawire"
           git config user.email "110220100+dopawire@users.noreply.github.com"
           gen=$(python -c "import json; print(json.load(open('rs_data.json'))['meta']['gen'])")
-          git add rs_data.json
+          git add rs_data.json us_picks.jsonl us_events.csv us_ipos.csv
           git commit -q -m "data snapshot $gen"
           git push
 

@@ -47,6 +47,7 @@ MIN_BARS = int(cfg("min_bars", 200))            # below → refetch FULL_RANGE
 EMA_PERIODS = [int(x) for x in cfg("ema_periods", [20, 50, 100, 150, 200])]
 ADR_PERIOD = int(cfg("adr_period", 20))         # ADR% lookback (Qullamaggie 20)
 CORP_ACTION_JUMP = float(cfg("corp_action_jump", 0.90))   # Yahoo US closes are split-adjusted
+ILLIQUID_TURNOVER_M = float(cfg("illiquid_turnover_m", 1.0))  # US$ M/day, see maths.is_illiquid
 BENCHMARK_NAME = str(cfg("benchmark", "S&P 500"))
 BENCH_YSYM = str(cfg("bench_symbol", "^GSPC"))
 YH_WORKERS = int(cfg("yahoo_workers", 8))

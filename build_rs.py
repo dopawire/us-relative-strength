@@ -50,7 +50,13 @@ from rs_engine.config import (CACHE_DIR, WINDOW, FULL_RANGE,
                               latest_session)
 from rs_engine.maths import (percentrank_inc, ema_flags, rs_ema_flag,
                              last_break_date, pct_off_high, adr_pct,
-                             equal_weight_rs)
+                             equal_weight_rs, period_return, avg_turnover_m, index_trend,
+                             setup_metrics, is_illiquid, ipo_metrics, weekly_closes, weekly_trend,
+                             htf_from_series, listing_vsince, rs_ratings)
+from rs_engine.decide import decide_from_rs_data
+from rs_engine import track
+from rs_engine.events import next_events, read_events
+from rs_engine import ipos
 from rs_engine.breadth import (compute_breadth, compute_macro_breadth,
                                detect_breadth_divergence)
 from rs_engine.rotation import compute_rotation
@@ -61,6 +67,8 @@ from rs_engine.report import write_daily_report
 HERE = os.path.dirname(os.path.abspath(__file__))
 MASTER_CSV   = os.path.join(HERE, "us_stock_master.csv")    # universe + GICS-style levels
 SYMBOL_CHANGES = os.path.join(HERE, "us_symbol_changes.csv")  # old,new,cik,date
+CAP_CLASSES  = os.path.join(HERE, "us_cap_classes.csv")     # symbol,cap,mcap (refresh_universe.py)
+NO_CAP_SESSIONS = 20       # no market cap and < 1 month of trading: no class yet
 
 # Cache file locations (CACHE_DIR itself lives in rs_engine.config).
 PRICE_CACHE  = os.path.join(CACHE_DIR, ".yh_price_cache.json")   # {sym: {date: close}}
@@ -154,6 +162,34 @@ def primary_share_classes(universe, cache, vols, days=20):
         keep = max(syms, key=lambda s: (dollar_vol(s), -len(s), s))
         dropped.update({s: keep for s in syms if s != keep})
     return [u for u in universe if u["sym"] not in dropped], dropped
+
+
+def read_cap_classes():
+    """{symbol: "Large" | "Mid" | "Small" | "Micro"} from Nasdaq market caps
+    (refresh_universe.py keeps us_cap_classes.csv current)."""
+    if not os.path.exists(CAP_CLASSES):
+        return {}
+    with open(CAP_CLASSES, newline="", encoding="utf-8") as fh:
+        return {r["symbol"].strip().upper(): r["cap"].strip() for r in csv.DictReader(fh)}
+
+
+def cap_class(sym, caps, n_sessions):
+    """Size class from the market cap; a stock without one is Micro after a
+    month of trading, and "New" (no class yet) before — a fresh IPO can be
+    any size, and such a stock can't be a 1-month gainer anyway."""
+    if sym in caps:
+        return caps[sym]
+    return "Micro" if n_sessions > NO_CAP_SESSIONS else "New"
+
+
+def read_ipos(changes=None):
+    """us_ipos.csv keyed by today's symbol (an IPO renamed since listing
+    follows its rename)."""
+    out = ipos.read()
+    for old, new in changes if changes is not None else read_symbol_changes():
+        if old in out and new not in out:
+            out[new] = out.pop(old)
+    return out
 
 
 def read_symbol_changes():
@@ -467,6 +503,27 @@ def repair_intraday_gap(cache, highs, lows, have, thresh, today=None, prov=None)
     return repaired
 
 
+def purge_off_session(cache, highs, lows, volumes, syms, sessions):
+    """Drop stock bars on days that aren't market sessions — Yahoo's
+    carry-forward bars on holidays.  An extra bar shifts a stock's 1W / 1M /
+    3M window by a day and nudges its EMAs.  `sessions` = the benchmark's
+    dates after gap-filling (a day >= half the stocks traded is in it).
+    → {sym: n_dropped}."""
+    first = min(sessions) if sessions else None
+    out = {}
+    for s in syms:
+        bad = [d for d in cache.get(s, {}) if d not in sessions and first and d >= first]
+        if not bad:
+            continue
+        for st in (cache, highs, lows, volumes):
+            v = st.get(s)
+            if v:
+                for d in bad:
+                    v.pop(d, None)
+        out[s] = len(bad)
+    return out
+
+
 def fake_flat_days(cache, have, sample=300):
     """Dates whose stock bars are >90% flat duplicates of each stock's
     PREVIOUS bar (sorted by date): Yahoo's holiday artifacts and stale-carry
@@ -530,8 +587,9 @@ def fill_benchmark_gaps(bench, cache, have, thresh):
 # --------------------------------------------------------------------------- #
 #  JSON export for the FastAPI backend
 # --------------------------------------------------------------------------- #
-def save_rs_json(levels, breadth, meta, path, rotation=None):
-    """Write precomputed RS data so the backend can serve it without recomputing."""
+def save_rs_json(levels, breadth, meta, path, rotation=None, post=None):
+    """Write precomputed RS data so the backend can serve it without recomputing.
+    `post(data)` may add derived sections (decisions, track record) first."""
     data = {
         "meta": meta,
         "breadth": breadth if breadth else {"dates": [], "osc": [], "n": 0},
@@ -557,7 +615,25 @@ def save_rs_json(levels, breadth, meta, path, rotation=None):
                     "a": round(m["adr"], 2) if m.get("adr") is not None else None,
                     "nw": m.get("new"),       # new listing: days since listing
                     "ap": 1 if m.get("approx") else None,   # classification mapped, not GICS
+                    "m1": round(m["m1"], 2) if m.get("m1") is not None else None,
+                    "m3": round(m["m3"], 2) if m.get("m3") is not None else None,
+                    "d1": round(m["d1"], 2) if m.get("d1") is not None else None,
+                    "w1": round(m["w1"], 2) if m.get("w1") is not None else None,
+                    "cap": m.get("cap"),      # Large / Mid / Small / Micro / New
+                    "tv": round(m["tv"], 2) if m.get("tv") is not None else None,
+                    "rr": m.get("rr"),        # RS rating 1-99 (vs all stocks)
+                    "vr": m.get("vr"),        # volume ÷ 50-day average
+                    "vd": m.get("vd"),        # 10-day ÷ prior 50-day volume (dry-up)
+                    "tt": m.get("tt"),        # 10-day range % (tightness)
                 })
+                if m.get("ev"):               # upcoming earnings: "YYYY-MM-DD Results …"
+                    members_out[-1]["ev"] = m["ev"]
+                if m.get("ipo"):              # IPO in the last year
+                    members_out[-1]["ipo"] = m["ipo"]
+                if m.get("wk"):               # weekly 10-SMA trend {s, d, u, n}
+                    members_out[-1]["wk"] = m["wk"]
+                if m.get("htf"):              # High Tight Flag setup (maths.htf_state)
+                    members_out[-1]["htf"] = m["htf"]
             level_data["groups"].append({
                 "id": gid, "name": it["name"],
                 "n": it["n"], "pct": round(it["pct"], 4),
@@ -567,6 +643,8 @@ def save_rs_json(levels, breadth, meta, path, rotation=None):
             })
             gid += 1
         data["levels"].append(level_data)
+    if post:
+        post(data)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f)
 
@@ -601,6 +679,10 @@ def main():
     universe = read_universe()
     if args.limit:
         universe = universe[:args.limit]
+    elif len(universe) < 1000:
+        # a broken universe refresh must not publish an empty dashboard
+        sys.exit(f"Universe has only {len(universe)} stocks — refusing to rebuild "
+                 f"rs_data.json (restore us_stock_master.csv and rerun refresh_universe.py).")
     print(f"Universe: {len(universe)} stocks, "
           f"{len({u['macro'] for u in universe if u['macro']})} sectors, "
           f"{len({u['sector'] for u in universe if u['sector']})} industry groups, "
@@ -677,6 +759,13 @@ def main():
         for d, m in _filled:
             prov[d] = m
         write_json_atomic(PROVENANCE, prov)
+    off = purge_off_session(cache, highs, lows, vols, have, set(bench))
+    if off:
+        print(f"Dropped {sum(off.values())} bar(s) on non-session days (holiday "
+              f"carry-forwards) from {len(off)} stock(s)")
+        for path, obj in ((PRICE_CACHE, cache), (HIGH_CACHE, highs), (LOW_CACHE, lows),
+                          (VOL_CACHE, vols)):
+            write_json_atomic(path, obj)
     covered = [d for d in bench_dates
                if sum(1 for s in have if d in cache[s]) >= thresh]
     ref_dates = (covered or bench_dates)[-WINDOW:]
@@ -696,6 +785,25 @@ def main():
                            if sum(1 for s in have if d in cache[s]) >= thresh)
 
     # ---- group members and compute RS for one classification level ----
+    caps = read_cap_classes()
+    upcoming = next_events(read_events(), ref_dates[-1])
+    # market-session calendar up to the window end: returns and the 52-week
+    # high count sessions, not a stock's own bars (illiquid stocks skip days)
+    cal = [d for d in sorted(bench) if d <= ref_dates[-1]]
+    year_start = cal[-252] if len(cal) >= 252 else cal[0]
+    # thinly traded stocks (skip sessions, < $1M/day) are left out of every
+    # ranking: their untraded days carry the last price, so RS isn't real
+    illiquid = sorted(u["sym"] for u in universe if cache.get(u["sym"])
+                      and is_illiquid(cache[u["sym"]], vols.get(u["sym"]), ref_dates))
+    illiq = set(illiquid)
+    if illiquid:
+        print(f"Left out of the rankings: {len(illiquid)} thinly traded stock(s) "
+              f"(skipped a session in the window, < $1M/day): {illiquid[:12]}"
+              f"{' …' if len(illiquid) > 12 else ''}")
+    ratings = rs_ratings({u["sym"]: cache[u["sym"]] for u in universe
+                          if cache.get(u["sym"]) and u["sym"] not in illiq}, ref_dates[-1])
+    ipo_list = read_ipos()
+
     skipped_breaks = []
     below_min = set()      # last price under MIN_PRICE (config min_price)
     stock_cache = {}       # sym -> metrics (shared by all four levels)
@@ -724,9 +832,24 @@ def main():
                       "rs": srs, "pct": percentrank_inc(srs, srs[-1]),
                       "ema": ef, "ltp": price,
                       "rse": rs_ema_flag(post, bench),
-                      "hi52": pct_off_high(highs.get(sym, {}), price, since=brk),
+                      "hi52": pct_off_high(highs.get(sym, {}), price,
+                                           since=max(brk or "", year_start)),
                       "adr": adr_pct(highs.get(sym, {}), lows.get(sym, {}), since=brk),
-                      "new": new}
+                      "new": new,
+                      "m1": period_return(ser, 20, cal), "m3": period_return(ser, 63, cal),
+                      "d1": period_return(ser, 1, cal), "w1": period_return(ser, 5, cal),
+                      "tv": avg_turnover_m(ser, vols.get(sym, {}), 20),
+                      "rr": ratings.get(sym),
+                      "cap": cap_class(sym, caps, len(ser)),
+                      "ev": upcoming.get(sym),
+                      "ipo": ipo_metrics(ser, ipo_list.get(sym), cal, bench),
+                      "wk": weekly_trend(weekly_closes(ser, since=brk)),
+                      "htf": htf_from_series(ser, highs.get(sym, {}), lows.get(sym, {}),
+                                             vols.get(sym, {}), since=brk,
+                                             vsince=listing_vsince(ser, min(bench))),
+                      **setup_metrics(ser, highs.get(sym, {}), lows.get(sym, {}),
+                                      vols.get(sym, {}), since=brk,
+                                      vsince=listing_vsince(ser, min(bench)))}
             stock_cache[sym] = st
         st = stock_cache[sym]
         return dict(st) if st else None    # copy: deltas are set per member row
@@ -742,7 +865,7 @@ def main():
             series, stocks = [], []
             for u in members:
                 ser = cache.get(u["sym"])
-                if not ser:
+                if not ser or u["sym"] in illiq:
                     continue
                 # a corporate action inside the RS window would swamp the equal-weight
                 # group index (a "+2000% day" is a demerger, not performance) — leave
@@ -792,7 +915,8 @@ def main():
         macros = compute_macro_breadth(universe, cache, breadth_dates)
         breadth = {"dates": bdates, "osc": bosc, "n": bn, "macros": macros,
                    "divergence": detect_breadth_divergence(
-                       cache.get("__BENCH__", {}), bdates, bosc)}
+                       cache.get("__BENCH__", {}), bdates, bosc),
+                   "market": index_trend(cache.get("__BENCH__", {}))}
         if bosc:
             print(f"Breadth oscillator: {len(bosc)} days "
                   f"({bdates[0]} → {bdates[-1]}), latest {bosc[-1]:+.1f} "
@@ -841,7 +965,8 @@ def main():
 
     ipo = build_ipo_watch(universe, cache, set(excluded),
                           cache.get("__BENCH__", {}))
-    rotation = compute_rotation(universe, cache, cache.get("__BENCH__", {}),
+    rotation = compute_rotation([u for u in universe if u["sym"] not in illiq],
+                                cache, cache.get("__BENCH__", {}),
                                 breadth_dates) if breadth_dates else \
         {"dates": [], "groups": []}
     if ipo:
@@ -858,11 +983,27 @@ def main():
         "n_window": n_window,
         "n_below_min": len(below_min),
         "share_classes": other_classes,      # {secondary class: primary kept}
+        "illiquid": illiquid,
         "excluded": excluded,
         "src": prov,
         "ipo": ipo,
     }
-    save_rs_json(levels, breadth, meta, RS_DATA_JSON, rotation)
+    def add_decisions(data):
+        """Focus / Swing picks (one set of rules for the pages, the pick log
+        and the evening brief) and their track record."""
+        try:
+            dec = decide_from_rs_data(data)
+            data["decide"] = dec
+            if not args.limit:
+                track.save_pick(track.pick_record(dec))
+            uni = [{"sym": u["sym"], "sector": u["sector"],
+                    "cap": cap_class(u["sym"], caps, len(cache.get(u["sym"], {})))}
+                   for u in universe if u["sym"] not in illiq]
+            data["track"] = track.track_for_site(track.evaluate(track.read_picks(), cache, uni))
+        except Exception as e:                      # never lose the build over it
+            print("decisions / track record failed:", e)
+
+    save_rs_json(levels, breadth, meta, RS_DATA_JSON, rotation, post=add_decisions)
     print(f"Wrote {RS_DATA_JSON}")
     write_daily_report(os.path.join(HERE, "daily_report.html"),
                        meta, breadth, levels, ipo)
